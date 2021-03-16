@@ -641,6 +641,7 @@ for_window [class="pokerstarsbr.exe"] floating enable
 for_window [class="VirtualBox"] floating enable
 for_window [class="zoom"] floating enable
 for_window [class="GParted"] floating enable
+for_window [class="Steam"] floating enable
 
 
 #####################################################################################################################
