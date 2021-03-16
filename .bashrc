@@ -201,7 +201,7 @@ alias ssn="sudo shutdown now"
 alias sr="sudo reboot"
 
 #git-bare repo for config files
-alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
+#alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
 
 # # ex = EXtractor for all kinds of archives
