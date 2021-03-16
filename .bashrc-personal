@@ -1,0 +1,3 @@
+# git-bare repo for dotfiles
+alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
+
