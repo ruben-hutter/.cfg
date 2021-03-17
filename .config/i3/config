@@ -633,7 +633,7 @@ for_window [window_role="pop-up"] floating enable
 for_window [window_role="^Preferences$"] floating enable
 for_window [window_role="setup"] floating enable
 
-for_window [class="Cisco AnyConnect Secure Mobility Client"] floating enable move position 2650 px 290 px
+for_window [class="Cisco AnyConnect Secure Mobility Client"] floating enable
 for_window [class="TeamViewer"] floating enable
 for_window [class="TelegramDesktop"] floating enable
 for_window [class="pokerstars.exe"] floating enable
@@ -642,6 +642,7 @@ for_window [class="VirtualBox"] floating enable
 for_window [class="zoom"] floating enable
 for_window [class="GParted"] floating enable
 for_window [class="Steam"] floating enable
+for_window [class="Lutris"] floating enable
 
 
 #####################################################################################################################
