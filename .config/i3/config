@@ -71,6 +71,7 @@ set $right l
 #exec --no-startup-id xrandr --output HDMI-2 --right-of HDMI-1 --auto
 #exec --no-startup-id xrandr --output HDMI2 --right-of HDMI1 --auto
 exec_always --no-startup-id /home/ruben/.screenlayout/dualScreen.sh
+#exec_always --no-startup-id /home/ruben/.screenlayout/ponteDual.sh
 
 # my current setup
 
@@ -91,6 +92,7 @@ exec_always --no-startup-id /home/ruben/.screenlayout/dualScreen.sh
 #set $secondMonitor HDMI-2
 
 set $firstMonitor DP1-2
+#set $firstMonitor HDMI-1
 set $secondMonitor eDP1
 
 workspace 1 output $firstMonitor
@@ -666,6 +668,8 @@ for_window [class="zoom"] focus
 for_window [class="Cisco AnyConnect Secure Mobility Client"] focus
 for_window [class="Shotwell"] focus
 for_window [class="obs"] focus
+for_window [class="firefox"] focus
+for_window [class="vlc"] focus
 
 
 #####################################################################################################################
