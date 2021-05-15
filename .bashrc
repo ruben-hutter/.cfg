@@ -14,7 +14,8 @@
 
 export HISTCONTROL=ignoreboth:erasedups
 
-PS1='[\u@\h \W]\$ '
+#PS1='[\u@\h \W]\$ '
+PS1='\[\e[0;31m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[0;31m\]\$ \[\e[m\]\[\e[0;32m\] '
 
 if [ -d "$HOME/.bin" ] ;
   then PATH="$HOME/.bin:$PATH"
@@ -200,9 +201,6 @@ alias probe="sudo -E hw-probe -all -upload"
 alias ssn="sudo shutdown now"
 alias sr="sudo reboot"
 
-#git-bare repo for config files
-#alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
-
 
 # # ex = EXtractor for all kinds of archives
 # # usage: ex <file>
@@ -254,3 +252,7 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 function gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}
+
+# autocompletion for git
+source ~/.git-completion.bash
+
