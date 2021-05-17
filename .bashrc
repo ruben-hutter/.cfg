@@ -254,5 +254,5 @@ unset __conda_setup
 function gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}
 
 # autocompletion for git
-source ~/.git-completion.bash
+#source ~/.git-completion.bash
 

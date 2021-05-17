@@ -536,7 +536,7 @@ bindsym control+mod1+w exec --no-startup-id arcolinux-welcome-app
 bindsym control+mod1+e exec --no-startup-id arcolinux-tweak-tool
 
 # terminal
-bindsym $mod+Return exec --no-startup-id termite;focus
+bindsym $mod+Return exec --no-startup-id alacritty;focus
 
 #xkill
 bindsym --release $mod+Escape exec xkill
