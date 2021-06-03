@@ -24,12 +24,12 @@ case $desktop in
       OTHERS=$(xrandr --query | grep " connected" | grep -v "primary" | cut -d" " -f1)
 
       # Launch on primary monitor
-	  if type "xrandr" > /dev/null; then
-		for m in $PRIMARY; do
-		  MONITOR=$m polybar --reload mainbar-i3 -c ~/.config/polybar/config &
-		done
+      if type "xrandr" > /dev/null; then
+	for m in $PRIMARY; do
+	  MONITOR=$m polybar --reload mainbar-i3 -c ~/.config/polybar/config &
+	done
       #MONITOR=$PRIMARY polybar --reload mainbar-i3 -c ~/.config/polybar/config &
-	  fi
+      fi
       sleep 1
 
       # Launch on all other monitors
@@ -38,7 +38,7 @@ case $desktop in
           MONITOR=$m polybar --reload mainbar-i3 -c ~/.config/polybar/config &
         done
       else
-      polybar --reload mainbar-i3 -c ~/.config/polybar/config &
+        polybar --reload mainbar-i3 -c ~/.config/polybar/config &
       fi
     # second polybar at bottom
     # if type "xrandr" > /dev/null; then
