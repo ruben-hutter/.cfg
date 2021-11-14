@@ -30,7 +30,7 @@ case $desktop in
 	done
       #MONITOR=$PRIMARY polybar --reload mainbar-i3 -c ~/.config/polybar/config &
       fi
-      sleep 1
+      sleep 0.1
 
       # Launch on all other monitors
       if type "xrandr" > /dev/null; then

@@ -443,6 +443,7 @@ assign [class="Thunar"] → 8
 # Workspace 9 email clients
 assign [class="TelegramDesktop|discord"] → 9
 assign [class="zoom"] → 9
+assign [class="Signal"] → 9
 
 # Workspace 10 music related
 assign [class="Spotify|spotify"] → 10
@@ -458,7 +459,7 @@ for_window [class="Spotify"] move to workspace 10
 # USER APPLICATIONS TO START AT BOOT
 
 # ArcoLinux Welcome App
-exec --no-startup-id dex $HOME/.config/autostart/arcolinux-welcome-app.desktop
+#exec --no-startup-id dex $HOME/.config/autostart/arcolinux-welcome-app.desktop
 
 # Autotiling
 exec_always --no-startup-id autotiling
@@ -471,7 +472,7 @@ exec_always --no-startup-id autotiling
 
 #Authentication dialog
 #exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
-
+exec --no-startup-id lxsession &
 
 # Updater
 #exec --no-startup-id pamac-tray
@@ -544,7 +545,7 @@ bindsym --release $mod+Escape exec xkill
 #workspace related
 
 #workspace 1 related
-bindsym $mod+F1 exec --no-startup-id brave; focus
+bindsym $mod+F1 exec --no-startup-id firefox; focus
 
 #workspace 2 related
 bindsym $mod+F2 exec --no-startup-id atom; focus
@@ -645,6 +646,7 @@ for_window [class="zoom"] floating enable
 for_window [class="GParted"] floating enable
 for_window [class="Steam"] floating enable
 for_window [class="Lutris"] floating enable
+for_window [class="Signal"] floating enable
 
 
 #####################################################################################################################
