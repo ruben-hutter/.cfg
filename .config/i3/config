@@ -505,7 +505,10 @@ exec --no-startup-id volumeicon
 #exec --no-startup-id conky -c ~/.config/i3/system-overview
 
 #feh sets wallpaper
-exec --no-startup-id feh --bg-fill /usr/share/backgrounds/arcolinux/arco-wallpaper.jpg &
+#exec --no-startup-id feh --bg-fill /usr/share/backgrounds/arcolinux/arco-wallpaper.jpg &
+
+#Nitrogen
+exec --no-startup-id nitrogen --restore &
 
 #Polybar
 exec_always --no-startup-id ~/.config/polybar/launch.sh &
@@ -544,7 +547,8 @@ bindsym --release $mod+Escape exec xkill
 #workspace related
 
 #workspace 1 related
-bindsym $mod+F1 exec --no-startup-id brave; focus
+#bindsym $mod+F1 exec --no-startup-id brave; focus
+bindsym $mod+F1 exec --no-startup-id firefox; focus
 
 #workspace 2 related
 bindsym $mod+F2 exec --no-startup-id atom; focus
@@ -563,7 +567,8 @@ bindsym $mod+F2 exec --no-startup-id atom; focus
 #bindsym $mod+F7 exec --no-startup-id virtualbox; focus
 
 #workspace 8 related
-bindsym $mod+Shift+Return exec --no-startup-id thunar; focus
+#bindsym $mod+Shift+Return exec --no-startup-id thunar; focus
+bindsym $mod+Shift+Return exec --no-startup-id pcmanfm; focus
 
 #workspace 9 related
 
@@ -713,9 +718,12 @@ bindsym mod1+Shift+u exec --no-startup-id wal -i $(cat $HOME/.config/variety/wal
 #####################################################################################################################
 
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id "amixer -D pulse sset Master '5%+'"
-bindsym XF86AudioLowerVolume exec --no-startup-id "amixer -D pulse sset Master '5%-'"
-bindsym XF86AudioMute exec --no-startup-id "amixer -D pulse set Master toggle"
+#bindsym XF86AudioRaiseVolume exec --no-startup-id "amixer -D pulse sset Master '5%+'"
+#bindsym XF86AudioLowerVolume exec --no-startup-id "amixer -D pulse sset Master '5%-'"
+#bindsym XF86AudioMute exec --no-startup-id "amixer -D pulse set Master toggle"
+bindsym XF86AudioRaiseVolume exec --no-startup-id "pactl set-sink-volume @DEFAULT_SINK@ +5%"
+bindsym XF86AudioLowerVolume exec --no-startup-id "pactl set-sink-volume @DEFAULT_SINK@ -5%"
+bindsym XF86AudioMute  exec --no-startup-id "pactl set-sink-mute @DEFAULT_SINK@ toggle"
 #https://github.com/acrisci/playerctl/
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
 bindsym XF86AudioNext exec --no-startup-id playerctl next
