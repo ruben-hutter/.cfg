@@ -71,7 +71,7 @@ set $right l
 #exec --no-startup-id xrandr --output HDMI-2 --right-of HDMI-1 --auto
 #exec --no-startup-id xrandr --output HDMI2 --right-of HDMI1 --auto
 exec_always --no-startup-id /home/ruben/.screenlayout/dualScreen.sh
-#exec_always --no-startup-id /home/ruben/.screenlayout/ponteDual.sh
+#exec_always --no-startup-id /home/ruben/.screenlayout/uniScreen.sh
 
 # my current setup
 
@@ -199,8 +199,8 @@ mode "$mode_system" {
 
 
 # ArcoLinux Logout
-bindsym $mod+Shift+e exec --no-startup-id arcolinux-logout
-bindsym $mod+X exec --no-startup-id arcolinux-logout
+bindsym $mod+Shift+e exec --no-startup-id archlinux-logout
+bindsym $mod+X exec --no-startup-id archlinux-logout
 
 
 
@@ -423,6 +423,8 @@ assign [class="Cisco AnyConnect Secure Mobility Client"] → 3
 
 # Workspace 4 Gimp
 assign [class="Gimp-2.10"] → 4
+assign [class="Thunderbird"] → 4
+assign [class="Mailspring"] → 4
 
 # Workspace 5 Images and meld
 assign [class="ristretto|Ristretto|shotwell|Shotwell|Xviewer|Nitrogen"] → 5
@@ -436,6 +438,7 @@ assign [class="obs"] → 6
 # Workspace 7 virtual machines and settings
 assign [class="VirtualBox"] → 7
 assign [class="TeamViewer"] → 7
+assign [class="Virt-manager"] → 7
 
 # Workspace 8 file managers
 assign [class="Thunar"] → 8
@@ -449,6 +452,7 @@ assign [class="Signal"] → 9
 assign [class="Spotify|spotify"] → 10
 #fix for spotify not moving to workspace 10
 for_window [class="Spotify"] move to workspace 10
+assign [class="Bitwarden"] → 10
 
 
 
@@ -512,7 +516,7 @@ exec --no-startup-id volumeicon
 exec --no-startup-id nitrogen --restore &
 
 #Polybar
-exec_always --no-startup-id ~/.config/polybar/launch.sh &
+exec_always --no-startup-id ~/.config/polybar/launch.sh
 
 #Libinput Gestures
 exec_always --no-startup-id libinput-gestures-setup start &
@@ -558,6 +562,7 @@ bindsym $mod+F2 exec --no-startup-id atom; focus
 
 #workspace 4 related
 #bindsym $mod+F4 exec --no-startup-id gimp-2.10; focus
+bindsym $mod+F4 exec --no-startup-id thunderbird; focus
 
 #workspace 5 related
 
@@ -568,8 +573,8 @@ bindsym $mod+F2 exec --no-startup-id atom; focus
 #bindsym $mod+F7 exec --no-startup-id virtualbox; focus
 
 #workspace 8 related
-#bindsym $mod+Shift+Return exec --no-startup-id thunar; focus
-bindsym $mod+Shift+Return exec --no-startup-id pcmanfm; focus
+bindsym $mod+Shift+Return exec --no-startup-id thunar; focus
+#bindsym $mod+Shift+Return exec --no-startup-id pcmanfm; focus
 
 #workspace 9 related
 
@@ -580,9 +585,9 @@ bindsym $mod+Shift+Return exec --no-startup-id pcmanfm; focus
 #####################################################################################################################
 
 
-bindsym Print exec --no-startup-id scrot 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg' -e 'mv $f $$(xdg-user-dir PICTURES)'
-bindsym $mod+Print --release exec --no-startup-id scrot -u 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg' -e 'mv $f $$(xdg-user-dir PICTURES)'
-bindsym $mod+Shift+Print --release exec --no-startup-id scrot -sf 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg' -e 'mv $f $$(xdg-user-dir PICTURES)'
+bindsym Print exec --no-startup-id scrot 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg'
+bindsym $mod+Print --release exec --no-startup-id scrot -u 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg'
+bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -f 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg'
 
 #bindsym Control+Print exec --no-startup-id xfce4-screenshooter
 #bindsym Control+Shift+Print exec --no-startup-id gnome-screenshot -i
@@ -668,6 +673,7 @@ for_window [class="Atom"] focus
 for_window [class="Brave-browser"] focus
 for_window [class="Spotify"] focus
 for_window [class="TeamViewer"] focus
+for_window [class="Virt-manager"] focus
 for_window [class="Telegram"] focus
 for_window [class="Code"] focus
 for_window [class="jetbrains-idea"] focus
@@ -676,6 +682,7 @@ for_window [class="Cisco AnyConnect Secure Mobility Client"] focus
 for_window [class="Shotwell"] focus
 for_window [class="obs"] focus
 for_window [class="firefox"] focus
+for_window [class="Thunderbird"] focus
 for_window [class="vlc"] focus
 
 
