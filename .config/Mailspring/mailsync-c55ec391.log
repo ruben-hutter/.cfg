@@ -1,0 +1,107 @@
+13026 [2022-03-31 15:56:46.969] [main] [info] Identity created at 1648731047 - using ID Schema 1
+13026 [2022-03-31 15:56:46.970] [main] [info] ------------- Starting Sync (hutter.ruben@gmail.com) ---------------
+13026 [2022-03-31 15:56:46.976] [background] [info] Fetching XOAuth2 access token (gmail) for c55ec391
+13026 [2022-03-31 15:56:47.505] [background] [info] Marking all folders as `busy`
+13026 [2022-03-31 15:56:47.505] [background] [info] Syncing folder list...
+13026 [2022-03-31 15:56:47.910] [metadata] [info] Will retry in 3 sec.
+13026 [2022-03-31 15:56:50.176] [background] [error] Created Mailspring container folder: Mailspring.
+13026 [2022-03-31 15:56:50.893] [background] [error] Created required Mailspring folder: Mailspring/Snoozed.
+13026 [2022-03-31 15:56:50.921] [background] [info] Syncing folder list...
+13026 [2022-03-31 15:56:51.269] [background] [info] syncFolderUIDRange for [Gmail]/All Mail, UIDs: 31508 - 32258, Heavy: true
+13026 [2022-03-31 15:56:51.957] [metadata] [info] Will retry in 3 sec.
+13026 [2022-03-31 15:56:52.886] [background] [info] - [Gmail]/All Mail: remote=172, local=0, remoteUID=7FrYj2AQ1ZCz4Rhakx39PWDsH72mbjgpByLGwDtsU
+13026 [2022-03-31 15:56:53.350] [foreground] [info] Idling on folder [Gmail]/All Mail
+13026 [2022-03-31 15:56:53.634] [background] [info] syncFolderUIDRange for [Gmail]/All Mail, UIDs: 31508 - 32258, Heavy: false
+13026 [2022-03-31 15:56:53.808] [background] [info] - [Gmail]/All Mail: remote=172, local=172, remoteUID=7FrYj2AQ1ZCz4Rhakx39PWDsH72mbjgpByLGwDtsU
+13026 [2022-03-31 15:56:56.004] [metadata] [info] Will retry in 5 sec.
+13026 [2022-03-31 15:57:00.939] [foreground] [info] Idle exited with code 0
+13026 [2022-03-31 15:57:00.940] [foreground] [info] Fetching body for message ID hvyqDfNdBYSXgNGRmERVcTAkPgSy7LkMe4frbbKSY
+13026 [2022-03-31 15:57:01.176] [foreground] [info] Idling on folder [Gmail]/All Mail
+13026 [2022-03-31 15:57:01.297] [main] [info] [local-647ababd-6c2f] Running ChangeUnreadTask performLocal:
+13026 [2022-03-31 15:57:01.304] [main] [info] [local-647ababd-6c2f] -- Succeeded. Changing status to `remote`
+13026 [2022-03-31 15:57:01.743] [foreground] [info] Idle exited with code 0
+13026 [2022-03-31 15:57:01.743] [foreground] [info] [local-647ababd-6c2f] Running ChangeUnreadTask performRemote:
+13026 [2022-03-31 15:57:01.973] [metadataExpiration] [info] Scanning for expired metadata
+13026 [2022-03-31 15:57:01.973] [metadataExpiration] [info] -- Will wake for next expiration in 7200sec
+13026 [2022-03-31 15:57:02.055] [foreground] [info] [local-647ababd-6c2f] -- Succeeded. Changing status to `complete`
+13026 [2022-03-31 15:57:02.056] [foreground] [info] Idling on folder [Gmail]/All Mail
+13026 [2022-03-31 15:57:02.147] [metadata] [info] Will retry in 10 sec.
+13026 [2022-03-31 15:57:02.975] [background] [info] syncFolderUIDRange for [Gmail]/Bin, UIDs: 1 - 10518, Heavy: true
+13026 [2022-03-31 15:57:04.198] [background] [info] - [Gmail]/Bin: remote=68, local=0, remoteUID=CXTWgYqveJxYuef14FLmZhEq333mzxU8eqUdxTk2P
+13026 [2022-03-31 15:57:04.430] [background] [info] syncFolderUIDRange for [Gmail]/Bin, UIDs: 1 - 10518, Heavy: false
+13026 [2022-03-31 15:57:04.924] [background] [info] - [Gmail]/Bin: remote=68, local=68, remoteUID=CXTWgYqveJxYuef14FLmZhEq333mzxU8eqUdxTk2P
+13026 [2022-03-31 15:57:04.925] [background] [info] Cleaning local cache and updating stats
+13026 [2022-03-31 15:57:04.926] [background] [info] -- 0 message bodies deleted from local cache.
+13026 [2022-03-31 15:57:05.163] [background] [info] syncFolderUIDRange for [Gmail]/Spam, UIDs: 1 - 4997, Heavy: true
+13026 [2022-03-31 15:57:05.647] [background] [info] - [Gmail]/Spam: remote=16, local=0, remoteUID=HaAHFXRaRPDMhsnimmrxxe4LQ4WpaEkwS7mfNSDqY
+13026 [2022-03-31 15:57:05.761] [background] [info] syncFolderUIDRange for [Gmail]/Spam, UIDs: 1 - 4997, Heavy: false
+13026 [2022-03-31 15:57:05.945] [background] [info] - [Gmail]/Spam: remote=16, local=16, remoteUID=HaAHFXRaRPDMhsnimmrxxe4LQ4WpaEkwS7mfNSDqY
+13026 [2022-03-31 15:57:05.945] [background] [info] Cleaning local cache and updating stats
+13026 [2022-03-31 15:57:05.947] [background] [info] -- 0 message bodies deleted from local cache.
+13026 [2022-03-31 15:57:05.949] [background] [info] Sync loop deleting unlinked messages with phase 2.
+13026 [2022-03-31 15:57:05.949] [background] [info] Sync loop complete.
+13026 [2022-03-31 15:57:05.949] [background] [info] Syncing folder list...
+13026 [2022-03-31 15:57:06.290] [main] [info] [local-c7b9563a-543a] Running ChangeFolderTask performLocal:
+13026 [2022-03-31 15:57:06.305] [main] [info] [local-c7b9563a-543a] -- Succeeded. Changing status to `remote`
+13026 [2022-03-31 15:57:06.355] [background] [info] syncFolderUIDRange for [Gmail]/All Mail, UIDs: 26508 - 31508, Heavy: true
+13026 [2022-03-31 15:57:06.867] [foreground] [info] Idle exited with code 0
+13026 [2022-03-31 15:57:06.868] [foreground] [info] [local-c7b9563a-543a] Running ChangeFolderTask performRemote:
+13026 [2022-03-31 15:57:08.212] [foreground] [info] [local-c7b9563a-543a] -- Succeeded. Changing status to `complete`
+13026 [2022-03-31 15:57:08.402] [foreground] [info] syncFolderChangesViaCondstore - [Gmail]/All Mail: modseq 23285204 to 23285297, uidnext 32258 to 32258
+13026 [2022-03-31 15:57:09.618] [background] [info] - [Gmail]/All Mail: remote=941, local=1, remoteUID=7FrYj2AQ1ZCz4Rhakx39PWDsH72mbjgpByLGwDtsU
+13026 [2022-03-31 15:57:09.755] [foreground] [info] syncFolderChangesViaCondstore - Changes since HMODSEQ 23285204: 0 changed, 0 vanished
+13026 [2022-03-31 15:57:13.102] [metadata] [info] Will retry in 20 sec.
+13026 [2022-03-31 15:57:13.124] [calContacts] [info] apidata.googleusercontent.com/caldav/v2/hutter.ruben%40gmail.com/events/
+13026 [2022-03-31 15:57:13.124] [calContacts] [info]   remote: 1057 etags
+13026 [2022-03-31 15:57:13.124] [calContacts] [info]    local: 0 etags
+13026 [2022-03-31 15:57:13.124] [calContacts] [info]  deleted: 0
+13026 [2022-03-31 15:57:13.124] [calContacts] [info]   needed: 1057
+13026 [2022-03-31 15:57:14.674] [background] [info] syncFolderUIDRange for [Gmail]/All Mail, UIDs: 26508 - 26507, Heavy: false
+13026 [2022-03-31 15:57:15.634] [background] [info] - [Gmail]/All Mail: remote=1111, local=1111, remoteUID=7FrYj2AQ1ZCz4Rhakx39PWDsH72mbjgpByLGwDtsU
+13026 [2022-03-31 15:57:18.878] [foreground] [info] Idling on folder [Gmail]/All Mail
+13026 [2022-03-31 15:57:21.843] [calContacts] [warning] [SLOW] Transaction=runForCalendar:insertions > 80ms (105ms, 0 waiting to aquire)
+13026 [2022-03-31 15:57:24.078] [calContacts] [warning] [SLOW] Transaction=runForCalendar:insertions > 80ms (88ms, 0 waiting to aquire)
+13026 [2022-03-31 15:57:26.331] [calContacts] [warning] [SLOW] Transaction=runForCalendar:insertions > 80ms (92ms, 0 waiting to aquire)
+13026 [2022-03-31 15:57:26.938] [background] [info] syncFolderUIDRange for [Gmail]/Bin, UIDs: 10518 - 10521, Heavy: true
+13026 [2022-03-31 15:57:27.475] [background] [info] - [Gmail]/Bin: remote=3, local=3, remoteUID=CXTWgYqveJxYuef14FLmZhEq333mzxU8eqUdxTk2P
+13026 [2022-03-31 15:57:27.477] [background] [warning] Ignoring changes to Security alert, local data is newer 1648735046 < 1648821426
+13026 [2022-03-31 15:57:27.477] [background] [info] syncFolderUIDRange for [Gmail]/Bin, UIDs: 1 - 0, Heavy: false
+13026 [2022-03-31 15:57:27.671] [background] [info] - [Gmail]/Bin: remote=69, local=69, remoteUID=CXTWgYqveJxYuef14FLmZhEq333mzxU8eqUdxTk2P
+13026 [2022-03-31 15:57:27.671] [background] [info] - Fetching full headers for 1 (of 1 needed)
+13026 [2022-03-31 15:57:27.902] [background] [warning] Ignoring changes to Security alert, local data is newer 1648735047 < 1648821426
+13026 [2022-03-31 15:57:28.025] [background] [info] syncFolderUIDRange for [Gmail]/Spam, UIDs: 1 - 0, Heavy: false
+13026 [2022-03-31 15:57:28.299] [background] [info] - [Gmail]/Spam: remote=16, local=16, remoteUID=HaAHFXRaRPDMhsnimmrxxe4LQ4WpaEkwS7mfNSDqY
+13026 [2022-03-31 15:57:28.301] [background] [info] Sync loop deleting unlinked messages with phase 1.
+13026 [2022-03-31 15:57:28.303] [background] [info] Sync loop complete.
+13026 [2022-03-31 15:57:28.303] [background] [info] Syncing folder list...
+13026 [2022-03-31 15:57:28.705] [background] [info] syncFolderUIDRange for [Gmail]/All Mail, UIDs: 21508 - 26508, Heavy: true
+13026 [2022-03-31 15:57:28.809] [calContacts] [warning] [SLOW] Transaction=runForCalendar:insertions > 80ms (82ms, 0 waiting to aquire)
+13026 [2022-03-31 15:57:30.953] [calContacts] [warning] [SLOW] Transaction=runForCalendar:insertions > 80ms (99ms, 0 waiting to aquire)
+13026 [2022-03-31 15:57:31.159] [background] [info] - [Gmail]/All Mail: remote=954, local=1, remoteUID=7FrYj2AQ1ZCz4Rhakx39PWDsH72mbjgpByLGwDtsU
+13026 [2022-03-31 15:57:34.926] [metadata] [info] Metadata delta stream starting...
+13026 [2022-03-31 15:57:39.851] [calContacts] [info] apidata.googleusercontent.com/caldav/v2/hutterino%40gmail.com/events/
+13026 [2022-03-31 15:57:39.851] [calContacts] [info]   remote: 86 etags
+13026 [2022-03-31 15:57:39.851] [calContacts] [info]    local: 0 etags
+13026 [2022-03-31 15:57:39.851] [calContacts] [info]  deleted: 0
+13026 [2022-03-31 15:57:39.851] [calContacts] [info]   needed: 86
+13026 [2022-03-31 15:57:42.008] [calContacts] [warning] [SLOW] Transaction=runForCalendar:insertions > 80ms (82ms, 0 waiting to aquire)
+13026 [2022-03-31 15:57:43.079] [calContacts] [info] apidata.googleusercontent.com/caldav/v2/vkjuj6oqe1tjpl9dvfk277b5hg%40group.calendar.google.com/events/
+13026 [2022-03-31 15:57:43.079] [calContacts] [info]   remote: 12 etags
+13026 [2022-03-31 15:57:43.079] [calContacts] [info]    local: 0 etags
+13026 [2022-03-31 15:57:43.079] [calContacts] [info]  deleted: 0
+13026 [2022-03-31 15:57:43.079] [calContacts] [info]   needed: 12
+13026 [2022-03-31 15:57:48.340] [background] [info] Sync loop deleting unlinked messages with phase 2.
+13026 [2022-03-31 15:57:48.344] [background] [info] Sync loop complete.
+13026 [2022-03-31 15:57:48.344] [background] [info] Syncing folder list...
+13026 [2022-03-31 15:57:48.750] [background] [info] syncFolderUIDRange for [Gmail]/All Mail, UIDs: 16508 - 21508, Heavy: true
+13026 [2022-03-31 15:57:49.290] [calContacts] [info] apidata.googleusercontent.com/caldav/v2/c5i68sj5edpm4rrfdchm6rreehgm6t3j81jn4rrle0n7cbj3c5m6arj4c5p2sprfdtjmop9ecdnmq%40virtual/events/
+13026 [2022-03-31 15:57:49.290] [calContacts] [info]   remote: 16 etags
+13026 [2022-03-31 15:57:49.290] [calContacts] [info]    local: 0 etags
+13026 [2022-03-31 15:57:49.290] [calContacts] [info]  deleted: 0
+13026 [2022-03-31 15:57:49.290] [calContacts] [info]   needed: 16
+13026 [2022-03-31 15:57:51.639] [calContacts] [info] apidata.googleusercontent.com/caldav/v2/d5q2sor84dk6ur39chgnig37e9nnas1eeon66obccln68obi5pjmurr7dhiisorfdk%40virtual/events/
+13026 [2022-03-31 15:57:51.639] [calContacts] [info]   remote: 9 etags
+13026 [2022-03-31 15:57:51.639] [calContacts] [info]    local: 0 etags
+13026 [2022-03-31 15:57:51.639] [calContacts] [info]  deleted: 0
+13026 [2022-03-31 15:57:51.639] [calContacts] [info]   needed: 9
+13026 [2022-03-31 15:57:51.974] [background] [info] - [Gmail]/All Mail: remote=1102, local=0, remoteUID=7FrYj2AQ1ZCz4Rhakx39PWDsH72mbjgpByLGwDtsU

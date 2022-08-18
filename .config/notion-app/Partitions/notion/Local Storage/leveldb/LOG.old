@@ -1,0 +1,30 @@
+2022/06/14-19:29:51.183 498d Reusing MANIFEST /home/ruben/.config/notion-app/Partitions/notion/Local Storage/leveldb/MANIFEST-000001
+2022/06/14-19:30:28.831 4a3b Level-0 table #5: started
+2022/06/14-19:30:28.836 4a3b Level-0 table #5: 33111 bytes OK
+2022/06/14-19:30:28.838 4a3b Delete type=0 #3
+2022/06/14-19:30:53.118 4a3b Level-0 table #7: started
+2022/06/14-19:30:53.132 4a3b Level-0 table #7: 56246 bytes OK
+2022/06/14-19:30:53.133 4a3b Delete type=0 #4
+2022/06/14-19:31:53.116 4c07 Level-0 table #9: started
+2022/06/14-19:31:53.131 4c07 Level-0 table #9: 98258 bytes OK
+2022/06/14-19:31:53.133 4c07 Delete type=0 #6
+2022/06/14-19:32:53.116 4c07 Level-0 table #11: started
+2022/06/14-19:32:53.128 4c07 Level-0 table #11: 10687 bytes OK
+2022/06/14-19:32:53.130 4c07 Delete type=0 #8
+2022/06/14-19:50:06.436 4a3b Level-0 table #13: started
+2022/06/14-19:50:06.449 4a3b Level-0 table #13: 17228 bytes OK
+2022/06/14-19:50:06.451 4a3b Delete type=0 #10
+2022/06/14-20:10:42.696 4c07 Level-0 table #15: started
+2022/06/14-20:10:42.708 4c07 Level-0 table #15: 15773 bytes OK
+2022/06/14-20:10:42.710 4c07 Delete type=0 #12
+2022/06/14-20:10:42.711 4a3b Compacting 4@0 + 1@1 files
+2022/06/14-20:10:42.717 4a3b Generated table #16@0: 55 keys, 94390 bytes
+2022/06/14-20:10:42.717 4a3b Compacted 4@0 + 1@1 files => 94390 bytes
+2022/06/14-20:10:42.719 4a3b compacted to: files[ 0 1 1 0 0 0 0 ]
+2022/06/14-20:10:42.719 4a3b Delete type=2 #11
+2022/06/14-20:10:42.719 4a3b Delete type=2 #15
+2022/06/14-20:10:42.719 4a3b Delete type=2 #7
+2022/06/14-20:10:42.719 4a3b Delete type=2 #13
+2022/06/14-20:10:42.719 4a3b Delete type=2 #9
+2022/06/14-20:24:32.526 4a3b Level-0 table #18: started
+2022/06/14-20:24:32.529 4a3b Level-0 table #18: 15661 bytes OK

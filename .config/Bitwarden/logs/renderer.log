@@ -1,0 +1,241 @@
+[2021-10-29 17:17:01.093] [info]  search indexing: 13.0956708ms
+[2021-10-31 17:29:12.922] [info]  search indexing: 10.4945104ms
+[2021-10-31 17:31:45.778] [info]  search indexing: 11.0803731ms
+[2021-11-17 12:40:29.809] [info]  search indexing: 11.0072601ms
+[2021-11-17 12:41:22.145] [info]  search indexing: 9.5916833ms
+[2021-11-17 12:53:47.206] [info]  search indexing: 7.1804368ms
+[2021-11-17 13:01:32.269] [info]  search indexing: 7.5571167ms
+[2021-11-22 14:28:58.580] [info]  search indexing: 11.9120995ms
+[2021-12-03 10:34:54.232] [info]  search indexing: 16.3816651ms
+[2021-12-03 11:52:44.213] [info]  search indexing: 14.6298199ms
+[2021-12-03 11:59:34.546] [info]  search indexing: 8.7802298ms
+[2021-12-03 11:59:39.300] [info]  search indexing: 8.1083481ms
+[2021-12-03 19:11:38.782] [info]  search indexing: 14.4524436ms
+[2021-12-07 15:24:15.755] [info]  search indexing: 11.8540836ms
+[2021-12-07 15:41:19.218] [info]  search indexing: 11.2994755ms
+[2021-12-07 15:41:38.780] [info]  search indexing: 10.7619764ms
+[2021-12-07 23:23:08.275] [info]  search indexing: 10.4383849ms
+[2021-12-07 23:51:06.977] [info]  search indexing: 12.8742473ms
+[2021-12-21 11:10:06.867] [info]  search indexing: 11.6656854ms
+[2022-01-09 16:46:43.140] [info]  search indexing: 11.0482025ms
+[2022-01-09 16:47:47.533] [info]  search indexing: 11.4913787ms
+[2022-02-22 10:38:04.282] [info]  search indexing: 0.1719413ms
+[2022-02-22 10:38:05.773] [info]  search indexing: 14.7158006ms
+[2022-02-22 11:11:58.406] [info]  search indexing: 11.2249754ms
+[2022-02-24 09:32:43.496] [info]  search indexing: 17.0430662ms
+[2022-02-24 09:33:06.142] [info]  search indexing: 9.3646847ms
+[2022-02-24 09:47:19.772] [info]  search indexing: 16.8424921ms
+[2022-02-24 13:37:46.531] [info]  search indexing: 10.3812708ms
+[2022-02-24 13:38:16.092] [info]  search indexing: 11.2853225ms
+[2022-02-24 16:48:15.341] [info]  search indexing: 9.1062815ms
+[2022-02-24 16:48:25.576] [info]  search indexing: 6.5085768ms
+[2022-02-24 23:25:24.297] [info]  search indexing: 14.8028393ms
+[2022-02-24 23:26:07.050] [info]  search indexing: 7.9946647ms
+[2022-02-24 23:26:14.506] [info]  search indexing: 8.1652425ms
+[2022-02-24 23:26:26.962] [info]  search indexing: 9.238589ms
+[2022-02-24 23:26:34.130] [info]  search indexing: 6.4483998ms
+[2022-02-24 23:26:39.742] [info]  search indexing: 8.3907669ms
+[2022-02-24 23:26:51.995] [info]  search indexing: 7.05395ms
+[2022-02-24 23:27:00.798] [info]  search indexing: 10.4016568ms
+[2022-02-24 23:47:00.443] [info]  search indexing: 8.2859442ms
+[2022-02-25 09:07:26.870] [info]  search indexing: 8.906402ms
+[2022-02-25 21:16:28.576] [info]  search indexing: 11.9957851ms
+[2022-02-25 21:23:06.774] [info]  search indexing: 11.2127125ms
+[2022-02-26 21:20:50.967] [info]  search indexing: 11.2882863ms
+[2022-02-26 21:26:02.916] [error] {
+  response: {
+    error: 'invalid_grant',
+    error_description: 'invalid_username_or_password',
+    ErrorModel: {
+      Message: 'Username or password is incorrect. Try again.',
+      Object: 'error'
+    }
+  },
+  message: 'Username or password is incorrect. Try again.',
+  captchaRequired: false,
+  statusCode: 400
+}
+[2022-02-26 21:26:02.925] [error] Received API exception: [object Object]
+[2022-02-26 21:26:15.146] [error] {
+  response: {
+    error: 'invalid_grant',
+    error_description: 'invalid_username_or_password',
+    ErrorModel: {
+      Message: 'Username or password is incorrect. Try again.',
+      Object: 'error'
+    }
+  },
+  message: 'Username or password is incorrect. Try again.',
+  captchaRequired: false,
+  statusCode: 400
+}
+[2022-02-26 21:26:15.147] [error] Received API exception: [object Object]
+[2022-02-26 21:26:54.159] [error] {
+  response: {
+    error: 'invalid_grant',
+    error_description: 'invalid_username_or_password',
+    ErrorModel: {
+      Message: 'Username or password is incorrect. Try again.',
+      Object: 'error'
+    }
+  },
+  message: 'Username or password is incorrect. Try again.',
+  captchaRequired: false,
+  statusCode: 400
+}
+[2022-02-26 21:26:54.160] [error] Received API exception: [object Object]
+[2022-02-26 21:27:50.933] [info]  search indexing: 0.1965204ms
+[2022-02-26 21:27:52.154] [info]  search indexing: 11.7765124ms
+[2022-02-26 21:29:48.512] [info]  search indexing: 8.1956391ms
+[2022-02-26 21:30:28.149] [error] {
+  response: {
+    error: 'invalid_grant',
+    error_description: 'invalid_username_or_password',
+    ErrorModel: {
+      Message: 'Username or password is incorrect. Try again.',
+      Object: 'error'
+    }
+  },
+  message: 'Username or password is incorrect. Try again.',
+  captchaRequired: false,
+  statusCode: 400
+}
+[2022-02-26 21:30:28.154] [error] Received API exception: [object Object]
+[2022-02-26 21:30:34.907] [error] {
+  response: {
+    error: 'invalid_grant',
+    error_description: 'invalid_username_or_password',
+    ErrorModel: {
+      Message: 'Username or password is incorrect. Try again.',
+      Object: 'error'
+    }
+  },
+  message: 'Username or password is incorrect. Try again.',
+  captchaRequired: false,
+  statusCode: 400
+}
+[2022-02-26 21:30:34.908] [error] Received API exception: [object Object]
+[2022-02-26 21:30:48.011] [error] {
+  response: {
+    error: 'invalid_grant',
+    error_description: 'invalid_username_or_password',
+    ErrorModel: {
+      Message: 'Username or password is incorrect. Try again.',
+      Object: 'error'
+    }
+  },
+  message: 'Username or password is incorrect. Try again.',
+  captchaRequired: false,
+  statusCode: 400
+}
+[2022-02-26 21:30:48.013] [error] Received API exception: [object Object]
+[2022-02-26 21:30:57.378] [error] {
+  response: {
+    error: 'invalid_grant',
+    error_description: 'invalid_username_or_password',
+    ErrorModel: {
+      Message: 'Username or password is incorrect. Try again.',
+      Object: 'error'
+    }
+  },
+  message: 'Username or password is incorrect. Try again.',
+  captchaRequired: false,
+  statusCode: 400
+}
+[2022-02-26 21:30:57.380] [error] Received API exception: [object Object]
+[2022-02-26 22:06:24.287] [info]  search indexing: 0.1249354ms
+[2022-02-26 22:06:25.310] [info]  search indexing: 9.4461798ms
+[2022-02-26 22:07:07.004] [error] {
+  response: {
+    error: 'invalid_grant',
+    error_description: 'invalid_username_or_password',
+    ErrorModel: {
+      Message: 'Username or password is incorrect. Try again.',
+      Object: 'error'
+    }
+  },
+  message: 'Username or password is incorrect. Try again.',
+  captchaRequired: false,
+  statusCode: 400
+}
+[2022-02-26 22:07:07.010] [error] Received API exception: [object Object]
+[2022-02-26 22:07:18.300] [error] {
+  response: {
+    error: 'invalid_grant',
+    error_description: 'invalid_username_or_password',
+    ErrorModel: {
+      Message: 'Username or password is incorrect. Try again.',
+      Object: 'error'
+    }
+  },
+  message: 'Username or password is incorrect. Try again.',
+  captchaRequired: false,
+  statusCode: 400
+}
+[2022-02-26 22:07:18.301] [error] Received API exception: [object Object]
+[2022-02-26 22:07:22.712] [info]  search indexing: 6.7112591ms
+[2022-02-28 15:13:25.190] [info]  search indexing: 8.3827501ms
+[2022-02-28 23:07:37.730] [info]  search indexing: 8.7188503ms
+[2022-02-28 23:11:53.211] [info]  search indexing: 11.4426467ms
+[2022-03-01 09:57:56.647] [info]  search indexing: 9.5970433ms
+[2022-03-01 10:34:00.202] [info]  search indexing: 9.9373182ms
+[2022-03-01 10:34:14.891] [info]  search indexing: 5.5931975ms
+[2022-03-01 10:34:33.751] [info]  search indexing: 0.1741447ms
+[2022-03-01 10:34:34.446] [info]  search indexing: 0.3485408ms
+[2022-03-01 10:34:40.894] [info]  search indexing: 11.2973507ms
+[2022-03-04 08:18:13.865] [info]  search indexing: 12.8777725ms
+[2022-03-08 13:39:24.336] [info]  search indexing: 19.325319ms
+[2022-03-08 13:49:51.354] [info]  search indexing: 9.3306612ms
+[2022-03-08 13:51:30.228] [info]  search indexing: 8.0697748ms
+[2022-03-08 13:51:52.933] [info]  search indexing: 16.5145119ms
+[2022-03-08 14:35:35.215] [info]  search indexing: 11.6525136ms
+[2022-03-08 14:35:54.632] [info]  search indexing: 7.9178515ms
+[2022-03-08 14:42:15.534] [info]  search indexing: 14.200151ms
+[2022-03-08 14:42:36.267] [info]  search indexing: 8.870072ms
+[2022-03-08 14:43:23.190] [info]  search indexing: 11.3568961ms
+[2022-03-08 14:43:37.284] [info]  search indexing: 15.037333ms
+[2022-03-08 14:44:23.905] [info]  search indexing: 9.6589815ms
+[2022-03-12 14:40:57.812] [info]  search indexing: 10.7494394ms
+[2022-03-20 22:03:41.591] [info]  search indexing: 5.8858857ms
+[2022-03-22 19:26:42.807] [info]  search indexing: 5.0220848ms
+[2022-03-23 12:31:47.488] [info]  search indexing: 13.080142ms
+[2022-03-23 19:04:29.271] [info]  search indexing: 5.3885242ms
+[2022-03-23 19:35:21.978] [info]  search indexing: 4.9017146ms
+[2022-03-23 21:20:50.310] [info]  search indexing: 4.7885495ms
+[2022-03-23 21:40:53.010] [info]  search indexing: 4.8120689ms
+[2022-03-24 14:16:29.944] [info]  search indexing: 9.1276129ms
+[2022-03-24 14:19:36.699] [info]  search indexing: 9.4732304ms
+[2022-03-24 14:25:32.056] [info]  search indexing: 8.660026ms
+[2022-03-24 17:11:23.663] [info]  search indexing: 5.2268743ms
+[2022-03-24 17:24:10.582] [info]  search indexing: 5.1397184ms
+[2022-03-31 15:49:24.751] [info]  search indexing: 9.0249372ms
+[2022-03-31 15:50:37.757] [info]  search indexing: 9.5857626ms
+[2022-03-31 16:08:24.053] [info]  search indexing: 5.2458433ms
+[2022-04-07 17:21:00.498] [info]  search indexing: 8.9967347ms
+[2022-04-07 17:21:54.534] [info]  search indexing: 8.1359157ms
+[2022-04-07 17:32:38.216] [info]  search indexing: 9.0929808ms
+[2022-04-07 17:33:15.306] [info]  search indexing: 9.1871315ms
+[2022-04-07 17:33:35.341] [info]  search indexing: 7.7109318ms
+[2022-04-07 19:01:13.169] [info]  search indexing: 10.3661703ms
+[2022-04-07 20:09:27.490] [info]  search indexing: 4.4981996ms
+[2022-04-12 09:12:47.495] [info]  search indexing: 9.9191086ms
+[2022-04-12 09:19:08.747] [info]  search indexing: 10.576814ms
+[2022-05-02 19:23:07.303] [info]  search indexing: 5.2361305ms
+[2022-05-02 19:28:59.444] [info]  search indexing: 0.2675883ms
+[2022-05-02 19:28:59.683] [error] null
+[2022-05-02 19:29:00.480] [info]  search indexing: 4.5746656ms
+[2022-05-02 19:29:01.373] [info]  search indexing: 3.3694283ms
+[2022-05-02 19:58:16.669] [info]  search indexing: 0.3492819ms
+[2022-05-02 19:58:17.285] [info]  search indexing: 0.2226097ms
+[2022-05-02 20:36:02.603] [info]  search indexing: 3.7925796ms
+[2022-05-02 20:54:18.257] [error] TypeError: Failed to fetch
+    at file:///usr/lib/bitwarden/app.asar/app/vendor.js:2:1697706
+    at D.i.<computed> (file:///usr/lib/bitwarden/app.asar/app/vendor.js:2:1691860)
+    at Mv.nativeFetch (file:///usr/lib/bitwarden/app.asar/app/main.js:1:739708)
+    at Mv.<anonymous> (file:///usr/lib/bitwarden/app.asar/app/main.js:1:739668)
+    at Generator.next (<anonymous>)
+    at o (file:///usr/lib/bitwarden/app.asar/app/main.js:1:704484)
+    at e.invoke (file:///usr/lib/bitwarden/app.asar/app/vendor.js:2:1684203)
+    at t.run (file:///usr/lib/bitwarden/app.asar/app/vendor.js:2:1679299)
+    at file:///usr/lib/bitwarden/app.asar/app/vendor.js:2:1695376
+    at e.invokeTask (file:///usr/lib/bitwarden/app.asar/app/vendor.js:2:1684887)

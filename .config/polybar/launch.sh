@@ -20,27 +20,26 @@ case $desktop in
 
     i3|/usr/share/xsessions/i3)
       # Select primary monitor and the other
-      #PRIMARY=$(xrandr --query | grep " connected" | grep "primary" | cut -d" " -f1)
-      #OTHERS=$(xrandr --query | grep " connected" | grep -v "primary" | cut -d" " -f1)
+      PRIMARY=$(xrandr --query | grep " connected" | grep "primary" | cut -d" " -f1)
+      OTHERS=$(xrandr --query | grep " connected" | grep -v "primary" | cut -d" " -f1)
 
       # Launch on primary monitor
-      #if type "xrandr" > /dev/null; then
-	#for m in $PRIMARY; do
-	  #MONITOR=$m polybar --reload mainbar-i3 -c ~/.config/polybar/config &
-	#done
-      #MONITOR=$PRIMARY polybar --reload mainbar-i3 -c ~/.config/polybar/config &
-      #fi
-      #sleep 0.1
+      if type "xrandr" > /dev/null; then
+	for m in $PRIMARY; do
+	  MONITOR=$m polybar --reload mainbar-i3 -c ~/.config/polybar/config &
+	done
+      fi
+      sleep 0.5
 
       # Launch on all other monitors
-      #if type "xrandr" > /dev/null; then
-        #for m in $OTHERS; do
-          #MONITOR=$m polybar --reload mainbar-i3 -c ~/.config/polybar/config &
-        #done
-      #else
-        #polybar --reload mainbar-i3 -c ~/.config/polybar/config &
-      #fi
-      MONITOR=$(xrandr --query | grep " connected" | cut -d" " -f1) polybar --reload mainbar-i3 -c ~/.config/polybar/config &
+      if type "xrandr" > /dev/null; then
+        for m in $OTHERS; do
+          MONITOR=$m polybar --reload mainbar-i3 -c ~/.config/polybar/config &
+        done
+      else
+        polybar --reload mainbar-i3 -c ~/.config/polybar/config &
+      fi
+      #MONITOR=$(xrandr --query | grep " connected" | cut -d" " -f1) polybar --reload mainbar-i3 -c ~/.config/polybar/config &
     # second polybar at bottom
     # if type "xrandr" > /dev/null; then
     #   for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
