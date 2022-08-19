@@ -1,8 +1,0 @@
-2022/06/14-19:30:31.287 4c07 Reusing MANIFEST /home/ruben/.config/notion-app/Partitions/notion/IndexedDB/notion_www.notion.so_0.indexeddb.leveldb/MANIFEST-000001
-2022/06/14-19:30:31.287 4c07 Recovering log #4
-2022/06/14-19:30:31.287 4c07 Reusing old log /home/ruben/.config/notion-app/Partitions/notion/IndexedDB/notion_www.notion.so_0.indexeddb.leveldb/000004.log 
-2022/06/14-19:30:36.948 4a3b Level-0 table #8: started
-2022/06/14-19:30:36.949 4a3b Level-0 table #8: 0 bytes OK
-2022/06/14-19:30:36.950 4a3b Delete type=0 #4
-2022/06/14-19:30:36.950 4a3b Manual compaction at level-0 from (begin) .. (end); will stop at (end)
-2022/06/14-19:30:36.950 4a3b Manual compaction at level-1 from (begin) .. (end); will stop at (end)
