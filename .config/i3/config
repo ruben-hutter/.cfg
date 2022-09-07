@@ -413,7 +413,7 @@ assign [class="firefox"] → 1
 assign [class="Brave-browser"] → 1
 
 # Workspace 2 text editor related
-assign [class="Atom"] → 2
+assign [class="subl|Subl"] → 2
 assign [class="Code"] → 2
 assign [class="jetbrains-idea"] → 2
 assign [class="jetbrains-pycharm"] → 2
@@ -557,7 +557,7 @@ bindsym --release $mod+Escape exec xkill
 bindsym $mod+F1 exec --no-startup-id firefox; focus
 
 #workspace 2 related
-bindsym $mod+F2 exec --no-startup-id code; focus
+bindsym $mod+F2 exec --no-startup-id subl; focus
 
 #workspace 3 related
 
@@ -670,7 +670,7 @@ for_window [class="Termite"] focus
 for_window [class="Terminator"] focus
 for_window [class="Thunar"] focus
 for_window [class="VirtualBox"] focus
-for_window [class="Atom"] focus
+for_window [class="subl|Subl"] focus
 for_window [class="Brave-browser"] focus
 for_window [class="Spotify"] focus
 for_window [class="TeamViewer"] focus
