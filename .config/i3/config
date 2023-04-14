@@ -71,7 +71,7 @@ set $right l
 #exec --no-startup-id xrandr --output HDMI-2 --right-of HDMI-1 --auto
 #exec --no-startup-id xrandr --output HDMI2 --right-of HDMI1 --auto
 exec_always --no-startup-id /home/ruben/.screenlayout/dualScreen.sh
-#exec_always --no-startup-id /home/ruben/.screenlayout/uniScreen.sh
+#exec_always --no-startup-id /home/ruben/.screenlayout/KIBERone.sh
 
 # my current setup
 
@@ -413,10 +413,11 @@ assign [class="firefox"] → 1
 assign [class="Brave-browser"] → 1
 
 # Workspace 2 text editor related
-assign [class="subl|Subl"] → 2
+#assign [class="subl|Subl"] → 2
 assign [class="Code"] → 2
 assign [class="jetbrains-idea"] → 2
 assign [class="jetbrains-pycharm"] → 2
+assign [class="obsidian"] → 2
 
 # Workspace 3 Inkscape
 #assign [class="Inkscape"] → 3
@@ -428,7 +429,7 @@ assign [class="Thunderbird"] → 4
 assign [class="Mailspring"] → 4
 
 # Workspace 5 Images and meld
-assign [class="ristretto|Ristretto|shotwell|Shotwell|Xviewer|Nitrogen"] → 5
+#assign [class="ristretto|Ristretto|shotwell|Shotwell|Xviewer|Nitrogen"] → 5
 #assign [class="feh|gthumb|Gthumb|eog|Eog|Pinta|pixeluvo|Pixeluvo"] → 5
 #assign [class="Meld"] → 5
 
@@ -557,7 +558,7 @@ bindsym --release $mod+Escape exec xkill
 bindsym $mod+F1 exec --no-startup-id firefox; focus
 
 #workspace 2 related
-bindsym $mod+F2 exec --no-startup-id subl; focus
+bindsym $mod+F2 exec --no-startup-id obsidian; focus
 
 #workspace 3 related
 
@@ -586,9 +587,9 @@ bindsym $mod+Shift+Return exec --no-startup-id thunar; focus
 #####################################################################################################################
 
 
-bindsym Print exec --no-startup-id scrot 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg'
-bindsym $mod+Print --release exec --no-startup-id scrot -u 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg'
-bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -f 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg'
+bindsym Print exec --no-startup-id scrot 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg' -q 100
+bindsym $mod+Print --release exec --no-startup-id scrot -u 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg' -q 100
+bindsym $mod+Shift+Print --release exec --no-startup-id scrot -s -f 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg' -q 100
 
 #bindsym Control+Print exec --no-startup-id xfce4-screenshooter
 #bindsym Control+Shift+Print exec --no-startup-id gnome-screenshot -i
