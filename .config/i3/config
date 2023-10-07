@@ -71,7 +71,7 @@ set $right l
 #exec --no-startup-id xrandr --output HDMI-2 --right-of HDMI-1 --auto
 #exec --no-startup-id xrandr --output HDMI2 --right-of HDMI1 --auto
 exec_always --no-startup-id /home/ruben/.screenlayout/dualScreen.sh
-#exec_always --no-startup-id /home/ruben/.screenlayout/KIBERone.sh
+#exec_always --no-startup-id /home/ruben/.screenlayout/presentation.sh
 
 # my current setup
 
@@ -417,11 +417,12 @@ assign [class="Brave-browser"] → 1
 assign [class="Code"] → 2
 assign [class="jetbrains-idea"] → 2
 assign [class="jetbrains-pycharm"] → 2
-assign [class="obsidian"] → 2
 
 # Workspace 3 Inkscape
 #assign [class="Inkscape"] → 3
 assign [class="Cisco AnyConnect Secure Mobility Client"] → 3
+assign [class="obsidian"] → 3
+assign [class="Logseq"] → 3
 
 # Workspace 4 Gimp
 assign [class="Gimp-2.10"] → 4
@@ -549,7 +550,7 @@ bindsym control+mod1+e exec --no-startup-id arcolinux-tweak-tool
 bindsym $mod+Return exec --no-startup-id alacritty; focus
 
 #xkill
-bindsym --release $mod+Escape exec xkill
+bindsym --release $mod+Shift+Escape exec xkill
 
 #workspace related
 
@@ -558,13 +559,14 @@ bindsym --release $mod+Escape exec xkill
 bindsym $mod+F1 exec --no-startup-id firefox; focus
 
 #workspace 2 related
-bindsym $mod+F2 exec --no-startup-id obsidian; focus
 
 #workspace 3 related
+bindsym $mod+F2 exec --no-startup-id obsidian; focus
+bindsym $mod+F3 exec --no-startup-id logseq; focus
 
 #workspace 4 related
 #bindsym $mod+F4 exec --no-startup-id gimp-2.10; focus
-bindsym $mod+F4 exec --no-startup-id thunderbird; focus
+bindsym $mod+F4 exec --no-startup-id mailspring; focus
 
 #workspace 5 related
 
@@ -659,6 +661,7 @@ for_window [class="GParted"] floating enable
 for_window [class="Steam"] floating enable
 for_window [class="Lutris"] floating enable
 for_window [class="Signal"] floating enable
+for_window [class="authenticator"] floating enable
 
 
 #####################################################################################################################
