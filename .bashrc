@@ -248,9 +248,7 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# .gitignore file creator
 function gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}
-
-# autocompletion for git
-#source ~/.git-completion.bash
 
 [ -f "/home/ruben/.ghcup/env" ] && source "/home/ruben/.ghcup/env" # ghcup-env
