@@ -1,11 +1,14 @@
 # git-bare repo for dotfiles
 alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
-# open i3 config file in vim
-alias i3conf="vim $HOME/.config/i3/config"
+# open i3 config file
+alias i3conf="$EDITOR $HOME/.config/i3/config"
 
 # get oath code from yubikey
 alias ykcode="ykman oath accounts code"
 
 # clearaaa
 alias clera="clear"
+
+# aliases
+alias nv="nvim"
