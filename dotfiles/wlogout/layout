@@ -2,7 +2,7 @@
     "label" : "lock",
     "action" : "sleep 1; swaylock",
     "text" : "Lock",
-    "keybind" : "l"
+    "keybind" : "k"
 }
 {
     "label" : "hibernate",
@@ -14,7 +14,7 @@
     "label" : "logout",
     "action" : "sleep 1; hyprctl dispatch exit",
     "text" : "Logout",
-    "keybind" : "e"
+    "keybind" : "l"
 }
 {
     "label" : "shutdown",

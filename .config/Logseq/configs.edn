@@ -1,1 +1,1 @@
-{:spell-check true, :git/auto-commit-seconds 60}
+{:spell-check true, :git/auto-commit-seconds 60, :window/native-titlebar? true}
