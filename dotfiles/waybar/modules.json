@@ -182,11 +182,6 @@
         }
     },
 
-	// Keyboard Layout
-	"custom/keyboard_layout": {
-		"tooltip": false
-	},
-
     // System tray
     "tray": {
         "icon-size": 20,
