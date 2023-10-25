@@ -47,24 +47,23 @@
 
     // Modules Right    
     "modules-right": [
-		"tray",
-        "network",
-        "bluetooth",
+        "custom/updates",
         "pulseaudio",
+        "bluetooth",
+        "battery", 
         "group/hardware",
         "custom/cliphist",
-        "battery", 
-        "clock",
-        "custom/exit"
+        "network",
+        "custom/exit",
+        "clock"
     ],
 
     // Group Quicklinks
     "group/quicklinks": {
         "orientation": "horizontal",
         "modules": [
-            "custom/firefox",
             "custom/filemanager",
-			"custom/chatgpt"
+            "custom/brave",
          ]
     },
 

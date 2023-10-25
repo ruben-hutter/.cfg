@@ -160,7 +160,7 @@ bindsym $mod+shift+d exec --no-startup-id dmenu_run -i -nb '#191919' -nf '#fea63
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
 #bindsym $mod+d exec --no-startup-id i3-dmenu-desktop 
-bindsym $mod+d exec --no-startup-id rofi -show drun
+bindsym $mod+d exec --no-startup-id rofi -show drun -show-icons
 
 # gmrun
 bindsym mod1+F2 exec --no-startup-id gmrun
@@ -457,6 +457,7 @@ assign [class="Spotify|spotify"] → 10
 for_window [class="Spotify"] move to workspace 10
 assign [class="Bitwarden"] → 10
 assign [class="Cisco AnyConnect Secure Mobility Client"] → 10
+assign [class="com.cisco.anyconnect.gui"] → 10
 
 
 
@@ -586,6 +587,7 @@ bindsym $mod+Shift+Return exec --no-startup-id thunar; focus
 #workspace 9 related
 
 #workspace 10 related
+bindsym $mod+F10 exec --no-startup-id bitwarden-desktop; focus
 
 #####################################################################################################################
 #################                          screenshots                                              #################

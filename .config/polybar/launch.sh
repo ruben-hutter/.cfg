@@ -7,7 +7,7 @@
 # Tip : There are other interesting fonts that provide icons like nerd-fonts-complete
 # --log=error
 # Terminate already running bar instances
-killall -q polybar
+killall -9 -q polybar
 
 # Wait until the processes have been shut down
 while pgrep -u $UID -x polybar > /dev/null; do sleep 1; done
