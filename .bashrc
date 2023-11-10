@@ -230,8 +230,6 @@ ex ()
 
 [[ -f ~/.bashrc-personal ]] && . ~/.bashrc-personal
 
-# Make your shell beautiful
-neofetch
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -252,3 +250,12 @@ unset __conda_setup
 function gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}
 
 [ -f "/home/ruben/.ghcup/env" ] && source "/home/ruben/.ghcup/env" # ghcup-env
+
+# Start Starship
+eval "$(starship init bash)"
+
+# Pywal
+cat ~/.cache/wal/sequences
+
+# Start Neofetch
+neofetch
