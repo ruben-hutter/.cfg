@@ -36,8 +36,8 @@
         "custom/wallpaper",
         "custom/waybarthemes",          
         "wlr/taskbar",
-        "group/quicklinks",
-        "hyprland/window"
+        "group/quicklinks"
+        // "hyprland/window"
     ],
 
     // Modules Center
@@ -48,7 +48,7 @@
     // Modules Right    
     "modules-right": [
 		"tray",
-        "network",
+        // "network",
         "bluetooth",
         "pulseaudio",
         "group/hardware",
