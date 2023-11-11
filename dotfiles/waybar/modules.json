@@ -20,9 +20,9 @@
 			"active": "",
 			"default": ""
         },
-        "persistent_workspaces": {
-             "*": 5
-        }       
+        // "persistent_workspaces": {
+        //      "*": 5
+        // }       
     },
 
     // Taskbar
@@ -54,6 +54,7 @@
             "(.*) Microsoft Teams": "$1"
         },
         "separate-outputs": true
+		// "icon": false
     },
 
     // Youtube Subscriber Count
