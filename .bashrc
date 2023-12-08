@@ -196,8 +196,8 @@ alias ssn="sudo shutdown now"
 alias sr="sudo reboot"
 
 
-# # ex = EXtractor for all kinds of archives
-# # usage: ex <file>
+# ex = EXtractor for all kinds of archives
+# usage: ex <file>
 ex ()
 {
   if [ -f $1 ] ; then
@@ -225,9 +225,7 @@ ex ()
 
 #create a file called .bashrc-personal and put all your personal aliases
 #in there. They will not be overwritten by skel.
-
 [[ -f ~/.bashrc-personal ]] && . ~/.bashrc-personal
-
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -244,9 +242,15 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# Cargo setup
+if [ -d "$HOME/.cargo/bin" ] ;
+  then PATH="$PATH:$HOME/.cargo/bin"
+fi
+
 # .gitignore file creator
 function gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}
 
+# Haskell setup
 [ -f "/home/ruben/.ghcup/env" ] && source "/home/ruben/.ghcup/env" # ghcup-env
 
 # Start Starship
