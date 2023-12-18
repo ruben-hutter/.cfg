@@ -300,7 +300,7 @@ bindsym Mod1+Ctrl+Left workspace prev
 focus_on_window_activation focus
 
 # focus window with mouse
-focus_follows_mouse no
+focus_follows_mouse yes
 
 
 
@@ -518,7 +518,10 @@ exec --no-startup-id volumeicon
 #exec --no-startup-id feh --bg-fill /usr/share/backgrounds/arcolinux/arco-wallpaper.jpg &
 
 #Nitrogen
-exec --no-startup-id nitrogen --restore &
+#exec --no-startup-id nitrogen --restore &
+
+# swww & wal
+exec_always --no-startup-id ~/dotfiles/scripts/updatewal-swww.sh
 
 #Polybar
 exec_always --no-startup-id ~/.config/polybar/launch.sh
@@ -542,17 +545,17 @@ exec --no-startup-id /usr/lib/xfce4/notifyd/xfce4-notifyd &
 
 #not workspace related
 
-#ArcoLinux Welcome App
-bindsym control+mod1+w exec --no-startup-id arcolinux-welcome-app
-
-#ArcoLinux Tweak Tool
-bindsym control+mod1+e exec --no-startup-id arcolinux-tweak-tool
-
 # terminal
 bindsym $mod+Return exec --no-startup-id alacritty; focus
 
 #xkill
 bindsym --release $mod+Shift+Escape exec xkill
+
+# random background
+bindsym $mod+Shift+w exec --no-startup-id ~/dotfiles/scripts/updatewal-swww.sh
+
+# select background
+bindsym $mod+Ctrl+w exec --no-startup-id ~/dotfiles/scripts/wallpaper-swww.sh
 
 #workspace related
 
