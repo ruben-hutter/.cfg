@@ -4,8 +4,6 @@ sleep 1
 
 killall -q polybar
 
-polybar_log=/home/ruben/polybar.log
-
 connected_monitors=$(xrandr --query | grep " connected" | cut -d" " -f1)
 
 primary_monitor=$(xrandr --query | grep " primary" | cut -d" " -f1)
