@@ -9,3 +9,9 @@ export XDG_SESSION_TYPE=Hyprland
 export XDG_SESSION_DESKTOP=Hyprland
 
 export HUGGINGFACE_APIKEY=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
+
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    eval `ssh-agent -s`
+    ssh-add $HOME/.ssh/github
+    ssh-add $HOME/.ssh/gitlab_uni
+fi

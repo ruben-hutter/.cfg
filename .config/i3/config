@@ -527,7 +527,7 @@ exec_always --no-startup-id ~/dotfiles/scripts/updatewal-swww.sh
 exec_always --no-startup-id ~/.config/polybar/launch.sh
 
 #Libinput Gestures
-exec_always --no-startup-id libinput-gestures-setup start &
+#exec_always --no-startup-id libinput-gestures-setup start &
 
 #####################################################################################################################
 #################                                 system applications                               #################

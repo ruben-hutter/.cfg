@@ -25,7 +25,7 @@ source "$HOME/.cache/wal/colors.sh"
 cp $wallpaper ~/.cache/current_wallpaper.jpg
 
 # ----------------------------------------------------- 
-# get wallpaper iamge name
+# get wallpaper image name
 # ----------------------------------------------------- 
 newwall=$(echo $wallpaper | sed "s|$HOME/wallpaper/||g")
 
