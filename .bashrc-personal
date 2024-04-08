@@ -13,5 +13,8 @@ alias ykcode="ykman oath accounts code"
 # clearaaa
 alias clera="clear"
 
-# aliases
+# neovim alias
 alias nv="nvim"
+
+# uni tmux session
+alias uni=~/scripts/tmux_uni.sh

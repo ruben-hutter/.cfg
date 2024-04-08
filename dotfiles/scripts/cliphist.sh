@@ -10,14 +10,14 @@
 # ----------------------------------------------------- 
 
 case $1 in
-    d) cliphist list | rofi -dmenu -config ~/dotfiles/rofi/config-cliphist.rasi | cliphist delete
+    d) cliphist list | wofi -dmenu -config ~/dotfiles/wofi/config-cliphist.rasi | cliphist delete
        ;;
 
-    w) if [ `echo -e "Clear\nCancel" | rofi -dmenu -config ~/dotfiles/rofi/config-short.rasi` == "Clear" ] ; then
+    w) if [ `echo -e "Clear\nCancel" | wofi -dmenu -config ~/dotfiles/rofi/config-short.rasi` == "Clear" ] ; then
             cliphist wipe
        fi
        ;;
 
-    *) cliphist list | rofi -dmenu -config ~/dotfiles/rofi/config-cliphist.rasi | cliphist decode | wl-copy
+    *) cliphist list | wofi -dmenu -config ~/dotfiles/rofi/config-cliphist.rasi | cliphist decode | wl-copy
        ;;
 esac
