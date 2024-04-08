@@ -9,8 +9,10 @@
 # by Stephan Raabe (2023) 
 # ----------------------------------------------------- 
 
-timeswaylock=600
-timeoff=660
+#timeswaylock=600
+timeswaylock=1800
+#timeoff=660
+timeoff=1860
 
 if [ -f "/usr/bin/swayidle" ]; then
     echo "swayidle is installed."
