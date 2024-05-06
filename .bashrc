@@ -259,5 +259,5 @@ eval "$(starship init bash)"
 # Pywal
 cat ~/.cache/wal/sequences
 
-# Start Neofetch
-neofetch
+# Start fastfetch
+fastfetch
