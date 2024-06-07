@@ -8,10 +8,17 @@ export XDG_CURRENT_DESKTOP=Hyprland
 export XDG_SESSION_TYPE=Hyprland
 export XDG_SESSION_DESKTOP=Hyprland
 
-export HUGGINGFACE_APIKEY=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
+if [ -f ~/.keys ]; then
+    . ~/.keys
+fi
 
-if [ -z "$SSH_AUTH_SOCK" ]; then
-    eval `ssh-agent -s`
-    ssh-add $HOME/.ssh/github
-    ssh-add $HOME/.ssh/gitlab_uni
+# Get the path to the SSH agent socket file
+SSH_AGENT_SOCKET=$(find /tmp/ssh-* -name 'agent.*' | head -n 1)
+
+# Check if the socket file exists
+if [ -S "$SSH_AGENT_SOCKET" ]; then
+    # Set SSH_AUTH_SOCK variable
+    export SSH_AUTH_SOCK="$SSH_AGENT_SOCKET"
+else
+    echo "SSH agent socket file not found."
 fi
