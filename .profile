@@ -19,6 +19,8 @@ SSH_AGENT_SOCKET=$(find /tmp/ssh-* -name 'agent.*' | head -n 1)
 if [ -S "$SSH_AGENT_SOCKET" ]; then
     # Set SSH_AUTH_SOCK variable
     export SSH_AUTH_SOCK="$SSH_AGENT_SOCKET"
+    # Add keys to the agent
+    ssh-add -l > /dev/null || ssh-add
 else
     echo "SSH agent socket file not found."
 fi
