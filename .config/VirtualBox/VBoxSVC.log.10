@@ -1,0 +1,49 @@
+00:00:00.003160 main     VirtualBox XPCOM Server 7.0.8 r156879 linux.amd64 (Apr 18 2023 21:49:14) release log
+00:00:00.003163 main     Log opened 2023-06-04T11:35:40.115282000Z
+00:00:00.003165 main     Build Type: release
+00:00:00.003167 main     OS Product: Linux
+00:00:00.003168 main     OS Release: 6.3.5-arch1-1
+00:00:00.003169 main     OS Version: #1 SMP PREEMPT_DYNAMIC Tue, 30 May 2023 13:44:01 +0000
+00:00:00.003196 main     DMI Product Name: 20QD0037MZ
+00:00:00.003211 main     DMI Product Version: ThinkPad X1 Carbon 7th
+00:00:00.003216 main     Firmware type: UEFI
+00:00:00.003694 main     Secure Boot: Disabled
+00:00:00.003751 main     Host RAM: 15677MB (15.3GB) total, 5436MB (5.3GB) available
+00:00:00.003755 main     Executable: /usr/lib/virtualbox/VBoxSVC
+00:00:00.003756 main     Process ID: 20151
+00:00:00.003757 main     Package type: LINUX_64BITS_GENERIC (OSE)
+00:00:00.006280 main     IPC socket path: /tmp/.vbox-ruben-ipc/ipcd
+00:00:00.120860 nspr-2   VirtualBox: object creation starts
+00:00:00.122255 nspr-2   Home directory: '/home/ruben/.config/VirtualBox'
+00:00:00.122963 nspr-2   Loading settings file "/home/ruben/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:00:00.130365 nspr-2   USB: Unknown USB device detected (idVendor: 0x06cb, idProduct: 0x00bd)
+00:00:00.130463 nspr-2   USB: Unknown USB device detected (idVendor: 0x8087, idProduct: 0x0aaa)
+00:00:00.130797 nspr-2   Successfully initialised host USB using sysfs
+00:00:00.171181 nspr-2   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp0s20f3: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:00:00.174530 nspr-2   HostDnsMonitor: initializing
+00:00:00.175468 nspr-2   NAT: resolv.conf: nameserver 192.168.37.113
+00:00:00.175535 nspr-2   HostDnsMonitor: updating information
+00:00:00.175593 nspr-2   HostDnsMonitor: old information
+00:00:00.175608 nspr-2     no server entries
+00:00:00.175615 nspr-2     no domain set
+00:00:00.175619 nspr-2     no search string entries
+00:00:00.175625 nspr-2   HostDnsMonitor: new information
+00:00:00.175630 nspr-2     server 1: 192.168.37.113
+00:00:00.175637 nspr-2     no domain set
+00:00:00.175642 nspr-2     no search string entries
+00:00:00.267495 nspr-2   VD: VDInit finished with VINF_SUCCESS
+00:00:00.268123 nspr-2   ERROR [COM]: aRC=NS_ERROR_FAILURE (0x80004005) aIID={aac6c7cb-a371-4c58-ab51-0616896b2f2c} aComponent={SystemPropertiesWrap} aText={Cannot determine default Guest Additions ISO location. Most likely they are not available}, preserve=false aResultDetail=0
+00:00:00.281046 nspr-2   Loading settings file "/home/ruben/VirtualBox VMs/Metasploitable2-Linux/Metasploitable2-Linux.vbox" with version "1.19-linux"
+00:00:00.284300 nspr-2   Loading settings file "/home/ruben/VirtualBox VMs/kali-linux-2022.4-virtualbox-amd64/kali-linux-2022.4-virtualbox-amd64.vbox" with version "1.19-linux"
+00:00:00.286266 nspr-2   VirtualBox: object created
+00:00:01.600096 nspr-5   NetIfAdpCtlOut: VBoxNetAdpCtl: Error while retrieving link speed for wlp0s20f3: VBoxNetAdpCtl: ioctl failed: Operation not supported
+00:00:01.826330 nspr-5   ERROR [COM]: aRC=VBOX_E_INVALID_VM_STATE (0x80bb0002) aIID={300763af-5d6b-46e6-aa96-273eac15538a} aComponent={MachineWrap} aText={The machine is not mutable (state is PoweredOff)}, preserve=false aResultDetail=0
+00:00:02.128619 nspr-2   Saving settings file "/home/ruben/.config/VirtualBox/VirtualBox.xml" with version "1.12-linux"
+00:00:02.141910 nspr-2   Finished saving settings file "/home/ruben/.config/VirtualBox/VirtualBox.xml"
+00:00:09.185636 main     VirtualBox: object deletion starts
+00:00:09.185695 main     ERROR [COM]: aRC=VBOX_E_OBJECT_IN_USE (0x80bb000c) aIID={ad47ad09-787b-44ab-b343-a082a3f2dfb1} aComponent={MediumWrap} aText={Medium '/home/ruben/UNI/Software Security/Exercises/Blatt06/Metasploitable2-Linux/Metasploitable.vmdk' cannot be closed because it is still attached to 1 virtual machines}, preserve=false aResultDetail=0
+00:00:09.185917 main     ERROR [COM]: aRC=VBOX_E_OBJECT_IN_USE (0x80bb000c) aIID={ad47ad09-787b-44ab-b343-a082a3f2dfb1} aComponent={MediumWrap} aText={Medium '/home/ruben/VirtualBox VMs/kali-linux-2022.4-virtualbox-amd64/kali-linux-2022.4-virtualbox-amd64.vdi' cannot be closed because it is still attached to 1 virtual machines}, preserve=false aResultDetail=0
+00:00:09.186506 main     HostDnsMonitor: shutting down ...
+00:00:09.186719 main     HostDnsMonitor: shut down
+00:00:09.197628 Watcher  ERROR [COM]: aRC=E_ACCESSDENIED (0x80070005) aIID={7682d5eb-f00e-44f1-8ca2-99d08b1cd607} aComponent={VirtualBoxWrap} aText={The object is not ready}, preserve=false aResultDetail=0
+00:00:09.197744 main     VirtualBox: object deleted

@@ -1,0 +1,47 @@
+[2024-09-04 16:06:26.858] [debug] [Marketplace] Release compare: v0.4.6 (current) >  v0.4.6 (latest)
+[2024-09-04 16:06:26.860] [debug] [Marketplace] Update skip: no new version
+[2024-09-04 16:06:27.391] [debug] [Marketplace] === Updating: pengx17/logseq-plugin-bullet-threading ===
+[2024-09-04 16:06:27.870] [debug] [Marketplace] Release latest: https://plugins.logseq.io/github/api/repos/pengx17/logseq-plugin-bullet-threading/releases/latest :status 200
+[2024-09-04 16:06:27.876] [debug] [Marketplace] Release latest: v1.1.4  from https://api.github.com/repos/pengx17/logseq-plugin-bullet-threading/releases/assets/110059142
+[2024-09-04 16:06:27.877] [debug] [Marketplace] Release compare: v1.1.4 (current) >  v1.1.4 (latest)
+[2024-09-04 16:06:27.878] [debug] [Marketplace] Update skip: no new version
+[2024-09-04 16:06:28.391] [debug] [Marketplace] === Updating: sansui233/logseq-bonofix-theme ===
+[2024-09-04 16:06:29.012] [debug] [Marketplace] Release latest: https://plugins.logseq.io/github/api/repos/sansui233/logseq-bonofix-theme/releases/latest :status 200
+[2024-09-04 16:06:29.017] [debug] [Marketplace] Release latest: v3.10.4  from https://api.github.com/repos/Sansui233/logseq-bonofix-theme/releases/assets/160490033
+[2024-09-04 16:06:29.018] [debug] [Marketplace] Release compare: v3.10.4 (current) >  v3.10.4 (latest)
+[2024-09-04 16:06:29.019] [debug] [Marketplace] Update skip: no new version
+[2024-09-04 16:07:20.446] [debug] window-all-closed Quitting...
+[2024-09-16 16:18:37.641] [info] Logseq App(0.10.9) Starting... 
+[2024-09-16 16:18:37.648] [info] restore proxy settings {:type "system"}
+[2024-09-16 16:18:37.649] [info] set proxy to {:type "system"}
+[2024-09-16 16:18:40.830] [debug] :electron.handler/watch-dir {:path "/home/ruben/.logseq/config"}
+[2024-09-16 16:18:40.928] [debug] :electron.handler/unwatch-dir {:path "/home/ruben/kDrive/Logseq"}
+[2024-09-16 16:18:40.929] [debug] :electron.handler/watch-dir {:path "/home/ruben/kDrive/Logseq"}
+[2024-09-16 16:18:43.710] [debug] [Marketplace] === Updating: pengx17/logseq-plugin-bullet-threading ===
+[2024-09-16 16:18:44.604] [debug] [Marketplace] INFO: use github api -  https://plugins.logseq.io/github/api
+[2024-09-16 16:18:45.717] [debug] [Marketplace] Release latest: https://plugins.logseq.io/github/api/repos/pengx17/logseq-plugin-bullet-threading/releases/latest :status 200
+[2024-09-16 16:18:45.720] [debug] [Marketplace] Release latest: v1.1.4  from https://api.github.com/repos/pengx17/logseq-plugin-bullet-threading/releases/assets/110059142
+[2024-09-16 16:18:45.721] [debug] [Marketplace] Release compare: v1.1.4 (current) >  v1.1.4 (latest)
+[2024-09-16 16:18:45.721] [debug] [Marketplace] Update skip: no new version
+[2024-09-16 16:18:46.231] [debug] [Marketplace] === Updating: xyhp915/logseq-journals-calendar ===
+[2024-09-16 16:18:46.964] [debug] [Marketplace] Release latest: https://plugins.logseq.io/github/api/repos/xyhp915/logseq-journals-calendar/releases/latest :status 200
+[2024-09-16 16:18:46.969] [debug] [Marketplace] Release latest: v0.10.10  from https://api.github.com/repos/xyhp915/logseq-journals-calendar/releases/assets/107493748
+[2024-09-16 16:18:46.970] [debug] [Marketplace] Release compare: v0.10.10 (current) >  v0.10.10 (latest)
+[2024-09-16 16:18:46.971] [debug] [Marketplace] Update skip: no new version
+[2024-09-16 16:18:47.481] [debug] [Marketplace] === Updating: sansui233/logseq-bonofix-theme ===
+[2024-09-16 16:18:48.244] [debug] [Marketplace] Release latest: https://plugins.logseq.io/github/api/repos/sansui233/logseq-bonofix-theme/releases/latest :status 200
+[2024-09-16 16:18:48.247] [debug] [Marketplace] Release latest: v3.10.4  from https://api.github.com/repos/Sansui233/logseq-bonofix-theme/releases/assets/160490033
+[2024-09-16 16:18:48.247] [debug] [Marketplace] Release compare: v3.10.4 (current) >  v3.10.4 (latest)
+[2024-09-16 16:18:48.247] [debug] [Marketplace] Update skip: no new version
+[2024-09-16 16:18:48.752] [debug] [Marketplace] === Updating: vipzhicheng/logseq-plugin-mark-map ===
+[2024-09-16 16:18:49.762] [debug] [Marketplace] Release latest: https://plugins.logseq.io/github/api/repos/vipzhicheng/logseq-plugin-mark-map/releases/latest :status 200
+[2024-09-16 16:18:49.767] [debug] [Marketplace] Release latest: v0.4.6  from https://api.github.com/repos/vipzhicheng/logseq-plugin-mark-map/releases/assets/175327122
+[2024-09-16 16:18:49.768] [debug] [Marketplace] Release compare: v0.4.6 (current) >  v0.4.6 (latest)
+[2024-09-16 16:18:49.769] [debug] [Marketplace] Update skip: no new version
+[2024-09-16 16:20:47.446] [debug] window-all-closed Quitting...
+[2024-09-16 20:36:31.235] [info] Logseq App(0.10.9) Starting... 
+[2024-09-16 20:36:31.244] [info] restore proxy settings {:type "system"}
+[2024-09-16 20:36:31.245] [info] set proxy to {:type "system"}
+[2024-09-16 20:36:34.502] [debug] :electron.handler/watch-dir {:path "/home/ruben/.logseq/config"}
+[2024-09-16 20:36:34.617] [debug] :electron.handler/unwatch-dir {:path "/home/ruben/kDrive/Logseq"}
+[2024-09-16 20:36:34.618] [debug] :electron.handler/watch-dir {:path "/home/ruben/kDrive/Logseq"}
