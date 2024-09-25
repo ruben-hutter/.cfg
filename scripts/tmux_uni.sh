@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
-if tmux has-session -t uni 2>/dev/null; then
-    tmux attach -t uni
-else
-    tmux new-session -s uni -n 'uni' -c ~/UNI/
+SESH="uni"
+
+tmux has-session -t $SESH 2>/dev/null
+
+if [ $? != 0 ]; then
+    tmux new-session -d -s $SESH -n "editor"
+
+    tmux send-keys -t $SESH:editor "cd ~/UNI" C-m
 fi
+
+tmux attach-session -t $SESH
