@@ -1,3 +1,39 @@
+# =============================== #
+# Aliases
+# =============================== #
+
+#list
+alias ls='ls --color=auto'
+alias la='ls -a'
+alias ll='ls -la'
+alias l='ls'
+
+#fix obvious typo's
+alias cd..='cd ..'
+
+## Colorize the grep command output for ease of use (good for log files)##
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+#readable output
+alias df='df -h'
+
+#free
+alias free="free -mt"
+
+# Aliases for software managment
+# pacman or pm
+alias pacman='sudo pacman --color auto'
+alias update='sudo pacman -Syyu'
+alias upal="paru -Syu"
+
+#get fastest mirrors in your neighborhood
+alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
+
+#Cleanup orphaned packages
+alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
+
 # alias to use aliases also with sudo
 alias sudo="sudo "
 
@@ -6,6 +42,9 @@ alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
 # open i3 config file
 alias i3conf="$EDITOR $HOME/.config/i3/config"
+
+# open hyprland config directory
+alias hyprconf="$EDITOR $HOME/.config/hypr"
 
 # get oath code from yubikey
 alias ykcode="ykman oath accounts code"
@@ -16,5 +55,18 @@ alias clera="clear"
 # neovim alias
 alias nv="nvim"
 
+# open vscode with ozone
+alias code="env ELECTRON_OZONE_PLATFORM_HINT=auto code"
+
 # uni tmux session
-alias uni=~/scripts/tmux_uni.sh
+alias uni="~/scripts/tmux_uni.sh"
+
+# uni vpn
+alias vpn="~/scripts/vpn_uni.sh"
+
+# =============================== #
+# Functions
+# =============================== #
+
+# .gitignore file creator
+function gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}

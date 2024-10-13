@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # ----------------------------------------------------- 
 # Set wallpaper
 # ----------------------------------------------------- 
-wal -q -i ~/wallpaper/astronaut_jellyfish.jpg
+wal -q -i ~/wallpapers/astronaut_jellyfish.jpg
 
 # ----------------------------------------------------- 
 # Load current pywal color scheme
@@ -18,13 +18,11 @@ cp $wallpaper ~/.cache/current_wallpaper.jpg
 # ----------------------------------------------------- 
 # Set the new wallpaper
 # ----------------------------------------------------- 
-swww img $wallpaper
+swww-daemon &
+sleep 1
+swww img $wallpaper &
 
 # ----------------------------------------------------- 
 # Launch waybar
 # ----------------------------------------------------- 
-killall waybar
 waybar -c ~/.config/waybar/config -s ~/.config/waybar/style.css &
-sleep 1
-
-echo "DONE!"
