@@ -34,8 +34,8 @@ map x $$f
 map X !$f
 
 # dedicated keys for file opener actions
-map o &mimeopen $f
-map O $mimeopen --ask $f
+map o &xdg-open $f
+map O $xdg-open --ask $f
 
 # define a custom 'open' command
 # This command is called when current file is not a directory. You may want to
@@ -72,7 +72,7 @@ cmd delete ${{
 }}
 
 # use '<delete>' key for either 'trash' or 'delete' command
-# map <delete> trash
+map <delete> trash
 # map <delete> delete
 map dd delete
 
