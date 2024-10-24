@@ -1,5 +1,6 @@
 local lsp_zero = require('lsp-zero')
 
+-- Set up LSP keybindings
 lsp_zero.on_attach(function(client, bufnr)
 	local opts = {buffer = bufnr, remap = false}
 
@@ -15,9 +16,10 @@ lsp_zero.on_attach(function(client, bufnr)
 	vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
 end)
 
+-- Set up LSP servers
 require('mason').setup({})
 require('mason-lspconfig').setup({
-    ensure_installed = {'rust_analyzer'},
+	ensure_installed = {'pyright', 'rust_analyzer'},
 	handlers = {
 		lsp_zero.default_setup,
 		lua_ls = function()
@@ -27,6 +29,7 @@ require('mason-lspconfig').setup({
 	}
 })
 
+-- Set up completion
 local cmp = require('cmp')
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
 
