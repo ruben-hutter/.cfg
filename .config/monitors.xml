@@ -8,6 +8,46 @@
       <primary>yes</primary>
       <monitor>
         <monitorspec>
+          <connector>DP1-2</connector>
+          <vendor>HPN</vendor>
+          <product>HP 24fh</product>
+          <serial>3CM0330VYC   </serial>
+        </monitorspec>
+        <mode>
+          <width>1920</width>
+          <height>1080</height>
+          <rate>60.000</rate>
+        </mode>
+      </monitor>
+    </logicalmonitor>
+    <logicalmonitor>
+      <x>0</x>
+      <y>0</y>
+      <scale>1</scale>
+      <monitor>
+        <monitorspec>
+          <connector>eDP1</connector>
+          <vendor>BOE</vendor>
+          <product>0x07db</product>
+          <serial>0x00000000</serial>
+        </monitorspec>
+        <mode>
+          <width>1920</width>
+          <height>1080</height>
+          <rate>59.999</rate>
+        </mode>
+      </monitor>
+    </logicalmonitor>
+  </configuration>
+  <configuration>
+    <layoutmode>physical</layoutmode>
+    <logicalmonitor>
+      <x>1920</x>
+      <y>0</y>
+      <scale>1</scale>
+      <primary>yes</primary>
+      <monitor>
+        <monitorspec>
           <connector>DP-4</connector>
           <vendor>HPN</vendor>
           <product>HP 24fh</product>
