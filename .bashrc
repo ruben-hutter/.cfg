@@ -55,3 +55,6 @@ eval "$(starship init bash)"
 
 # Start fastfetch
 fastfetch
+
+# Set up fzf key bindings and fuzzy completion
+eval "$(fzf --bash)"
