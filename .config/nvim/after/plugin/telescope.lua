@@ -1,7 +1,22 @@
 local builtin = require('telescope.builtin')
 
-vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
-vim.keymap.set('n', '<C-p>', builtin.git_files, {})
-vim.keymap.set('n', '<leader>ps', function()
-	builtin.grep_string({ search = vim.fn.input("Grep > ") })
-end)
+-- File Pickers
+vim.keymap.set('n', '<leader>pf', builtin.find_files, { desc = 'Find files' })
+vim.keymap.set('n', '<leader>pg', builtin.git_files, { desc = 'Git files' })
+vim.keymap.set('n', '<leader>ps', builtin.live_grep, { desc = 'Live grep' })
+
+-- Neovim Pickers
+vim.keymap.set('n', '<leader>pb', builtin.buffers, { desc = 'Buffers' })
+vim.keymap.set('n', '<leader>ph', builtin.help_tags, { desc = 'Help tags' })
+vim.keymap.set('n', '<leader>pd', builtin.diagnostics, { desc = 'Document diagnostics' })
+
+-- LSP Pickers
+vim.keymap.set('n', '<leader>pr', builtin.lsp_references, { desc = 'LSP references' })
+
+-- Treesitter Pickers
+vim.keymap.set('n', '<leader>pt', builtin.treesitter, { desc = 'Treesitter' })
+
+-- Other Pickers
+vim.keymap.set('n', '<leader>pc', builtin.commands, { desc = 'Commands' })
+vim.keymap.set('n', '<leader>pk', builtin.keymaps, { desc = 'Keymaps' })
+vim.keymap.set('n', '<leader>pm', builtin.man_pages, { desc = 'Man pages' })
