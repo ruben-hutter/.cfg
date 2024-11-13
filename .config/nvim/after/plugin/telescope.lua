@@ -17,6 +17,7 @@ vim.keymap.set('n', '<leader>pr', builtin.lsp_references, { desc = 'LSP referenc
 vim.keymap.set('n', '<leader>pt', builtin.treesitter, { desc = 'Treesitter' })
 
 -- Other Pickers
-vim.keymap.set('n', '<leader>pc', builtin.commands, { desc = 'Commands' })
-vim.keymap.set('n', '<leader>pk', builtin.keymaps, { desc = 'Keymaps' })
+--vim.keymap.set('n', '<leader>pc', builtin.commands, { desc = 'Commands' })
+--vim.keymap.set('n', '<leader>pk', builtin.keymaps, { desc = 'Keymaps' })
 vim.keymap.set('n', '<leader>pm', builtin.man_pages, { desc = 'Man pages' })
+vim.keymap.set('n', '<leader>pp', builtin.current_buffer_fuzzy_find, { desc = 'Current buffer fuzzy find' })
