@@ -20,19 +20,17 @@ fi
 
 # Automatically start ssh-agent
 if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-    ssh-agent -t 1h > "$XDG_RUNTIME_DIR/ssh-agent.env"
+    ssh-agent -t 12h > "$XDG_RUNTIME_DIR/ssh-agent.env"
 fi
 if [[ ! "$SSH_AUTH_SOCK" ]]; then
     source "$XDG_RUNTIME_DIR/ssh-agent.env" > /dev/null
 fi
 
 # Cargo setup
-if [ -d "$HOME/.cargo/bin" ] ;
-  then PATH="$PATH:$HOME/.cargo/bin"
-fi
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
 # Haskell setup
-[ -f "/home/ruben/.ghcup/env" ] && source "/home/ruben/.ghcup/env" # ghcup-env
+[ -f "/home/ruben/.ghcup/env" ] && . "/home/ruben/.ghcup/env" # ghcup-env
 
 # Pywal
 cat ~/.cache/wal/sequences
@@ -58,3 +56,4 @@ fastfetch
 
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --bash)"
+
