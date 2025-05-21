@@ -30,9 +30,6 @@ alias mirror="reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/m
 #Cleanup orphaned packages
 alias cleanup='pacman -Rns $(pacman -Qtdq)'
 
-# git-bare repo for dotfiles
-alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
-
 # get oath code from yubikey
 alias ykcode="ykman oath accounts code"
 
