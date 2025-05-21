@@ -27,7 +27,7 @@ fi
 create_session() {
     local session_name="$1"
     echo "Creating new session: $session_name"
-    tmux new-session -d -s "$session_name"
+    tmux new-session -d -s "$session_name" 2>/dev/null || true
     tmux attach-session -t "$session_name"
 }
 
@@ -38,6 +38,9 @@ if [ -z "$sessions" ]; then
     # No existing sessions, prompt for a new one
     echo "No existing tmux sessions."
     read -p "Enter new session name: " new_session
+    if [ -z "$new_session" ]; then
+        new_session="0"
+    fi
     create_session "$new_session"
 else
     # Use fzf to select from existing sessions or enter a new session name
@@ -62,7 +65,21 @@ else
         # No session was selected or the query doesn't match any existing session
         # Use the query as the new session name
         if [ -n "$query" ]; then
-            create_session "$query"
+            if echo "$sessions" | grep -qxF "$query"; then
+                # The query matches an existing session
+                if [ -n "$TMUX" ]; then
+                    if [ "$query" != "$current_session" ]; then
+                        tmux switch-client -t "$query"
+                    else
+                        echo "Already in session '$query'"
+                    fi
+                else
+                    tmux attach-session -t "$query"
+                fi
+            else
+                # The query does not match any existing session, create a new one
+                create_session "$query"
+            fi
         fi
     fi
 fi
