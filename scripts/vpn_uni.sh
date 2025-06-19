@@ -6,7 +6,7 @@
 
 # Check if the user has provided an option
 if [ -z "$1" ]; then
-    echo "Please provide an option"
+    echo "Usage: $0 [c|connect|d|disconnect]"
     exit
 fi
 
