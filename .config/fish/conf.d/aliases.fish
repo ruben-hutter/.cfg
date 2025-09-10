@@ -48,6 +48,9 @@ alias tm="~/scripts/tmux_session_manager.sh"
 # uni vpn
 alias vpn="~/scripts/vpn_uni.sh"
 
+# open a new note in nvim
+alias nn="~/scripts/new_note.sh"
+
 # lauch lazygit
 alias lg="lazygit"
 
