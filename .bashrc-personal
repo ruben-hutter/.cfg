@@ -22,17 +22,28 @@ alias df='df -h'
 #free
 alias free="free -mt"
 
+# =============================== #
+# Arch
+# =============================== #
+
 # Aliases for software managment
 # pacman or pm
-alias pacman='sudo pacman --color auto'
-alias update='sudo pacman -Syyu'
-alias upal="paru -Syu"
+#alias pacman='sudo pacman --color auto'
+#alias update='sudo pacman -Syyu'
+#alias upal="paru -Syu"
 
 #get fastest mirrors in your neighborhood
-alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
+#alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
 
 #Cleanup orphaned packages
-alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
+#alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
+
+# =============================== #
+# Fedora
+# =============================== #
+
+alias update="sudo dnf upgrade"
+alias upal="sudo dnf upgrade"
 
 # alias to use aliases also with sudo
 alias sudo="sudo "
@@ -57,12 +68,6 @@ alias nv="nvim"
 
 # open vscode with ozone
 alias code="env ELECTRON_OZONE_PLATFORM_HINT=auto code"
-
-# uni tmux session
-alias uni="~/scripts/tmux_uni.sh"
-
-# uni vpn
-alias vpn="~/scripts/vpn_uni.sh"
 
 # =============================== #
 # Functions
