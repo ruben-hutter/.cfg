@@ -17,9 +17,21 @@ lsp_zero.on_attach(function(client, bufnr)
 end)
 
 -- Set up LSP servers
-require('mason').setup({})
+require("mason").setup({
+    ui = {
+        icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗"
+        }
+    }
+})
 require('mason-lspconfig').setup({
-    ensure_installed = {'pyright', 'rust_analyzer'},
+    ensure_installed = {
+        'tinymist',
+        'pyright',
+        'rust_analyzer',
+    },
     handlers = {
         lsp_zero.default_setup,
         lua_ls = function()
