@@ -1,6 +1,10 @@
+vim.cmd.colorscheme "catppuccin"
+
+--[[
 local pywal = require('pywal')
 
 pywal.setup()
+]]
 
 -- Remove background color for Normal
 vim.cmd("highlight Normal guibg=NONE ctermbg=NONE")
