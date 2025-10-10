@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 sleep 1
-killall -e xdg-desktop-portal-hyprland
-killall -e xdg-desktop-portal-wlr
-killall xdg-desktop-portal
-/usr/lib/xdg-desktop-portal-hyprland &
+killall -e xdg-desktop-portal-hyprland 2>/dev/null
+killall -e xdg-desktop-portal-wlr 2>/dev/null
+killall -e xdg-desktop-portal 2>/dev/null
 sleep 1
-/usr/lib/xdg-desktop-portal &
+
+/usr/libexec/xdg-desktop-portal-hyprland &
+/usr/libexec/xdg-desktop-portal &

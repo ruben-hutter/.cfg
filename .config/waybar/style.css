@@ -1,14 +1,14 @@
 @import "mocha.css";
 
-@define-color backgroundlight @sapphire;
-@define-color backgrounddark #FFFFFF;
-@define-color workspacesbackground1 @sapphire;
-@define-color workspacesbackground2 #FFFFFF;
-@define-color bordercolor @sapphire;
-@define-color textcolor1 @sapphire;
-@define-color textcolor2 #FFFFFF;
-@define-color textcolor3 #FFFFFF;
-@define-color iconcolor #FFFFFF;
+@define-color backgroundlight @surface0;
+@define-color backgrounddark @base;
+@define-color workspacesbackground1 @surface0;
+@define-color workspacesbackground2 @surface1;
+@define-color bordercolor @lavender;
+@define-color textcolor1 @text;
+@define-color textcolor2 @text;
+@define-color textcolor3 @base;
+@define-color iconcolor @lavender;
 
 * {
     font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
