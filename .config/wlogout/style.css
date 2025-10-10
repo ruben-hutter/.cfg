@@ -1,24 +1,8 @@
-/*
-          _                         _    
-__      _| | ___   __ _  ___  _   _| |_  
-\ \ /\ / / |/ _ \ / _` |/ _ \| | | | __| 
- \ V  V /| | (_) | (_| | (_) | |_| | |_  
-  \_/\_/ |_|\___/ \__, |\___/ \__,_|\__| 
-                  |___/                  
- 
-by Stephan Raabe (2023) 
------------------------------------------------------ 
-*/
-
-/* -----------------------------------------------------
- * Import Pywal colors 
- * ----------------------------------------------------- */
-@import '../../.cache/wal/colors-wlogout.css';
-
 /* -----------------------------------------------------
  * General 
  * ----------------------------------------------------- */
 
+/* 
 * {
     font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
 	background-image: none;
@@ -51,12 +35,6 @@ button:hover {
 	background-color: rgba(12, 12, 12, 0.5);
 	border: 3px solid @color11;
 }
-
-/* 
------------------------------------------------------ 
-Buttons
------------------------------------------------------ 
-*/
 
 #lock {
 	margin: 10px;
@@ -93,3 +71,31 @@ Buttons
 	border-radius: 20px;
 	background-image: image(url("icons/reboot.png"));
 }
+*/
+
+@import "themes/mocha/sapphire.css";
+
+#lock {
+    background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/lock.svg");
+}
+
+#logout {
+    background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/logout.svg");
+}
+
+#suspend {
+    background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/suspend.svg");
+}
+
+#hibernate {
+    background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/hibernate.svg");
+}
+
+#shutdown {
+    background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/shutdown.svg");
+}
+
+#reboot {
+    background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/reboot.svg");
+}
+

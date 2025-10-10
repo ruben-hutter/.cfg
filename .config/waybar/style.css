@@ -1,14 +1,11 @@
-/* -----------------------------------------------------
- * Import Pywal colors 
- * ----------------------------------------------------- */
-@import '../../.cache/wal/colors-waybar.css';
+@import "mocha.css";
 
-@define-color backgroundlight @color8;
+@define-color backgroundlight @sapphire;
 @define-color backgrounddark #FFFFFF;
-@define-color workspacesbackground1 @color8;
+@define-color workspacesbackground1 @sapphire;
 @define-color workspacesbackground2 #FFFFFF;
-@define-color bordercolor @color8;
-@define-color textcolor1 @color8;
+@define-color bordercolor @sapphire;
+@define-color textcolor1 @sapphire;
 @define-color textcolor2 #FFFFFF;
 @define-color textcolor3 #FFFFFF;
 @define-color iconcolor #FFFFFF;
@@ -113,7 +110,6 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #taskbar {
-    /* background: @color11; */
     background: @backgroundlight;
     margin: 3px 15px 3px 0px;
     padding:0px;

@@ -1,14 +1,3 @@
-/*
-#  ____        __ _  
-# |  _ \ ___  / _(_) 
-# | |_) / _ \| |_| | 
-# |  _ < (_) |  _| | 
-# |_| \_\___/|_| |_| 
-#                    
-# by Stephan Raabe (2023) 
-# ----------------------------------------------------- 
-*/
-
 /* ---- Configuration ---- */
 configuration {
     modi:                       "drun,run";
@@ -27,8 +16,7 @@ configuration {
     
 }
 
-/* ---- Load pywal colors (custom wal template) ---- */
-@import "~/.cache/wal/colors-rofi-pywal"
+@import "catppuccin-mocha.rasi"
 
 /* ---- Window ---- */
 window {
@@ -39,7 +27,7 @@ window {
     padding:                      0px;
     margin:                       0px; 
     color:                        #FFFFFF;
-    border:                       3px;
+    border:                       2px;
     border-color:                 #FFFFFF;
     cursor:                       "default";
     transparency:                 "real";
@@ -57,8 +45,8 @@ mainbox {
     orientation:                  horizontal;
     spacing:                      0px;
     margin:                       0px;
-    background-color:             @background;
-    background-image:             url("~/.cache/current_wallpaper.jpg", height);
+    background-color:             @base;
+    background-image:             url("~/.cache/current_wallpaper", height);
     children:                     ["imagebox","listbox"];
 }
 
@@ -86,12 +74,12 @@ dummy {
 /* ---- Inputbar ---- */
 inputbar {
     enabled:                      true;
-    text-color:                   @foreground;
+    text-color:                   @text;
     spacing:                      10px;
     padding:                      15px;
     border-radius:                10px;
-    border-color:                 @foreground;
-    background-color:             @background;
+    border-color:                 @text;
+    background-color:             @base;
     children:                     [ "textbox-prompt-colon", "entry" ];
 }
 
@@ -114,24 +102,24 @@ entry {
 
 /* ---- Mode Switcher ---- */
 mode-switcher{
-    enabled:                      true;
+    enabled:                      false;
     spacing:                      20px;
     background-color:             transparent;
-    text-color:                   @foreground;
+    text-color:                   @text;
 }
 
 button {
     padding:                      10px;
     border-radius:                10px;
-    background-color:             @background;
+    background-color:             @base;
     text-color:                   inherit;
     cursor:                       pointer;
     border:                       0px;
 }
 
 button selected {
-    background-color:             @color11;
-    text-color:                   @foreground;
+    background-color:             @sapphire;
+    text-color:                   @base;
 }
 
 /* ---- Listview ---- */
@@ -149,7 +137,7 @@ listview {
     spacing:                      0px;
     padding:                      10px;
     margin:                       0px;
-    background-color:             @background;
+    background-color:             @base;
     border:0px;
 }
 
@@ -159,54 +147,54 @@ element {
     padding:                      10px;
     margin:                       5px;
     cursor:                       pointer;
-    background-color:             @background;
+    background-color:             @base;
     border-radius:                10px;
     border:                       2px;
 }
 
 element normal.normal {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @text;
 }
 
 element normal.urgent {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @text;
 }
 
 element normal.active {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @text;
 }
 
 element selected.normal {
-    background-color:            @color11;
-    text-color:                  @foreground;
+    background-color:            @sapphire;
+    text-color:                  @base;
 }
 
 element selected.urgent {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @base;
 }
 
 element selected.active {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @base;
 }
 
 element alternate.normal {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @text;
 }
 
 element alternate.urgent {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @text;
 }
 
 element alternate.active {
     background-color:            inherit;
-    text-color:                  @foreground;
+    text-color:                  @text;
 }
 
 element-icon {
@@ -238,8 +226,8 @@ textbox {
     padding:                     15px;
     margin:                      0px;
     border-radius:               0px;
-    background-color:            @background;
-    text-color:                  @foreground;
+    background-color:            @base;
+    text-color:                  @text;
     vertical-align:              0.5;
     horizontal-align:            0.0;
 }
@@ -247,6 +235,6 @@ textbox {
 error-message {
     padding:                     15px;
     border-radius:               20px;
-    background-color:            @background;
-    text-color:                  @foreground;
+    background-color:            @base;
+    text-color:                  @text;
 }
