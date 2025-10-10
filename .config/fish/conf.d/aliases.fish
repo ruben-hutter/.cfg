@@ -20,15 +20,8 @@ alias free="free -mt"
 
 # Aliases for software managment
 # pacman or pm
-alias pacman='pacman --color auto'
-alias update='pacman -Syyu'
-alias upal="paru -Syu"
-
-#get fastest mirrors in your neighborhood
-alias mirror="reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
-
-#Cleanup orphaned packages
-alias cleanup='pacman -Rns $(pacman -Qtdq)'
+alias update='sudo dnf check-update && sudo dnf upgrade'
+alias upal="sudo dnf upgrade --refresh"
 
 # get oath code from yubikey
 alias ykcode="ykman oath accounts code"
@@ -44,9 +37,6 @@ alias code="env ELECTRON_OZONE_PLATFORM_HINT=auto code"
 
 # tmux session manager
 alias tm="~/scripts/tmux_session_manager.sh"
-
-# uni vpn
-alias vpn="~/scripts/vpn_uni.sh"
 
 # open a new note in nvim
 alias nn="~/scripts/new_note.sh"
