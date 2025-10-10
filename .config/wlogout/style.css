@@ -1,8 +1,5 @@
-/* -----------------------------------------------------
- * General 
- * ----------------------------------------------------- */
+@import "themes/mocha/sapphire.css";
 
-/* 
 * {
     font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
 	background-image: none;
@@ -31,71 +28,44 @@ button {
 button:focus,
 button:active,
 button:hover {
-    color: @color11;
+    color: @blue;
 	background-color: rgba(12, 12, 12, 0.5);
-	border: 3px solid @color11;
+	border: 3px solid @blue;
 }
 
 #lock {
 	margin: 10px;
 	border-radius: 20px;
-	background-image: image(url("icons/lock.png"));
-}
-
-#logout {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("icons/logout.png"));
-}
-
-#suspend {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("icons/suspend.png"));
-}
-
-#hibernate {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("icons/hibernate.png"));
-}
-
-#shutdown {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("icons/shutdown.png"));
-}
-
-#reboot {
-	margin: 10px;
-	border-radius: 20px;
-	background-image: image(url("icons/reboot.png"));
-}
-*/
-
-@import "themes/mocha/sapphire.css";
-
-#lock {
     background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/lock.svg");
 }
 
 #logout {
+	margin: 10px;
+	border-radius: 20px;
     background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/logout.svg");
 }
 
 #suspend {
+	margin: 10px;
+	border-radius: 20px;
     background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/suspend.svg");
 }
 
 #hibernate {
+	margin: 10px;
+	border-radius: 20px;
     background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/hibernate.svg");
 }
 
 #shutdown {
+	margin: 10px;
+	border-radius: 20px;
     background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/shutdown.svg");
 }
 
 #reboot {
+	margin: 10px;
+	border-radius: 20px;
     background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/reboot.svg");
 }
 
