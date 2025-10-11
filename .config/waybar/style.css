@@ -1,17 +1,17 @@
 /* -----------------------------------------------------
  * Import Pywal colors 
  * ----------------------------------------------------- */
-@import '../../.cache/wal/colors-waybar.css';
+@import "colors.css";
 
-@define-color backgroundlight @color8;
-@define-color backgrounddark #FFFFFF;
-@define-color workspacesbackground1 @color8;
-@define-color workspacesbackground2 #FFFFFF;
-@define-color bordercolor @color8;
-@define-color textcolor1 @color8;
-@define-color textcolor2 #FFFFFF;
-@define-color textcolor3 #FFFFFF;
-@define-color iconcolor #FFFFFF;
+@define-color backgroundlight @surface_container;
+@define-color backgrounddark @surface_container_high;
+@define-color workspacesbackground1 @surface_container;
+@define-color workspacesbackground2 @surface_container_high;
+@define-color bordercolor @outline_variant;
+@define-color textcolor1 @on_surface;
+@define-color textcolor2 @on_surface;
+@define-color textcolor3 @on_error;
+@define-color iconcolor @on_surface_variant;
 
 * {
     font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;

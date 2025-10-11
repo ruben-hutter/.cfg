@@ -3,24 +3,17 @@
 # ----------------------------------------------------- 
 # Set wallpaper
 # ----------------------------------------------------- 
-wal -q -i ~/wallpapers/astronaut_jellyfish.jpg
-
-# ----------------------------------------------------- 
-# Load current pywal color scheme
-# ----------------------------------------------------- 
-source "$HOME/.cache/wal/colors.sh"
+wallpaper=~/wallpapers/astronaut_jellyfish.jpg
 
 # ----------------------------------------------------- 
 # Copy selected wallpaper into .cache folder
 # ----------------------------------------------------- 
-cp $wallpaper ~/.cache/current_wallpaper.jpg
+ln -snf $wallpaper ~/.cache/current_wallpaper
 
 # ----------------------------------------------------- 
-# Set the new wallpaper
+# Launch matugen
 # ----------------------------------------------------- 
-swww-daemon &
-sleep 1
-swww img $wallpaper &
+matugen image ~/.cache/current_wallpaper &
 
 # ----------------------------------------------------- 
 # Launch waybar

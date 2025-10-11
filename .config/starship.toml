@@ -1,7 +1,39 @@
+format = '''
+$directory$git_branch$rust$python
+$character'''
+
+palette = 'colors'
+
+[palettes.colors]
+mustard = '#af8700' # example
+color1 = '#97ccf8'
+color2 = '#00344f'
+color3 = '#c1c7ce'
+color4 = '#1c2024'
+color5 = '#00344f'
+color6 = '#101417'
+color7 = '#101417'
+color8 = '#97ccf8'
+color9 = '#d0c0e8'
+
+# Prompt symbols 
 [character]
-success_symbol = "[>](bold green)"
-error_symbol = "[x](bold red)"
-vimcmd_symbol = "[<](bold green)"
+success_symbol = "[>](color9 bold)"
+error_symbol = "[x](@{error})"
+vicmd_symbol = "[<](#f9e2af)"
+
+[directory]
+format = "[](fg:color1 bg:color4)[󰉋](bg:color1 fg:color2)[ ](fg:color1 bg:color4)[$path ](fg:color3 bg:color4)[ ](fg:color4)"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[git_branch]
+#symbol = "git "
+format = "[](fg:color8 bg:color4)[ ](bg:color8 fg:color5)[](fg:color8 bg:color4)[(bg:color8 fg:color5) $branch](fg:color3 bg:color4)[](fg:color4) "
 
 [git_commit]
 tag_symbol = " tag "
@@ -12,6 +44,11 @@ behind = "<"
 diverged = "<>"
 renamed = "r"
 deleted = "x"
+
+[time]
+format = "[](fg:color8 bg:color4)[ ](bg:color8 fg:color5)[](fg:color8 bg:color4)[(bg:color8 fg:color5) $time](fg:color3 bg:color4)[](fg:color4) "
+disabled = false
+time_format = "%R" # Hour:Minute Format
 
 [aws]
 symbol = "aws "
@@ -46,9 +83,6 @@ symbol = "deno "
 [dotnet]
 symbol = ".NET "
 
-[directory]
-read_only = " ro"
-
 [docker_context]
 symbol = "docker "
 
@@ -57,9 +91,6 @@ symbol = "exs "
 
 [elm]
 symbol = "elm "
-
-[git_branch]
-symbol = "git "
 
 [golang]
 symbol = "go "
@@ -157,7 +188,11 @@ symbol = "pulumi "
 symbol = "purs "
 
 [python]
-symbol = "py "
+#symbol = "py "
+format = "[](fg:color8 bg:color4)[${symbol}${version}](bg:color8 fg:color5)[](fg:color8 bg:color4)[(bg:color8 fg:color5)( ${virtualenv})](fg:color3 bg:color4)[](fg:color4) "
+symbol = '🐍'
+# pyenv_version_name = true
+pyenv_prefix = 'venv'
 
 [raku]
 symbol = "raku "
