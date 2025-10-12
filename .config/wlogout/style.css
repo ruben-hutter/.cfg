@@ -36,36 +36,36 @@ button:hover {
 #lock {
 	margin: 10px;
 	border-radius: 20px;
-    background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/lock.svg");
+    background-image: url("/home/ruben/.config/wlogout/icons/mocha/blue/lock.svg");
 }
 
 #logout {
 	margin: 10px;
 	border-radius: 20px;
-    background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/logout.svg");
+    background-image: url("/home/ruben/.config/wlogout/icons/mocha/blue/logout.svg");
 }
 
 #suspend {
 	margin: 10px;
 	border-radius: 20px;
-    background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/suspend.svg");
+    background-image: url("/home/ruben/.config/wlogout/icons/mocha/blue/suspend.svg");
 }
 
 #hibernate {
 	margin: 10px;
 	border-radius: 20px;
-    background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/hibernate.svg");
+    background-image: url("/home/ruben/.config/wlogout/icons/mocha/blue/hibernate.svg");
 }
 
 #shutdown {
 	margin: 10px;
 	border-radius: 20px;
-    background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/shutdown.svg");
+    background-image: url("/home/ruben/.config/wlogout/icons/mocha/blue/shutdown.svg");
 }
 
 #reboot {
 	margin: 10px;
 	border-radius: 20px;
-    background-image: url("/home/ruben/.config/wlogout/icons/mocha/sapphire/reboot.svg");
+    background-image: url("/home/ruben/.config/wlogout/icons/mocha/blue/reboot.svg");
 }
 

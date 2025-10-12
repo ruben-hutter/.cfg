@@ -1,14 +1,17 @@
-@import "mocha.css";
+/* -----------------------------------------------------
+ * Import matugen colors 
+ * ----------------------------------------------------- */
+@import "colors.css";
 
-@define-color backgroundlight @surface0;
-@define-color backgrounddark @base;
-@define-color workspacesbackground1 @surface0;
-@define-color workspacesbackground2 @surface1;
-@define-color bordercolor @lavender;
-@define-color textcolor1 @text;
-@define-color textcolor2 @text;
-@define-color textcolor3 @base;
-@define-color iconcolor @lavender;
+@define-color backgroundlight @surface_container;
+@define-color backgrounddark @surface_container_high;
+@define-color workspacesbackground1 @surface_container;
+@define-color workspacesbackground2 @surface_container_high;
+@define-color bordercolor @outline_variant;
+@define-color textcolor1 @on_surface;
+@define-color textcolor2 @on_surface;
+@define-color textcolor3 @on_error;
+@define-color iconcolor @on_surface_variant;
 
 * {
     font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
@@ -110,6 +113,7 @@ window#waybar.empty #window {
  * ----------------------------------------------------- */
 
 #taskbar {
+    /* background: @color11; */
     background: @backgroundlight;
     margin: 3px 15px 3px 0px;
     padding:0px;

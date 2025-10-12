@@ -6,7 +6,7 @@
     "position": "top",
     "margin-top": 10,
     "margin-bottom": 0,
-    "height": 40,
+    "height": 39,
     "margin-left": 0,
     "margin-right": 0,    
     "spacing": 0,
@@ -27,7 +27,7 @@
     // Modules Right    
     "modules-right": [
 		"tray",
-        "bluetooth",
+        // "bluetooth",
         "pulseaudio",
         "group/hardware",
         "battery", 
