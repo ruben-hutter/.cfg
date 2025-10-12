@@ -3,23 +3,17 @@
 # ----------------------------------------------------- 
 # Set wallpaper
 # ----------------------------------------------------- 
-#wal -q -i ~/wallpapers/astronaut_jellyfish.jpg
-wallpaper=~/wallpapers/city_top_view.jpg
-
-# ----------------------------------------------------- 
-# Load current pywal color scheme
-# ----------------------------------------------------- 
-#source "$HOME/.cache/wal/colors.sh"
+wallpaper="$HOME/wallpapers/city_bridge.jpg"
 
 # ----------------------------------------------------- 
 # Copy selected wallpaper into .cache folder
 # ----------------------------------------------------- 
-ln -snf $wallpaper ~/.cache/current_wallpaper
+ln -snf "$wallpaper" "$HOME/.cache/current_wallpaper"
 
 # ----------------------------------------------------- 
 # Set the new wallpaper
 # ----------------------------------------------------- 
-cat > ~/.config/hypr/hyprpaper.conf << EOF
+cat > "$HOME/.config/hypr/hyprpaper.conf" << EOF
 preload = $wallpaper
 wallpaper = , $wallpaper
 EOF
@@ -27,4 +21,10 @@ EOF
 # ----------------------------------------------------- 
 # Launch waybar
 # ----------------------------------------------------- 
-waybar -c ~/.config/waybar/config -s ~/.config/waybar/style.css &
+matugen image "$HOME/.cache/current_wallpaper" &
+
+# ----------------------------------------------------- 
+# Launch waybar
+# ----------------------------------------------------- 
+killall waybar
+waybar -c "$HOME/.config/waybar/config" -s "$HOME/.config/waybar/style.css" &
