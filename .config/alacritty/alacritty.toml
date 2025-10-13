@@ -1,5 +1,8 @@
 [general]
-import = ["colors.toml"]
+import = [
+    #"colors.toml",
+    "catppuccin-mocha.toml",
+]
 live_config_reload = true
 
 [env]

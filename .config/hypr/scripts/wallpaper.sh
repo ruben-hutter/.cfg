@@ -3,19 +3,25 @@
 # ----------------------------------------------------- 
 # Set wallpaper
 # ----------------------------------------------------- 
-wallpaper=~/wallpapers/astronaut_jellyfish.jpg
+wallpaper="$HOME/wallpapers/astronaut_jellyfish.jpg"
 
 # ----------------------------------------------------- 
 # Copy selected wallpaper into .cache folder
 # ----------------------------------------------------- 
-ln -snf $wallpaper ~/.cache/current_wallpaper
+ln -snf "$wallpaper" "$HOME/.cache/current_wallpaper"
+
+# ----------------------------------------------------- 
+# Launch swww
+# ----------------------------------------------------- 
+swww-daemon &
+sleep 1
 
 # ----------------------------------------------------- 
 # Launch matugen
 # ----------------------------------------------------- 
-matugen image ~/.cache/current_wallpaper &
+matugen image "$wallpaper" &
 
 # ----------------------------------------------------- 
 # Launch waybar
 # ----------------------------------------------------- 
-waybar -c ~/.config/waybar/config -s ~/.config/waybar/style.css &
+waybar -c "$HOME/.config/waybar/config" -s "$HOME/.config/waybar/style.css" &
