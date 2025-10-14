@@ -22,6 +22,7 @@ EOF
 # Launch waybar
 # ----------------------------------------------------- 
 matugen image "$HOME/.cache/current_wallpaper" &
+sleep 0.5
 
 # ----------------------------------------------------- 
 # Launch waybar
