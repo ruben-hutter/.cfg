@@ -14,7 +14,7 @@
 @define-color iconcolor @on_surface_variant;
 
 * {
-    font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-family: "Fira Sans Semibold", "Font Awesome 6 Free", Roboto, Helvetica, Arial, sans-serif;
     border: none;
     border-radius: 0px;
 }
