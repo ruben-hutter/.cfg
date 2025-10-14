@@ -1,0 +1,26 @@
+[config.wallpaper]
+command = "hyprctl"
+arguments = ["hyprpaper", "reload", ","]
+set = true
+
+[templates.hyprland]
+input_path = "templates/hyprland-colors.conf"
+output_path = "~/.config/hypr/conf/colors.conf"
+post_hook = "hyprctl reload"
+
+[templates.waybar]
+input_path = "templates/colors.css"
+output_path = "~/.config/waybar/colors.css"
+post_hook = "pkill -SIGUSR2 waybar"
+
+[templates.wlogout]
+input_path = "templates/colors.css"
+output_path = "~/.config/wlogout/colors.css"
+
+[templates.alacritty]
+input_path = "templates/alacritty-colors.toml"
+output_path = "~/.config/alacritty/colors.toml"
+
+[templates.starship]
+input_path = "templates/starship-colors.toml"
+output_path = "~/.config/starship.toml"
