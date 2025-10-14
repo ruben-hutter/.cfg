@@ -36,36 +36,36 @@ button:hover {
 #lock {
 	margin: 10px;
 	border-radius: 20px;
-    background-image: url("/home/ruben/.config/wlogout/icons/mocha/blue/lock.svg");
+    background-image: url("icons/lock.png");
 }
 
 #logout {
 	margin: 10px;
 	border-radius: 20px;
-    background-image: url("/home/ruben/.config/wlogout/icons/mocha/blue/logout.svg");
+    background-image: url("icons/logout.png");
 }
 
 #suspend {
 	margin: 10px;
 	border-radius: 20px;
-    background-image: url("/home/ruben/.config/wlogout/icons/mocha/blue/suspend.svg");
+    background-image: url("icons/suspend.png");
 }
 
 #hibernate {
 	margin: 10px;
 	border-radius: 20px;
-    background-image: url("/home/ruben/.config/wlogout/icons/mocha/blue/hibernate.svg");
+    background-image: url("icons/hibernate.png");
 }
 
 #shutdown {
 	margin: 10px;
 	border-radius: 20px;
-    background-image: url("/home/ruben/.config/wlogout/icons/mocha/blue/shutdown.svg");
+    background-image: url("icons/shutdown.png");
 }
 
 #reboot {
 	margin: 10px;
 	border-radius: 20px;
-    background-image: url("/home/ruben/.config/wlogout/icons/mocha/blue/reboot.svg");
+    background-image: url("icons/reboot.png");
 }
 
