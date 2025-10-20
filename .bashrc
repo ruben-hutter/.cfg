@@ -10,19 +10,30 @@ export HISTCONTROL=ignoreboth:erasedups
 #PS1='[\u@\h \W]\$ '
 PS1='\[\e[0;31m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[0;31m\]\$ \[\e[m\]\[\e[0;32m\] '
 
-if [ -d "$HOME/.bin" ] ;
-  then PATH="$HOME/.bin:$PATH"
+# Ignore upper and lowercase when TAB completion
+bind "set completion-ignore-case on"
+
+if [ -d "$HOME/.bin" ]; then
+    export PATH="$HOME/.bin:$PATH"
 fi
 
-if [ -d "$HOME/.local/bin" ] ;
-  then PATH="$HOME/.local/bin:$PATH"
+if [ -d "$HOME/.local/bin" ]; then
+    export PATH="$HOME/.local/bin:$PATH"
+fi
+
+if [ -d "$HOME/go/bin" ]; then
+    export PATH="$HOME/go/bin:$PATH"
 fi
 
 # Cargo setup
-[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+if [ -f "$HOME/.cargo/env" ]; then
+    . "$HOME/.cargo/env"
+fi
 
 # Haskell setup
-[ -f "/home/ruben/.ghcup/env" ] && . "/home/ruben/.ghcup/env" # ghcup-env
+if [ -f "$HOME/.ghcup/env" ]; then
+    . "$HOME/.ghcup/env"
+fi
 
 # Pywal
 #cat ~/.cache/wal/sequences
@@ -33,12 +44,9 @@ if [ -x /usr/bin/fish ]; then
     exec /usr/bin/fish
 fi
 
-# Ignore upper and lowercase when TAB completion
-bind "set completion-ignore-case on"
-
-# Create a file called .bashrc-personal and put all your personal aliases
-#in there. They will not be overwritten by skel.
-[[ -f ~/.bashrc-personal ]] && . ~/.bashrc-personal
+if [ -f "$HOME/.bashrc-personal" ]; then
+    . "$HOME/.bashrc-personal"
+fi
 
 # Start Starship
 eval "$(starship init bash)"
@@ -51,14 +59,14 @@ eval "$(fzf --bash)"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/ruben/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/ruben/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/ruben/miniconda3/etc/profile.d/conda.sh"
+    if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/ruben/miniconda3/bin:$PATH"
+        export PATH="$HOME/miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
