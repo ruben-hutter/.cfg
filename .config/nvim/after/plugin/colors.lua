@@ -1,19 +1,12 @@
-vim.cmd.colorscheme "catppuccin"
+function ColorMyPencils(color)
+    color = color or "catppuccin-mocha"
+    vim.cmd.colorscheme(color)
 
---[[
-local pywal = require('pywal')
+    -- Set transparent background for various elements
+    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+    vim.api.nvim_set_hl(0, "LineNr", { bg = "none" })
+    vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
+end
 
-pywal.setup()
-]]
-
--- Remove background color for Normal
-vim.cmd("highlight Normal guibg=NONE ctermbg=NONE")
-
--- Remove background color for NormalFloat
-vim.cmd("highlight NormalFloat guibg=NONE ctermbg=NONE")
-
--- Remove background color for LineNr
-vim.cmd("highlight LineNr guibg=NONE ctermbg=NONE")
-
--- Remove background color for the sign column (left of line numbers)
-vim.cmd("highlight SignColumn guibg=NONE ctermbg=NONE")
+ColorMyPencils()
