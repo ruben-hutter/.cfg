@@ -22,10 +22,3 @@ EOF
 # Launch waybar
 # ----------------------------------------------------- 
 matugen image "$HOME/.cache/current_wallpaper" &
-sleep 0.5
-
-# ----------------------------------------------------- 
-# Launch waybar
-# ----------------------------------------------------- 
-killall waybar
-waybar -c "$HOME/.config/waybar/config" -s "$HOME/.config/waybar/style.css" &
