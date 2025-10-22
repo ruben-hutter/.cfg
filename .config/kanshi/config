@@ -1,0 +1,18 @@
+profile office {
+}
+
+profile home34 {
+    output eDP-1 position 0,0 mode 1920x1200@60Hz scale 1.0
+    output DP-4 position 1920,0 mode 1920x1080@60Hz
+    output DP-3 position 3840,0 mode 1920x1080@60Hz
+}
+
+profile home56 {
+    output eDP-1 position 0,0 mode 1920x1200@60Hz scale 1.0
+    output DP-5 position 1920,0 mode 1920x1080@60Hz
+    output DP-6 position 3840,0 mode 1920x1080@60Hz
+}
+
+profile laptop {
+    output eDP-1 enable mode 1920x1200@60Hz position 0,0
+}
