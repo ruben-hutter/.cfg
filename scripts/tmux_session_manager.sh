@@ -39,7 +39,7 @@ if [ -z "$sessions" ]; then
     echo "No existing tmux sessions."
     read -p "Enter new session name: " new_session
     if [ -z "$new_session" ]; then
-        new_session="0"
+        new_session="home"
     fi
     create_session "$new_session"
 else
