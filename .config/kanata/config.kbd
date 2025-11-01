@@ -1,0 +1,96 @@
+;; ============================================================
+;; Kanata Configuration for Dual Keyboard Setup
+;; Swiss French (laptop) + German (external keyboard) layouts
+;; ============================================================
+
+(defcfg
+  ;; Process all keys for better tap-hold behavior
+  process-unmapped-keys yes
+  
+  ;; Log layer changes for debugging
+  log-layer-changes no
+)
+
+;; ============================================================
+;; Source - Physical key positions
+;; ============================================================
+;; These represent the PHYSICAL keys, not the symbols on them
+;; The scan codes are the same whether you have a Swiss or German keyboard
+(defsrc
+  esc  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    z    u    i    o    p    [    ]    
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft 102d y    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+;; Notes about the physical layout:
+;; - QWERTZ: Both Swiss and German use QWERTZ (not QWERTY)
+;; - "102d" is the extra key next to left shift (< > | key)
+;; - ";" is where ö is on German / é is on Swiss French
+;; - "'" is where ä is on German / à is on Swiss French  
+;; - "\" is where # is on German / $ is on Swiss French (between ' and ret)
+;; - "[" is where ü is on German / è is on Swiss French
+;; - "]" is where + is on German / ¨ is on Swiss French
+;; - "-" is where ß is on German / ' is on Swiss French
+;; - "=" is where ´ is on German / ^ is on Swiss French
+;; - fn key is not included (usually can't be remapped)
+
+;; ============================================================
+;; Variables - Timing configuration
+;; ============================================================
+(defvar
+  ;; Tap-hold timing
+  tap-time 200
+  hold-time 200
+)
+
+;; ============================================================
+;; Aliases - Home Row Mods
+;; ============================================================
+(defalias
+  ;; Left hand home row mods (Shift, Ctrl, Meta/Win, Alt)
+  a-sft (tap-hold $tap-time $hold-time a lsft)
+  s-ctl (tap-hold $tap-time $hold-time s lctl)
+  d-met (tap-hold $tap-time $hold-time d lmet)
+  f-alt (tap-hold $tap-time $hold-time f lalt)
+  
+  ;; Right hand home row mods (Alt, Meta/Win, Ctrl, Shift)
+  j-alt (tap-hold $tap-time $hold-time j ralt)
+  k-met (tap-hold $tap-time $hold-time k rmet)
+  l-ctl (tap-hold $tap-time $hold-time l rctl)
+  ;; This is the physical key where ö/é are (semicolon scancode)
+  ö-sft (tap-hold $tap-time $hold-time ; rsft)
+  
+  ;; Layer access
+  spc-num (tap-hold $tap-time $hold-time spc (layer-while-held numbers))
+
+  ;; caps:escape_shifted_capslock option
+  cap-esc (fork esc caps (lsft rsft))
+)
+
+;; ============================================================
+;; Layer: Base (with home row mods)
+;; ============================================================
+;; This layer just passes through most keys to your OS keyboard layout
+;; Your OS handles whether you get ö or é, etc.
+(deflayer base
+  esc  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    z    u    i    o    p    [    ]    
+  @cap-esc @a-sft @s-ctl @d-met @f-alt g    h    @j-alt @k-met @l-ctl @ö-sft ' ret
+  lsft 102d y    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           @spc-num            ralt rmet rctl
+)
+
+;; ============================================================
+;; Layer: Numbers and Symbols
+;; Activated by holding space
+;; ============================================================
+(deflayer numbers
+  _    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  _
+  _    1    2    3    (unicode "(")  _    _    (unicode ")")  6    5    4    _    _
+  _    7    8    _    (unicode [)    _    _    (unicode ])    _    0    9    _    _    _
+  _    _    _    _    (unicode "{")  _    _    (unicode "}")  _    _    _    _
+  _    _    _              _              _    _    _
+)
+
