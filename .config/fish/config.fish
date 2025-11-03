@@ -1,6 +1,10 @@
 # Load environment variables
 source ~/.profile
 
+set GTK_THEME Adwaita:dark
+set EDITOR nvim
+set SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/keyring/ssh"
+
 if status is-interactive
     # Suppress the default fish greeting
     set fish_greeting
