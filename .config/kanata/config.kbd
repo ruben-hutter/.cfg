@@ -27,13 +27,13 @@
 ;; Notes about the physical layout:
 ;; - QWERTZ: Both Swiss and German use QWERTZ (not QWERTY)
 ;; - "102d" is the extra key next to left shift (< > | key)
-;; - ";" is where ö is on German / é is on Swiss French
-;; - "'" is where ä is on German / à is on Swiss French  
-;; - "\" is where # is on German / $ is on Swiss French (between ' and ret)
-;; - "[" is where ü is on German / è is on Swiss French
-;; - "]" is where + is on German / ¨ is on Swiss French
-;; - "-" is where ß is on German / ' is on Swiss French
-;; - "=" is where ´ is on German / ^ is on Swiss French
+;; - ";" is where é is on Swiss French
+;; - "'" is where à is on Swiss French  
+;; - "\" is where $ is on Swiss French (between ' and ret)
+;; - "[" is where è is on Swiss French
+;; - "]" is where ¨ is on Swiss French
+;; - "-" is where ' is on Swiss French
+;; - "=" is where ^ is on Swiss French
 ;; - fn key is not included (usually can't be remapped)
 
 ;; ============================================================
@@ -41,8 +41,8 @@
 ;; ============================================================
 (defvar
   ;; Tap-hold timing
-  tap-time 200
-  hold-time 200
+  tap-time 150
+  hold-time 150
 )
 
 ;; ============================================================
@@ -59,11 +59,27 @@
   j-alt (tap-hold $tap-time $hold-time j ralt)
   k-met (tap-hold $tap-time $hold-time k rmet)
   l-ctl (tap-hold $tap-time $hold-time l rctl)
-  ;; This is the physical key where ö/é are (semicolon scancode)
-  ö-sft (tap-hold $tap-time $hold-time ; rsft)
+  ;; This is the physical key where é are (semicolon scancode)
+  é-sft (tap-hold $tap-time $hold-time ; rsft)
   
   ;; Layer access
-  spc-num (tap-hold $tap-time $hold-time spc (layer-while-held coding))
+  spc-cod (tap-hold $tap-time $hold-time spc (layer-while-held coding))
+
+  ;; Symbols mapping on coding layer
+  /\ (fork S-7 (unmod ralt <) (lsft rsft))
+  !? (fork S-] S-- (lsft rsft))
+  *% (fork S-3 S-5 (lsft rsft))
+  pls S-1
+  xor (macro = spc)
+  eq S-0
+  tld (macro RA-= spc)
+  and S-6
+  or RA-7
+  hsh RA-3
+  dlr \
+  sqt -
+  dqt S-2
+  btk (macro S-= spc)
 
   ;; caps:escape_shifted_capslock option
   cap-esc (fork esc caps (lsft rsft))
@@ -76,24 +92,23 @@
 ;; Layer: Base (with home row mods)
 ;; ============================================================
 ;; This layer just passes through most keys to your OS keyboard layout
-;; Your OS handles whether you get ö or é, etc.
+;; Your OS handles whether you get é, etc.
 (deflayer base
   esc  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    z    u    i    o    p    [    ]    
-  @cap-esc @a-sft @s-ctl @d-met @f-alt g    h    @j-alt @k-met @l-ctl @ö-sft ' \ ret
+  @cap-esc @a-sft @s-ctl @d-met @f-alt g    h    @j-alt @k-met @l-ctl @é-sft ' \ ret
   lsft 102d y    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           @spc-num            ralt rmet rctl
+  lctl lmet ralt           @spc-cod            lalt rmet rctl
 )
 
 ;; ============================================================
-;; Layer: Numbers and Symbols
+;; Layer: Coding
 ;; Activated by holding space
 ;; ============================================================
 (deflayer coding
-  @rld f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  _
-  _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    S-8  RA-[ RA-' _    _    S-9  RA-] RA-\ _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _
+  @rld f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  del
+  _    @!?  @dqt @eq  _    @tld _    _    @sqt @or  @pls @btk _
+  _    @and RA-' RA-[ S-8  _    @hsh S-9  RA-] RA-\ @/\  @dlr _    _
+  _    _    _    @xor _    _    _    _    @*%  _    _    _    _
   _    _    _              _              _    _    _
 )
-
