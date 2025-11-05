@@ -35,8 +35,10 @@ if [ -f "$HOME/.ghcup/env" ]; then
     . "$HOME/.ghcup/env"
 fi
 
-# Pywal
-#cat ~/.cache/wal/sequences
+# Bun setup
+if [ -d "$HOME/.bun/bin" ]; then
+    export PATH="$HOME/.bun/bin:$PATH"
+fi
 
 # Start fish shell
 # Comment out the following lines if you want to use bash
