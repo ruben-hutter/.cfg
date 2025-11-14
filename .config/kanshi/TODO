@@ -1,0 +1,1 @@
+Write a script that runs when loging in (at startup, after reboot, after suspend or after lock) and takes `hyprctl monitors | grep -E "Monitor|model|serial"` to configure correctly kanshi config file.
