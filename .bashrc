@@ -35,11 +35,6 @@ if [ -f "$HOME/.ghcup/env" ]; then
     . "$HOME/.ghcup/env"
 fi
 
-# Bun setup
-if [ -d "$HOME/.bun/bin" ]; then
-    export PATH="$HOME/.bun/bin:$PATH"
-fi
-
 # Start fish shell
 # Comment out the following lines if you want to use bash
 if [ -x /usr/bin/fish ]; then
@@ -59,18 +54,10 @@ fastfetch
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --bash)"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "$HOME/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="$HOME/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
+# pnpm
+export PNPM_HOME="/home/ruben/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

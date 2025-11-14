@@ -1,5 +1,5 @@
 function hyprconf
     # Open the configuration directory in the default editor
-    $EDITOR $HOME/.config/hypr
+    pushd $HOME/.config/hypr && $EDITOR . && popd
 end
 
