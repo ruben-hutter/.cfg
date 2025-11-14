@@ -30,3 +30,12 @@ opacity = 0.9
 [window.padding]
 x = 10
 y = 10
+
+[keyboard]
+bindings = [
+    { key = "V",        mods = "Control|Shift", action = "Paste" },
+    { key = "C",        mods = "Control|Shift", action = "Copy"  },
+    { key = "Plus",     mods = "Control|Shift", action = "IncreaseFontSize" },
+    { key = "Minus",    mods = "Control",       action = "DecreaseFontSize" },
+    { key = "0",        mods = "Control",       action = "ResetFontSize" },
+]
