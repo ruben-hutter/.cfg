@@ -36,7 +36,7 @@ setup_detach_hook() {
     local session="$1"
 
     if [ "$walrus_available" = true ]; then
-        tmux set-hook -t "$session" client-detached "run-shell 'walrus stop 2>/dev/null'" 2>/dev/null
+        tmux set-hook -t "$session" client-detached "run-shell 'walrus stop \"$session\" 2>/dev/null'" 2>/dev/null
     fi
 }
 
@@ -45,7 +45,7 @@ stop_tracking_and_start_new_session() {
 
     # Stop tracking the current session if walrus is available
     if [ "$walrus_available" = true ] && [ -n "$current_session" ]; then
-        walrus stop 2>/dev/null
+        walrus stop "$current_session" 2>/dev/null
     fi
 
     # Start tracking the new session
