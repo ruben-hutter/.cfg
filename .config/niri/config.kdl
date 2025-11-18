@@ -1,0 +1,17 @@
+// This config is in the KDL format: https://kdl.dev
+// "/-" comments out the following node.
+// Check the wiki for a full description of the configuration:
+// https://yalter.github.io/niri/Configuration:-Introduction
+
+// Load configuration files
+include "conf/misc.kdl"
+include "conf/autostart.kdl"
+include "conf/input.kdl"
+include "conf/output.kdl"
+include "conf/layout.kdl"
+include "conf/keybindings.kdl"
+include "conf/windowrules.kdl"
+include "conf/animations.kdl"
+include "dms/colors.kdl"
+include "dms/wpblur.kdl"
+
