@@ -1,11 +1,11 @@
 profile office1 {
-    output "BOE 0x0CE0" position 0,0 mode 1920x1200@60Hz scale 1.0
+    output "BOE 0x0CE0 Unknown" position 0,0 mode 1920x1200@60Hz scale 1.0
     output DP-1 position 1920,0 mode 1920x1080@60Hz
     output DP-3 position 3840,0 mode 1920x1080@60Hz
 }
 
 profile office2 {
-    output eDP-1 position 0,0 mode 1920x1200@60Hz scale 1.0
+    output "BOE 0x0CE0 Unknown" position 0,0 mode 1920x1200@60Hz scale 1.0
     output DP-3 position 1920,0 mode 1920x1080@60Hz
 }
 
@@ -16,5 +16,5 @@ profile home {
 }
 
 profile laptop {
-    output "BOE 0x0CE0" position 0,0 mode 1920x1200@60Hz scale 1.0
+    output "BOE 0x0CE0 Unknown" position 0,0 mode 1920x1200@60Hz scale 1.0
 }
