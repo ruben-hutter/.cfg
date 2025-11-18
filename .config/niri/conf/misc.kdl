@@ -24,7 +24,7 @@ window-rule {
 
 window-rule {
     match is-active=false
-    opacity 0.90
+    opacity 0.9
 }
 
 layer-rule {
