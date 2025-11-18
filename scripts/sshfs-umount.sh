@@ -24,14 +24,6 @@ fi
 
 echo "Unmounting $MOUNTPOINT..."
 
-# Try to kill processes using the mountpoint
-PIDS=$(lsof +D "$MOUNTPOINT" 2>/dev/null | awk 'NR>1 {print $2}' | sort -u)
-if [ -n "$PIDS" ]; then
-    echo "Killing processes using mountpoint: $PIDS"
-    echo "$PIDS" | xargs kill 2>/dev/null
-    sleep 1
-fi
-
 # Try fusermount first (lazy unmount)
 if fusermount -uz "$MOUNTPOINT" 2>/dev/null; then
     echo "Successfully unmounted $MOUNTPOINT using fusermount."

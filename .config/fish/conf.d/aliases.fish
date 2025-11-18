@@ -33,7 +33,7 @@ alias clera="clear"
 alias nv="nvim"
 
 # open vscode with ozone
-alias code="env ELECTRON_OZONE_PLATFORM_HINT=auto code"
+#alias code="env ELECTRON_OZONE_PLATFORM_HINT=auto code"
 
 # tmux session manager
 alias tm="~/scripts/tmux_session_manager.sh"
