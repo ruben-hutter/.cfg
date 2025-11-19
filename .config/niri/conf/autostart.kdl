@@ -1,0 +1,24 @@
+// Add lines like this to spawn processes at startup.
+// Note that running niri as a session supports xdg-desktop-autostart,
+// which may be more convenient to use.
+// See the binds section below for more spawn examples.
+
+spawn-at-startup "kanshi"
+spawn-at-startup "/usr/libexec/xdg-desktop-portal-gtk"
+spawn-at-startup "/usr/libexec/xdg-desktop-portal-gnome"
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
+spawn-at-startup "dms" "run"
+spawn-at-startup "dms" "ipc" "call" "wallpaper" "next"
+spawn-at-startup "tmux" "new-session" "-d"
+spawn-sh-at-startup "$HOME/scripts/ssh-agent.sh"
+spawn-sh-at-startup "$HOME/.local/bin/kDrive"
+
+// To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
+// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
+
+hotkey-overlay {
+    skip-at-startup
+    hide-not-bound
+}
+
