@@ -44,3 +44,6 @@ alias nn="~/scripts/new_note.sh"
 # lauch lazygit
 alias lg="lazygit"
 
+# lazygit for dotfiles config repo
+alias conflg='lazygit --git-dir $HOME/.cfg --work-tree $HOME'
+
