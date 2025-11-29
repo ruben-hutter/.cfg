@@ -7,42 +7,34 @@
 
 // Laptop built-in display
 output "BOE 0x0CE0 Unknown" {
-    mode "1920x1200@60"
     scale 1.0
-    transform "normal"
     position x=0 y=0
 }
 
 // Home monitors
 output "HP Inc. HP 24fh 3CM0330VYC   " {
-    mode "1920x1080@60"
+    focus-at-startup
     scale 1.0
-    transform "normal"
     position x=1920 y=0
 }
 
 output "HP Inc. HP 24fh 3CM033045N   " {
-    mode "1920x1080@60"
     scale 1.0
-    transform "normal"
     position x=3840 y=0
-    focus-at-startup
 }
 
 // Work monitor
-/-output "SomeCompany UltrawideMonitor 1234" {
-    // Narrower proportions and more presets for an ultrawide.
+output "HP Inc. HP E34m G4 CNC4140Q0S" {
+    focus-at-startup
+    scale 1.1
+
     layout {
-        default-column-width { proportion 0.25; }
+        default-column-width { proportion 0.33333; }
 
         preset-column-widths {
-            proportion 0.2
-            proportion 0.25
+            proportion 0.33333
             proportion 0.5
-            proportion 0.75
-            proportion 0.8
+            proportion 0.66667
         }
-
-        //center-focused-column "always"
     }
 }

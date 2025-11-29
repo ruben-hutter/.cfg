@@ -9,13 +9,10 @@ spawn-at-startup "/usr/libexec/xdg-desktop-portal-gnome"
 spawn-at-startup "/usr/libexec/lxqt-policykit-agent"
 //spawn-at-startup "kanshi"
 //spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets,ssh"
-spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
-spawn-at-startup "dms" "run"
+//spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
+//spawn-at-startup "dms" "run"
 spawn-at-startup "tmux" "new-session" "-d"
-spawn-sh-at-startup "QT_QPA_PLATFORM=xcb $HOME/.local/bin/kDrive &"
-
-// To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
-// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
+//spawn-sh-at-startup "QT_QPA_PLATFORM=xcb $HOME/.local/bin/kDrive &"
 
 hotkey-overlay {
     skip-at-startup

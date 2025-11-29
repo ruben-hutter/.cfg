@@ -1,0 +1,11 @@
+[Unit]
+Description=kDrive
+After=graphical-session.target
+
+[Service]
+ExecStartPre=/usr/bin/sleep 5
+ExecStart=/usr/bin/env QT_QPA_PLATFORM=xcb /home/ruben/.local/bin/kDrive
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
