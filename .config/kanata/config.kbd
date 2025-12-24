@@ -83,7 +83,7 @@
 (deflayer base
   esc  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    z    u    i    o    p    [    ]    
-  @cap-esc @a-sft @s-ctl @d-met @f-alt g    h    @j-alt @k-met @l-ctl @é-sft ' \ ret
+  @cap-arw @a-sft @s-ctl @d-met @f-alt g    h    @j-alt @k-met @l-ctl @é-sft ' \ ret
   lsft 102d y    x    c    v    b    n    m    ,    .    /    rsft
   lctl lmet ralt           @spc-cod            lalt rmet rctl
 )
@@ -107,7 +107,7 @@
 (deflayer arrows
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    left down up   rght _    _    _
+  _    _    _    _    _    _    left down up   rght _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _              _              _    _    _
 )
