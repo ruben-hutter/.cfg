@@ -37,9 +37,9 @@ fi
 
 # Start fish shell
 # Comment out the following lines if you want to use bash
-if [ -x /usr/bin/fish ]; then
-    exec /usr/bin/fish
-fi
+#if [ -x /usr/bin/fish ]; then
+#    exec /usr/bin/fish
+#fi
 
 if [ -f "$HOME/.bashrc-personal" ]; then
     . "$HOME/.bashrc-personal"

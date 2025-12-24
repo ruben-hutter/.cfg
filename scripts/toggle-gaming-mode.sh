@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SERVICE_NAME="kanata-std"
+SERVICE_NAME="kanata"
 
 if systemctl --user is-active --quiet "$SERVICE_NAME"; then
     systemctl --user stop "$SERVICE_NAME"

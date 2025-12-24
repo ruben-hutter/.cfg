@@ -1,9 +1,24 @@
-# Load environment variables
+# ============================================================================
+# Environment Variables
+# ============================================================================
 #set GTK_THEME Adwaita:dark
 set EDITOR nvim
 #set -gx SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/gcr/ssh"
 set -gx SSH_AUTH_SOCK "$HOME/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock"
 set -gx PNPM_HOME "$HOME/.local/share/pnpm"
+
+# ============================================================================
+# PATH Setup
+# ============================================================================
+# Custom bin directories
+fish_add_path $HOME/.local/bin
+
+# Language-specific paths
+fish_add_path $HOME/go/bin
+fish_add_path $HOME/.ghcup/bin
+fish_add_path $HOME/.cabal/bin
+
+# Package managers
 fish_add_path $PNPM_HOME
 
 if status is-interactive
@@ -24,5 +39,12 @@ if status is-interactive
 
     # Enable direnv
     eval (direnv hook fish)
-end
 
+    # Nix Daemon
+    if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+        source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+    end
+
+    # opencode
+    fish_add_path /home/ruben/.opencode/bin
+end

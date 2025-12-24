@@ -1,11 +1,19 @@
 format = '''
-$directory$git_branch$rust$python
+$hostname$container$directory$git_branch$rust$python
 $character'''
 
 palette = 'colors'
 
+[hostname]
+ssh_only = true
+ssh_symbol = '🌐'
+detect_env_vars = ['!CONTAINER_ID']
+
+[container]
+format = '[$name ]($style)'
+
 [palettes.colors]
-mustard = '#af8700' # example
+mustard = '#af8700'
 color1 = '#99ccfa'
 color2 = '#003351'
 color3 = '#c2c7ce'
