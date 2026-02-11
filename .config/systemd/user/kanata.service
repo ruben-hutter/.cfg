@@ -4,7 +4,9 @@ Documentation=https://github.com/jtroo/kanata
 
 [Service]
 Type=simple
+ExecStartPre=/usr/bin/touch /run/user/%U/kanata.started
 ExecStart=%h/.local/bin/kanata --cfg %h/.config/kanata/config.kbd
+ExecStartPost=/usr/bin/rm -f /run/user/%U/kanata.started
 Restart=always
 RestartSec=3
 
