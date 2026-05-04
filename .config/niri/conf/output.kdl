@@ -29,7 +29,7 @@ output "HP Inc. HP E34m G4 CNC4140Q0S" {
     scale 1.1
 
     layout {
-        default-column-width { proportion 0.33333; }
+        default-column-width { proportion 0.66667; }
 
         preset-column-widths {
             proportion 0.33333
