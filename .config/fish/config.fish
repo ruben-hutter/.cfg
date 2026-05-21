@@ -12,6 +12,7 @@ set -gx PNPM_HOME "$HOME/.local/share/pnpm"
 # ============================================================================
 # Custom bin directories
 fish_add_path $HOME/.local/bin
+fish_add_path $HOME/scripts
 
 # Language-specific paths
 fish_add_path $HOME/go/bin
@@ -30,6 +31,9 @@ if status is-interactive
 
     # Print fastfetch
     fastfetch
+
+    # Print walrus stats
+    walrus show -p month
 
     # Starship prompt
     starship init fish | source
