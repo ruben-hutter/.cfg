@@ -3,8 +3,7 @@
 # ============================================================================
 #set GTK_THEME Adwaita:dark
 set EDITOR nvim
-#set -gx SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/gcr/ssh"
-set -gx SSH_AUTH_SOCK "$HOME/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock"
+set -gx SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/ssh-agent.socket"
 set -gx PNPM_HOME "$HOME/.local/share/pnpm"
 
 # ============================================================================
