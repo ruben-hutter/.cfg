@@ -1,0 +1,7 @@
+[Unit]
+Description=Reload Kanata on input device change
+ConditionPathExists=/run/user/%U/kanata.started
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl --user restart kanata.service

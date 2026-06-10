@@ -1,0 +1,11 @@
+[Unit]
+Description=blink(1) tiny HTTP server
+After=local-fs.target
+
+[Service]
+ExecStart=/home/ruben/source/blink1-tool/blink1-tiny-server --host 127.0.0.1 --port 8934
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
