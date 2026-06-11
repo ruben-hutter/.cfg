@@ -13,8 +13,6 @@ const PALETTE = [
 
 const BLINK1_URL = "http://localhost:8934"
 
-const sessionStates = new Map<string, string>()
-
 function sessionColor(sessionId: string): string {
   let hash = 0
   for (let i = 0; i < sessionId.length; i++) {
@@ -39,17 +37,11 @@ export default (async () => {
       if (!sessionID) return
 
       if (event.type === "session.idle") {
-        sessionStates.set(sessionID, "idle")
         await blink1Flash(sessionColor(sessionID), 3, 300)
       }
-
-      if (event.type === "session.status") {
-        const status = props?.status as { type?: string } | undefined
-        if (status?.type === "busy" && sessionStates.get(sessionID) !== "busy") {
-          sessionStates.set(sessionID, "busy")
-          await blink1Flash(sessionColor(sessionID), 1, 200)
-        }
-      }
+    },
+    "chat.message": async (input) => {
+      await blink1Flash(sessionColor(input.sessionID), 1, 500)
     },
   }
 }) satisfies Plugin
