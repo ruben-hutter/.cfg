@@ -29,15 +29,107 @@ async function blink1Flash(rgb: string, count: number, millis = 300) {
   } catch {}
 }
 
+async function blink1Off() {
+  try {
+    await fetch(`${BLINK1_URL}/blink1/off`)
+  } catch {}
+}
+
+const BLINK_INTERVAL = 1300
+const activePrompts = new Map<string, Set<string>>()
+const sessionQueue: string[] = []
+let blinkTimer: ReturnType<typeof setInterval> | null = null
+
+function activeSession(): string | undefined {
+  return sessionQueue.length > 0 ? sessionQueue[0] : undefined
+}
+
+function startTimer() {
+  if (blinkTimer) return
+  const sessionID = activeSession()
+  if (!sessionID) return
+  const color = sessionColor(sessionID)
+  blink1Flash(color, 5, 200)
+  blinkTimer = setInterval(() => blink1Flash(color, 5, 200), BLINK_INTERVAL)
+}
+
+function stopTimer() {
+  if (blinkTimer) {
+    clearInterval(blinkTimer)
+    blinkTimer = null
+    blink1Off()
+  }
+}
+
+function trackPrompt(sessionID: string, promptID: string) {
+  let set = activePrompts.get(sessionID)
+  if (!set) {
+    set = new Set()
+    activePrompts.set(sessionID, set)
+    sessionQueue.push(sessionID)
+  }
+  set.add(promptID)
+  if (activeSession() === sessionID) startTimer()
+}
+
+function untrackPrompt(sessionID: string, promptID: string) {
+  const set = activePrompts.get(sessionID)
+  if (!set) return
+  set.delete(promptID)
+  if (set.size === 0) {
+    activePrompts.delete(sessionID)
+    const idx = sessionQueue.indexOf(sessionID)
+    if (idx !== -1) sessionQueue.splice(idx, 1)
+    if (blinkTimer && !activeSession()) {
+      stopTimer()
+    } else if (blinkTimer) {
+      stopTimer()
+      startTimer()
+    }
+  }
+}
+
+function clearSession(sessionID: string) {
+  if (!activePrompts.has(sessionID)) return
+  activePrompts.delete(sessionID)
+  const idx = sessionQueue.indexOf(sessionID)
+  if (idx !== -1) sessionQueue.splice(idx, 1)
+  if (blinkTimer) {
+    stopTimer()
+    startTimer()
+  }
+}
+
 export default (async () => {
   return {
     event: async ({ event }) => {
       const props = event.properties as Record<string, unknown>
       const sessionID = props?.sessionID as string | undefined
-      if (!sessionID) return
 
       if (event.type === "session.idle") {
+        if (sessionID) clearSession(sessionID)
+        if (!sessionID) return
         await blink1Flash(sessionColor(sessionID), 3, 300)
+      }
+
+      if (event.type === "question.asked") {
+        if (!sessionID) return
+        trackPrompt(sessionID, props.id as string)
+      }
+
+      if (event.type === "question.replied" || event.type === "question.rejected") {
+        if (!sessionID) return
+        untrackPrompt(sessionID, props.requestID as string)
+      }
+
+      if (event.type === "permission.asked") {
+        if (!sessionID) return
+        trackPrompt(sessionID, props.id as string)
+      }
+
+      if (event.type === "permission.replied") {
+        if (!sessionID) return
+        untrackPrompt(sessionID, props.requestID as string)
       }
     },
     "chat.message": async (input) => {
