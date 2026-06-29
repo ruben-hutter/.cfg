@@ -32,6 +32,11 @@ window-rule {
     opacity 1.0
 }
 
+window-rule {
+    match app-id="org.gnome.Evince"
+    opacity 1.0
+}
+
 layer-rule {
     match namespace="^quickshell$"
     place-within-backdrop true
