@@ -1,6 +1,6 @@
 [Unit]
 Description=Reload Kanata on input device change
-ConditionPathExists=/run/user/%U/kanata.started
+ConditionPathExists=/run/user/%U
 
 [Service]
 Type=oneshot
