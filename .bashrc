@@ -76,3 +76,7 @@ case ":$PATH:" in
 esac
 
 # <<< juliaup initialize <<<
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/ruben/.local/bin:$PATH"
