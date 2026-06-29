@@ -25,9 +25,6 @@ binds {
     Mod+D hotkey-overlay-title="Run an Application: dms-spotlight" {
         spawn "dms" "ipc" "call" "spotlight" "toggle";
     }
-    /-Mod+Alt+K hotkey-overlay-title="Switch Keyboard Layout: kanata-switch.sh" {
-        spawn-sh "$HOME/scripts/kanata-switch.sh";
-    }
     Mod+X hotkey-overlay-title="Open the Powermenu: dms-powermenu" {
         spawn "dms" "ipc" "call" "powermenu" "toggle";
     }
