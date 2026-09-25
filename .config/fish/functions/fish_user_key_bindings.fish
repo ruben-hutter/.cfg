@@ -15,4 +15,8 @@ function fish_user_key_bindings
     # The following variable can be used to configure cursor shape in
     # visual mode, but due to fish_cursor_default, is redundant here
     set fish_cursor_visual block
+
+    # 'q' reads the rest of the line as an unquoted question
+    bind -M insert \r _q_smart_enter
+    bind -M default \r _q_smart_enter
 end

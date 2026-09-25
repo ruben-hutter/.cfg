@@ -47,3 +47,6 @@ alias lg="lazygit"
 # lazygit for dotfiles config repo
 alias conflg='lazygit --git-dir $HOME/.cfg --work-tree $HOME'
 
+# zoxide
+alias z="zoxide"
+

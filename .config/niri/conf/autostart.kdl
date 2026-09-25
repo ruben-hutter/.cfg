@@ -12,7 +12,7 @@ spawn-at-startup "/usr/libexec/lxqt-policykit-agent"
 //spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
 //spawn-at-startup "dms" "run"
 spawn-at-startup "tmux" "new-session" "-d"
-//spawn-sh-at-startup "QT_QPA_PLATFORM=xcb $HOME/.local/bin/kDrive &"
+spawn-sh-at-startup "sleep 10; exec $HOME/.local/bin/kDrive.AppImage"
 
 hotkey-overlay {
     skip-at-startup
