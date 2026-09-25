@@ -30,11 +30,6 @@ if [ -f "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
 fi
 
-# Haskell setup
-if [ -f "$HOME/.ghcup/env" ]; then
-    . "$HOME/.ghcup/env"
-fi
-
 # Start fish shell
 # Comment out the following lines if you want to use bash
 #if [ -x /usr/bin/fish ]; then
@@ -80,3 +75,5 @@ esac
 
 # Added by Antigravity CLI installer
 export PATH="/home/ruben/.local/bin:$PATH"
+
+[ -f "/home/ruben/.ghcup/env" ] && . "/home/ruben/.ghcup/env" # ghcup-env

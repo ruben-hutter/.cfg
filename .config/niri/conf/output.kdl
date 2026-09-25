@@ -5,22 +5,33 @@
 // https://yalter.github.io/niri/Configuration:-Outputs
 // Remember to uncomment the node by removing "/-"!
 
-// Laptop built-in display
-output "BOE 0x0CE0 Unknown" {
+// Work monitors Basel
+output "HP Inc. HP 527pq CNK6090BL4" {
     scale 1.0
     position x=0 y=0
 }
 
-// Home monitors
-output "HP Inc. HP 24fh 3CM0330VYC   " {
+output "HP Inc. HP 527pm 1H36020DJ7" {
     focus-at-startup
     scale 1.0
-    position x=1920 y=0
+    position x=2560 y=0
+}
+
+// Laptop: right of the Basel pair, left of the home pair
+output "BOE 0x0CE0 Unknown" {
+    scale 1.0
+    position x=5120 y=0
+}
+
+// Home monitors (laptop on the left, then these two)
+output "HP Inc. HP 24fh 3CM0330VYC   " {
+    scale 1.0
+    position x=7040 y=0
 }
 
 output "HP Inc. HP 24fh 3CM033045N   " {
     scale 1.0
-    position x=3840 y=0
+    position x=8960 y=0
 }
 
 // TV in Olten
@@ -29,7 +40,7 @@ output "LG Electronics LG TV 0x01010101" {
     position x=1920 y=0
 }
 
-// Work monitor
+// Work monitor Brugg
 output "HP Inc. HP E34m G4 CNC4140Q0S" {
     focus-at-startup
     scale 1.1
