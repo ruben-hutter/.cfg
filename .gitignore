@@ -1,0 +1,32 @@
+.config/opencode/opencode.json
+.config/opencode/node_modules/
+.ssh/
+.gnupg/
+.local/share/keyrings/
+.config/gh/
+.local/state/opencode/
+*.secret
+*.env
+.netrc
+.npmrc
+
+# shell/tool histories & agent state (sensitive)
+.bash_history
+.python_history
+.sqlite_history
+.clojure_history
+.viminfo
+.claude.json*
+.android/
+.emulator_console_auth_token
+
+# backups & regenerated junk
+*.bak
+*.bak-*
+.steampath
+.steampid
+.wget-hsts
+.dmrc
+
+# plugin managers manage their own clones
+.config/tmux/plugins/

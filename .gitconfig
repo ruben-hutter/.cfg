@@ -1,0 +1,10 @@
+[user]
+	signingKey = 3AC3A656F8490CA9A30E6439F31E31C90133D488
+	email = ruben.hutter@rubenhutter.ch
+	name = Ruben Hutter
+[commit]
+	gpgSign = true
+[pull]
+	rebase = false
+[init]
+	defaultBranch = main

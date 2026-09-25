@@ -1,0 +1,3 @@
+gui:
+  skipRewordInEditorWarning: true
+promptToReturnFromSubprocess: false
