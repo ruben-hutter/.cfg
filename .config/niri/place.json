@@ -1,0 +1,20 @@
+{
+  "setups": [
+    { "name": "work",
+      "roles": ["HP Inc. HP 527pm 1H36020DJ7",
+                "HP Inc. HP 527pq CNK6090BL4",
+                "BOE 0x0CE0 None"] },
+    { "name": "home",
+      "roles": ["HP Inc. HP 24fh 3CM0330VYC",
+                "HP Inc. HP 24fh 3CM033045N",
+                "BOE 0x0CE0 None"] },
+    { "name": "laptop",
+      "roles": ["BOE 0x0CE0 None"] },
+    { "name": "olten",
+      "roles": ["LG Electronics LG TV 0x01010101",
+                "BOE 0x0CE0 None"] },
+    { "name": "brugg",
+      "roles": ["HP Inc. HP E34m G4 CNC4140Q0S",
+                "BOE 0x0CE0 None"] }
+  ]
+}
