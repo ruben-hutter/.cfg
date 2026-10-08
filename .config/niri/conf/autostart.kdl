@@ -13,6 +13,8 @@ spawn-at-startup "/usr/libexec/lxqt-policykit-agent"
 //spawn-at-startup "dms" "run"
 spawn-at-startup "tmux" "new-session" "-d"
 spawn-sh-at-startup "sleep 10; exec $HOME/.local/bin/kDrive.AppImage"
+// Keep workspaces arranged by monitor role across setup changes
+spawn-at-startup "python3" "/home/ruben/.config/niri/place/place.py" "watch"
 
 hotkey-overlay {
     skip-at-startup
