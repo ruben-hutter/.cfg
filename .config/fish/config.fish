@@ -1,25 +1,8 @@
 # ============================================================================
-# Environment Variables
+# Interactive setup only.
+# Environment/PATH:  ~/.config/fish/conf.d/00-env.fish
+# Session autostart: ~/.config/fish/conf.d/99-niri-autostart.fish
 # ============================================================================
-#set GTK_THEME Adwaita:dark
-set EDITOR nvim
-set -gx SSH_AUTH_SOCK "$XDG_RUNTIME_DIR/ssh-agent.socket"
-set -gx PNPM_HOME "$HOME/.local/share/pnpm"
-
-# ============================================================================
-# PATH Setup
-# ============================================================================
-# Custom bin directories
-fish_add_path $HOME/.local/bin
-fish_add_path $HOME/scripts
-
-# Language-specific paths
-fish_add_path $HOME/go/bin
-fish_add_path $HOME/.ghcup/bin
-fish_add_path $HOME/.cabal/bin
-
-# Package managers
-fish_add_path $PNPM_HOME
 
 if status is-interactive
     # Suppress the default fish greeting
@@ -47,8 +30,4 @@ if status is-interactive
     if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
         source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
     end
-
-    # opencode
-    fish_add_path /home/ruben/.opencode/bin
 end
-

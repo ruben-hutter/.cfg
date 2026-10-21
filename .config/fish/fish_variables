@@ -3,8 +3,7 @@
 SETUVAR --export GDK_BACKEND:wayland
 SETUVAR --export MOZ_ENABLE_WAYLAND:1
 SETUVAR --export OZONE_PLATFORM_HINT:wayland
-SETUVAR --export QT_QPA_PLATFORM:wayland
 SETUVAR --export XDG_SESSION_TYPE:wayland
 SETUVAR --export XWAYLAND_NO_GLAMOR:1
 SETUVAR __fish_initialized:3800
-SETUVAR fish_user_paths:/home/ruben/scripts\x1e/home/ruben/\x2eopencode/bin\x1e/home/ruben/\x2eghcup/bin\x1e/home/ruben/go/bin\x1e/home/ruben/\x2elocal/bin\x1e/home/ruben/\x2elocal/share/pnpm
+SETUVAR fish_user_paths:/home/ruben/\x2epi/agent/bin\x1e/home/ruben/\x2elocal/share/JetBrains/Toolbox/scripts\x1e/home/ruben/\x2ejuliaup/bin\x1e/home/ruben/scripts\x1e/home/ruben/\x2eopencode/bin\x1e/home/ruben/\x2eghcup/bin\x1e/home/ruben/go/bin\x1e/home/ruben/\x2elocal/bin\x1e/home/ruben/\x2elocal/share/pnpm
