@@ -147,5 +147,19 @@ class PlanTest(unittest.TestCase):
         self.assertEqual(moves, [])
 
 
+class FirstOccupiedTest(unittest.TestCase):
+    def test_frontmost_occupied_per_monitor(self):
+        # A: buffer empty at #1, occupied at #2; B: occupied at #1; C: all empty
+        workspaces = [ws(1, "A", 1), ws(2, "A", 2), ws(3, "B", 1), ws(4, "C", 1)]
+        windows = [win(1, 2), win(2, 3)]
+        self.assertEqual(layout.first_occupied(workspaces, windows, ["A", "B", "C"]),
+                         [2, 3, None])
+
+    def test_picks_by_idx_not_list_order(self):
+        workspaces = [ws(5, "A", 2), ws(6, "A", 1)]
+        windows = [win(1, 5), win(2, 6)]
+        self.assertEqual(layout.first_occupied(workspaces, windows, ["A"]), [6])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
