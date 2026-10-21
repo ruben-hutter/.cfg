@@ -12,3 +12,7 @@ When I ask you to implement a feature, task, or bugfix in a repo with this layou
 4. If the repo does not have the wtree layout (no `.bare` at its root), just work normally — no worktree needed.
 
 This rule also applies when the task looks small.
+
+## Task handoff notes
+
+If `TASK.md` exists in the current directory, read it before starting work: it holds the goal, decisions, and pointers for the task this worktree was created for. Treat it as scratch context, not repo documentation.
