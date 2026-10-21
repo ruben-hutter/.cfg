@@ -56,6 +56,10 @@
       "showTrash": false,
       "trashFileManager": "default",
       "trashCustomCommand": "",
+      "magnification": false,
+      "magnificationScale": 130,
+      "magnificationProfile": "parabolic",
+      "magnificationExpand": false,
       "order": [],
       "widgets": [
         {
@@ -84,52 +88,85 @@
   "blurWallpaperOnOverview": true,
   "controlCenterWidgets": [
     {
+      "id": "user",
+      "enabled": true,
+      "w": 6,
+      "h": 1,
+      "col": 0,
+      "row": 0
+    },
+    {
+      "id": "settings",
+      "enabled": true,
+      "w": 1,
+      "h": 1,
+      "small": true,
+      "col": 6,
+      "row": 0
+    },
+    {
       "id": "volumeSlider",
       "enabled": true,
       "w": 4,
-      "h": 1
+      "h": 1,
+      "col": 0,
+      "row": 1
     },
     {
       "id": "brightnessSlider",
       "enabled": true,
       "w": 4,
-      "h": 1
+      "h": 1,
+      "col": 4,
+      "row": 1
     },
     {
       "id": "wifi",
       "enabled": true,
       "w": 4,
-      "h": 1
+      "h": 1,
+      "col": 0,
+      "row": 2
     },
     {
       "id": "bluetooth",
       "enabled": true,
       "w": 4,
-      "h": 1
+      "h": 1,
+      "col": 4,
+      "row": 2
     },
     {
       "id": "audioOutput",
       "enabled": true,
       "w": 4,
-      "h": 1
+      "h": 1,
+      "col": 0,
+      "row": 3
     },
     {
       "id": "audioInput",
       "enabled": true,
       "w": 4,
-      "h": 1
+      "h": 1,
+      "col": 4,
+      "row": 3
     },
     {
-      "id": "nightMode",
+      "id": "power",
       "enabled": true,
-      "w": 4,
-      "h": 1
+      "w": 1,
+      "h": 1,
+      "small": true
     },
     {
-      "id": "doNotDisturb",
+      "id": "edit",
       "enabled": true,
-      "w": 4,
-      "h": 1
+      "w": 1,
+      "h": 1,
+      "small": true,
+      "col": 7,
+      "row": 4
     }
   ],
   "spotlightSectionViewModes": {
@@ -140,7 +177,9 @@
     {
       "id": "clock",
       "w": 2,
-      "h": 1
+      "h": 1,
+      "col": 0,
+      "row": 0
     },
     {
       "id": "weather",
@@ -150,19 +189,33 @@
     {
       "id": "calendar",
       "w": 4,
-      "h": 3
+      "h": 4,
+      "col": 2,
+      "row": 0
     },
     {
       "id": "sysmon",
       "w": 2,
-      "h": 1
+      "h": 1,
+      "col": 0,
+      "row": 1
     },
     {
       "id": "media",
       "w": 2,
-      "h": 1
+      "h": 2,
+      "col": 0,
+      "row": 2
     }
   ],
+  "dashOptions": {
+    "media": {
+      "lyrics": false
+    },
+    "overview": {
+      "panelRows": 4
+    }
+  },
   "networkPreference": "wifi",
   "cursorSettings": {
     "theme": "System Default",
@@ -196,7 +249,7 @@
   "notificationCompactMode": true,
   "notificationHistoryEnabled": false,
   "osdAlwaysShowValue": true,
-  "osdMediaPlaybackEnabled": true,
+  "osdMediaPlaybackEnabled": false,
   "osdPowerProfileEnabled": true,
   "barConfigs": [
     {
@@ -294,5 +347,20 @@
     }
   },
   "frameMode": "separate",
-  "configVersion": 31
+  "configVersion": 42,
+  "launcherStyle": "full",
+  "niriOverviewLauncherStyle": "full",
+  "niriOverviewOverlayEnabled": true,
+  "dankLauncherV2Size": "micro",
+  "dankLauncherV2BorderEnabled": false,
+  "dankLauncherV2BorderColor": "primary",
+  "launcherEnterAction": "launch",
+  "notificationShowTimeoutBar": true,
+  "osdPosition": 7,
+  "osdWorkspaceEnabled": false,
+  "scrollTitleEnabled": true,
+  "bluetoothMprisEnabled": false,
+  "batteryNotifyLow": true,
+  "batteryLowNotificationType": 0,
+  "acProfileName": ""
 }
