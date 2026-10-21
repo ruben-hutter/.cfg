@@ -3,18 +3,21 @@
 
 vim.api.nvim_create_autocmd('LspAttach', {
 	callback = function(event)
-		local opts = { buffer = event.buf, remap = false }
+		local function map(lhs, rhs, desc)
+			vim.keymap.set('n', lhs, rhs, { buffer = event.buf, remap = false, desc = 'LSP: ' .. desc })
+		end
 
-		vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition() end, opts)
-		vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, opts)
-		vim.keymap.set('n', '<leader>vws', function() vim.lsp.buf.workspace_symbol() end, opts, { desc = 'Workspace symbols' })
-		vim.keymap.set('n', '<leader>vd', function() vim.diagnostic.open_float() end, opts, { desc = 'Diagnostic float' })
-		vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = 1, float = true }) end, opts, { desc = 'Next diagnostic' })
-		vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = -1, float = true }) end, opts, { desc = 'Prev diagnostic' })
-		vim.keymap.set('n', '<leader>vca', function() vim.lsp.buf.code_action() end, opts, { desc = 'Code action' })
-		vim.keymap.set('n', '<leader>vrr', function() vim.lsp.buf.references() end, opts, { desc = 'References' })
-		vim.keymap.set('n', '<leader>vrn', function() vim.lsp.buf.rename() end, opts, { desc = 'Rename' })
-		vim.keymap.set('i', '<C-h>', function() vim.lsp.buf.signature_help() end, opts, { desc = 'Signature help' })
+		map('gd', vim.lsp.buf.definition, 'Goto definition')
+		map('K', vim.lsp.buf.hover, 'Hover')
+		map('<leader>vws', vim.lsp.buf.workspace_symbol, 'Workspace symbols')
+		map('<leader>vd', vim.diagnostic.open_float, 'Diagnostic float')
+		map(']d', function() vim.diagnostic.jump({ count = 1, float = true }) end, 'Next diagnostic')
+		map('[d', function() vim.diagnostic.jump({ count = -1, float = true }) end, 'Prev diagnostic')
+		map('<leader>vca', vim.lsp.buf.code_action, 'Code action')
+		map('<leader>vrr', vim.lsp.buf.references, 'References')
+		map('<leader>vrn', vim.lsp.buf.rename, 'Rename')
+		vim.keymap.set('i', '<C-h>', vim.lsp.buf.signature_help,
+			{ buffer = event.buf, remap = false, desc = 'LSP: Signature help' })
 	end,
 })
 

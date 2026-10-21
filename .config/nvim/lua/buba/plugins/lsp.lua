@@ -4,7 +4,6 @@ return {
 		-- we enable servers explicitly in nvim-lspconfig's config below
 		automatic_enable = false,
 		ensure_installed = {
-			-- NOTE: no 'hls' here - mason's HLS binary is ABI-incompatible with
 			-- ghcup's GHC; HLS is installed via ghcup instead
 			'bashls',        -- bash
 			'pyright',       -- python
@@ -47,11 +46,10 @@ return {
 			vim.lsp.enable({
 				'hls', 'jdtls', 'bashls', 'pyright', 'rust_analyzer',
 				'clangd', 'gopls', 'lua_ls', 'ts_ls', 'html', 'cssls',
-				'tinymist',
+				'tinymist', 'fish_lsp',
 			})
 		end,
 	},
 	{'hrsh7th/cmp-nvim-lsp'},
-	{'hrsh7th/nvim-cmp'},
-	{'L3MON4D3/LuaSnip'}
+	{'hrsh7th/nvim-cmp'}
 }
