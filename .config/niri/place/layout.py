@@ -43,6 +43,18 @@ def observed_lists(workspaces, windows, conns):
     return [per[c] for c in conns]
 
 
+def first_occupied(workspaces, windows, conns):
+    """Frontmost occupied workspace id per monitor, or None if it has none:
+    what each monitor should display right after a transition."""
+    occ = {w["workspace_id"] for w in windows}
+    picks = []
+    for conn in conns:
+        pick = next((w["id"] for w in sorted(workspaces, key=lambda w: w["idx"])
+                     if w["output"] == conn and w["id"] in occ), None)
+        picks.append(pick)
+    return picks
+
+
 def learn(state, lists, freeze_sizes=False):
     """Adopt observed reality.
 

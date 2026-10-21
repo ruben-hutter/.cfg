@@ -164,8 +164,7 @@ def tick(niri, setups, state, last_setup, locked):
             state.update(layout.learn(state, lists))
             log(f"learned initial layout at {name}: sizes {state['sizes']}")
         ok, pending = converge(niri, state, conns)
-        restore_focus(niri, state.get("memory", {}).get(name), state.get("focus"),
-                      conns, workspaces, windows, ok)
+        restore_focus(niri, conns, ok)
         if ok:
             state.pop("fresh", None)  # distribution phase done
         log(f"applied {name}: {'ok' if ok else f'INCOMPLETE ({pending} pending)'}")
@@ -173,25 +172,10 @@ def tick(niri, setups, state, last_setup, locked):
             notify(f"place: {name} (incomplete)",
                    "some workspaces refused to move - see place.log")
         return name
-    # settled: follow the user's arrangement and remember what they are
-    # looking at (read-only, also runs while locked - keybinds work there).
-    # NEVER on a transition tick: reality is mid-switch, and writing it down
-    # would clobber this setup's memory right before we restore from it.
-    # Only OCCUPIED workspaces are remembered: parking on a buffer empty
-    # must not overwrite the last real workspace of a monitor.
+    # settled: follow the user's arrangement (also runs while locked -
+    # keybinds work there). NEVER on a transition tick: reality is
+    # mid-switch, and learning from it would corrupt the strip.
     state.update(layout.learn(state, lists, freeze_sizes=state.get("fresh", False)))
-    occ = {w["workspace_id"] for w in windows}
-    focused = next((w["id"] for w in windows if w.get("is_focused")), None)
-    mem = state.setdefault("memory", {}).setdefault(name, {})
-    display = mem.get("display") or [None] * len(conns)
-    for r, c in enumerate(conns):
-        active = next((w["id"] for w in workspaces
-                       if w["output"] == c and w.get("is_active")), None)
-        if active is not None and active in occ:
-            display[r] = active
-    mem["display"] = display
-    if focused is not None and focused in occ:
-        mem["focus"] = focused
     return name
 
 
@@ -210,38 +194,21 @@ def cmd_watch(niri, setups, state):
             log(f"ERROR tick: {e}")
 
 
-def restore_focus(niri, memory, fallback_focus, conns, workspaces, windows,
-                  converged):
-    """After a transition, put back what each monitor displayed and what had
-    keyboard focus the LAST TIME this setup was active. Falls back to each
-    monitor's first occupied workspace (skipping the leading buffer empty).
-    Skipped when the apply did not converge (the world is in an unexpected
-    shape; better not to move focus around it)."""
+def restore_focus(niri, conns, converged):
+    """After a transition, show each monitor's first occupied workspace (its
+    frontmost used one, skipping the leading buffer empty). The primary is
+    focused last, so it keeps keyboard focus. Uses a fresh snapshot: the
+    workspaces only sit on their new monitors once converge is done. Skipped
+    when the apply did not converge (the world is in an unexpected shape;
+    better not to move focus around it)."""
     if not converged:
         return
-    memory = memory or {}
-    exists = {w["id"] for w in workspaces}
-    occ = {w["workspace_id"] for w in windows}
-    by_conn = {}
-    for w in sorted(workspaces, key=lambda w: (w["output"], w["idx"])):
-        by_conn.setdefault(w["output"], []).append(w)
-    display = memory.get("display") or []
-
-    for r, conn in enumerate(conns):
-        want = display[r] if r < len(display) else None
-        if want not in exists:
-            want = next((w["id"] for w in by_conn.get(conn, [])
-                         if w["id"] in occ), None)
-        if want is not None and want in exists:
-            niri.raw({"FocusWorkspace": {"reference": {"Id": want}}})
-
-    # end on the workspace that had keyboard focus the last time here
-    f = memory.get("focus", fallback_focus)
-    if f not in exists:
-        f = fallback_focus
-    if f is not None and f in exists:
-        niri.raw({"FocusWorkspace": {"reference": {"Id": f}}})
-        log(f"restored focus to ws {f}")
+    _, workspaces, windows = niri.state()
+    picks = layout.first_occupied(workspaces, windows, conns)
+    for r in list(range(1, len(conns))) + [0]:  # primary last
+        if picks[r] is not None:
+            niri.raw({"FocusWorkspace": {"reference": {"Id": picks[r]}}})
+    log(f"restored focus to first used workspace per monitor: {picks}")
 
 
 def cmd_apply(niri, setups, state):
