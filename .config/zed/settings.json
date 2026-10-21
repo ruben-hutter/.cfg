@@ -7,6 +7,29 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "ssh_connections": [
+    {
+      "host": "test-ruben",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/home/device-admin"
+          ]
+        },
+        {
+          "paths": [
+            "/home/device-admin/lana"
+          ]
+        }
+      ]
+    },
+    {
+      "host": "test-ruben",
+      "args": [],
+      "projects": []
+    }
+  ],
   "agent_servers": {
     "glm-acp-agent": {
       "type": "registry"
