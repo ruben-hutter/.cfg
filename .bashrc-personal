@@ -32,12 +32,6 @@ alias sudo="sudo "
 # git-bare repo for dotfiles
 alias config="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
-# open i3 config file
-alias i3conf="$EDITOR $HOME/.config/i3/config"
-
-# open hyprland config directory
-alias hyprconf="$EDITOR $HOME/.config/hypr"
-
 # get oath code from yubikey
 alias ykcode="ykman oath accounts code"
 

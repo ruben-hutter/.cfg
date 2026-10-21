@@ -1,5 +1,6 @@
 #
-# ~/.bashrc
+# ~/.bashrc — interactive bash setup.
+# Environment/PATH lives in ~/.profile (sourced by ~/.bash_profile).
 #
 
 # If not running interactively, don't do anything
@@ -12,29 +13,6 @@ PS1='\[\e[0;31m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[0;31m\]\$ \[\e[m\]\[\e[0
 
 # Ignore upper and lowercase when TAB completion
 bind "set completion-ignore-case on"
-
-if [ -d "$HOME/.bin" ]; then
-    export PATH="$HOME/.bin:$PATH"
-fi
-
-if [ -d "$HOME/.local/bin" ]; then
-    export PATH="$HOME/.local/bin:$PATH"
-fi
-
-if [ -d "$HOME/go/bin" ]; then
-    export PATH="$HOME/go/bin:$PATH"
-fi
-
-# Cargo setup
-if [ -f "$HOME/.cargo/env" ]; then
-    . "$HOME/.cargo/env"
-fi
-
-# Start fish shell
-# Comment out the following lines if you want to use bash
-#if [ -x /usr/bin/fish ]; then
-#    exec /usr/bin/fish
-#fi
 
 if [ -f "$HOME/.bashrc-personal" ]; then
     . "$HOME/.bashrc-personal"
@@ -49,31 +27,5 @@ fastfetch
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --bash)"
 
-# pnpm
-export PNPM_HOME="/home/ruben/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
-# >>> juliaup initialize >>>
-
-# !! Contents within this block are managed by juliaup !!
-
-case ":$PATH:" in
-    *:/home/ruben/.juliaup/bin:*)
-        ;;
-
-    *)
-        export PATH=/home/ruben/.juliaup/bin${PATH:+:${PATH}}
-        ;;
-esac
-
-# <<< juliaup initialize <<<
-
-
-# Added by Antigravity CLI installer
-export PATH="/home/ruben/.local/bin:$PATH"
-
-[ -f "/home/ruben/.ghcup/env" ] && . "/home/ruben/.ghcup/env" # ghcup-env
+# Enable direnv (auto-activate nix dev shells via .envrc)
+eval "$(direnv hook bash)"
