@@ -249,11 +249,12 @@ def apply_setup(niri, state, setup, outputs, workspaces, windows):
     restore_focus(niri, conns, ok)
     if ok and expanded:
         state = layout.arrived(state, sid)  # distribution phase done
-    return ok, pending
+    return ok, pending, state
 
 
 def tick(niri, setups, state, last, locked):
-    """One poll. Returns (name, id), or None if deferred (locked)."""
+    """One poll. Returns ((name, id), state), or (None, state) if deferred
+    (locked) — callers persist the RETURNED state, not their own."""
     outputs, workspaces, windows = niri.state()
     setup, how, created = current_setup(setups, outputs)
     name = setup.get("name") or "?"
@@ -272,7 +273,7 @@ def tick(niri, setups, state, last, locked):
         # transition: place the blocks per current state
         if locked:
             log(f"setup {name} detected but session is locked - deferring")
-            return None  # not marking it done: retried on a later poll
+            return None, state  # not marking it done: retried on a later poll
         if how == "set":
             # known monitor set, drifted layout: snap the screens back to the
             # declared desk order before applying (runtime-only)
@@ -284,19 +285,19 @@ def tick(niri, setups, state, last, locked):
             state = layout.transition(state, lists)
             if state.get("cold"):
                 log(f"fresh session at {name}: strip adopted, waiting to expand")
-        ok, pending = apply_setup(niri, state, setup, outputs, workspaces, windows)
+        ok, pending, state = apply_setup(niri, state, setup, outputs, workspaces, windows)
         log(f"applied {name}: {'ok' if ok else f'INCOMPLETE ({pending} pending)'}")
         if not ok:
             notify(f"place: {name} (incomplete)",
                    "some workspaces refused to move - see place.log")
         if created:
             launch_setup_tool()  # freshly registered: define it right away
-        return (name, sid)
+        return (name, sid), state
     # settled: follow the user's arrangement (also runs while locked -
     # keybinds work there). NEVER on a transition tick: reality is
     # mid-switch, and learning from it would corrupt the strip.
     state = layout.settle(state, lists, sid)
-    return (name, sid)
+    return (name, sid), state
 
 
 def launch_setup_tool():
@@ -331,7 +332,7 @@ def cmd_watch(niri, state):
             if PAUSED.exists():
                 last = None  # resume re-applies, even without a setup change
                 continue
-            last = tick(niri, setups, state, last, locked["locked"])
+            last, state = tick(niri, setups, state, last, locked["locked"])
             if last is not None:
                 save_state(state)
         except Exception as e:
@@ -533,7 +534,7 @@ def cmd_setup(niri, setups, state):
         notify("place setup: aborted", str(e))
         sys.exit(f"setup aborted: {e}")
     kill_badge(badge, err)
-    ok, pending = apply_setup(niri, state, setup, outputs, workspaces, windows)
+    ok, pending, state = apply_setup(niri, state, setup, outputs, workspaces, windows)
     save_state(state)
     notify(f"place setup: {setup.get('name')} defined",
            f"primary: {picked[0]}")
@@ -563,7 +564,7 @@ def cmd_locate(niri, setups, state):
     kill_badge(badge, err)
     state = commit_desk_order(setups, state, setup, outputs, picked)
     align_to_desk(niri, setups, outputs, setup)
-    ok, pending = apply_setup(niri, state, setup, outputs, workspaces, windows)
+    ok, pending, state = apply_setup(niri, state, setup, outputs, workspaces, windows)
     save_state(state)
     notify(f"place locate: {setup.get('name')} desk order set",
            " -> ".join(picked))
@@ -595,7 +596,7 @@ def cmd_arrange(niri, setups, state):
     setup["arranged"] = True
     save_setups(setups)
     log(f"role order for {setup.get('name')}: {' -> '.join(picked)}")
-    ok, pending = apply_setup(niri, state, setup, outputs, workspaces, windows)
+    ok, pending, state = apply_setup(niri, state, setup, outputs, workspaces, windows)
     save_state(state)
     notify(f"place arrange: order saved ({setup.get('name')})",
            " -> ".join(picked))
@@ -635,7 +636,7 @@ def cmd_align(niri, setups, state):
 def cmd_apply(niri, setups, state):
     outputs, workspaces, windows = niri.state()
     setup, _how, _created = current_setup(setups, outputs)
-    ok, pending = apply_setup(niri, state, setup, outputs, workspaces, windows)
+    ok, pending, state = apply_setup(niri, state, setup, outputs, workspaces, windows)
     save_state(state)
     print(f"{setup.get('name')}: {'ok' if ok else f'INCOMPLETE ({pending} pending)'}")
 

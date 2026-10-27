@@ -40,16 +40,11 @@ The daemon is started by niri (`conf/autostart.kdl`):
 spawn-at-startup "python3" "/home/ruben/.config/niri/place/place.py" "watch"
 ```
 
-## Development (optional)
+## Development
 
-uv manages only dev tooling (pytest, ruff). The runtime never touches the
-venv, so sharing the folder means: copy the `.py` files, done.
+Pure stdlib — no project files, no venv:
 
 ```sh
-uv sync             # .venv with pytest + ruff only — nothing gets compiled
-uv run pytest
-uv run ruff check .
+python3 -m unittest test_layout.py -v    # tests
+uvx ruff check .                         # optional lint (runs without any project setup)
 ```
-
-Don't run the overlay through the venv (`uv run python place.py setup`) — the
-dev venv has no PyGObject; use the system `python3 place.py …`.
