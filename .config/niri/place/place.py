@@ -95,18 +95,12 @@ def save_setups(setups):
 
 
 def load_state():
-    if STATE.exists():
-        d = json.loads(STATE.read_text())
-    else:
-        d = {}
-    if d.get("session") != session_token():
-        # new niri session: workspace ids are dead; splits (and sizes, as a
-        # seed) survive and become the cut targets while the user re-opens
-        sizes = d.get("sizes")
-        d = {"order": [], "sizes": sizes, "splits": d.get("splits", {}),
-             "session": session_token(), "fresh": sizes is not None}
-        log(f"new session detected, sizes {sizes}")
-    d.setdefault("splits", {})
+    """Read the persisted strip state; migrate it across niri sessions."""
+    d = json.loads(STATE.read_text()) if STATE.exists() else {}
+    old = d.get("session")
+    d = layout.migrate(d, session_token())
+    if d.get("session") != old:
+        log(f"new session detected, sizes {d.get('sizes')}")
     return d
 
 
@@ -240,27 +234,22 @@ def restore_focus(niri, conns, converged):
 
 
 def apply_setup(niri, state, setup, outputs, workspaces, windows):
-    """Arrive at `setup`: restore its remembered split, converge, learn the
-    result into its split. Returns (ok, n_pending)."""
+    """Arrive at `setup`: restore its remembered split, converge, remember
+    the cut. Returns (ok, n_pending)."""
     conns = layout.role_conns(setup, outputs)
     expanded = len(conns) > 1
-    split = state["splits"].get(setup["id"])
-    if expanded and split:
-        log(f"restoring split {split} for {setup.get('name')}")
-        state["sizes"] = list(split)
-    lists = layout.observed_lists(workspaces, windows, conns)
-    if not state.get("sizes"):
+    sid = setup["id"]
+    if expanded and state["splits"].get(sid):
+        log(f"restoring split {state['splits'][sid]} for {setup.get('name')}")
+    had_sizes = bool(state.get("sizes"))
+    state = layout.arrive(state, sid, layout.observed_lists(workspaces, windows, conns))
+    if not had_sizes and state.get("sizes"):
         # first run ever: adopt the current arrangement as the baseline
-        state.update(layout.learn(state, lists))
         log(f"learned initial layout at {setup.get('name')}: sizes {state['sizes']}")
-        if not expanded:
-            state["fresh"] = state["cold"] = True
     ok, pending = converge(niri, state, conns)
     restore_focus(niri, conns, ok)
     if ok and expanded:
-        state.pop("fresh", None)  # distribution phase done
-        if state.get("sizes"):
-            state["splits"][setup["id"]] = list(state["sizes"])
+        state = layout.arrived(state, sid)  # distribution phase done
     return ok, pending
 
 
@@ -289,17 +278,12 @@ def tick(niri, setups, state, last, locked):
             # known monitor set, drifted layout: snap the screens back to the
             # declared desk order before applying (runtime-only)
             align_to_desk(niri, setups, outputs, setup)
-        expanded = len(conns) > 1
         if state.get("fresh"):
             # cold start: pre-reboot ids are dead, the strip is whatever is
-            # open right now. fresh stays alive through collapsed time; the
-            # first expanded arrival cuts the strip by that setup's
-            # remembered split (see apply_setup).
-            state["order"] = [i for l in lists for i in l]
-            if expanded:
-                state.pop("cold", None)
-            else:
-                state["cold"] = True
+            # open right now. layout.transition adopts it; fresh stays alive
+            # through collapsed time until an expanded arrival cuts it.
+            state = layout.transition(state, lists)
+            if state.get("cold"):
                 log(f"fresh session at {name}: strip adopted, waiting to expand")
         ok, pending = apply_setup(niri, state, setup, outputs, workspaces, windows)
         log(f"applied {name}: {'ok' if ok else f'INCOMPLETE ({pending} pending)'}")
@@ -312,10 +296,7 @@ def tick(niri, setups, state, last, locked):
     # settled: follow the user's arrangement (also runs while locked -
     # keybinds work there). NEVER on a transition tick: reality is
     # mid-switch, and learning from it would corrupt the strip.
-    state.update(layout.learn(state, lists, freeze_sizes=state.get("fresh", False)))
-    expanded = len(conns) > 1
-    if expanded and not state.get("fresh") and state.get("sizes"):
-        state["splits"][sid] = list(state["sizes"])
+    state = layout.settle(state, lists, sid)
     return (name, sid)
 
 
@@ -506,11 +487,11 @@ def commit_desk_order(setups, state, setup, outputs, picked):
         internal = {layout.identity(o) for c, o in outputs.items()
                     if c.startswith("eDP")}
         setup["roles"] = layout.default_roles_from_order(desk, internal)
-    if old_id and old_id != setup["id"] and old_id in state["splits"]:
-        state["splits"].setdefault(setup["id"], state["splits"].pop(old_id))
+    state = layout.rekey(state, old_id, setup["id"])
     save_setups(setups)
     log(f"desk order for {setup.get('name')}: {' -> '.join(picked)} "
         f"(id {setup['id']}, roles {setup['roles']})")
+    return state
 
 
 def cmd_setup(niri, setups, state):
@@ -530,7 +511,7 @@ def cmd_setup(niri, setups, state):
         badge_send(badge, f"SET {picked[-1]} {len(picked)}",
                    f"STATUS {len(picked)} {total}")
         time.sleep(0.8)
-        commit_desk_order(setups, state, setup, outputs, picked)
+        state = commit_desk_order(setups, state, setup, outputs, picked)
         align_to_desk(niri, setups, outputs, setup)  # screens snap into place
         order_conns = layout.role_conns(setup, outputs)  # roles may have moved
 
@@ -581,7 +562,7 @@ def cmd_locate(niri, setups, state):
         notify("place locate: aborted", str(e))
         sys.exit(f"locate aborted: {e}")
     kill_badge(badge, err)
-    commit_desk_order(setups, state, setup, outputs, picked)
+    state = commit_desk_order(setups, state, setup, outputs, picked)
     align_to_desk(niri, setups, outputs, setup)
     ok, pending = apply_setup(niri, state, setup, outputs, workspaces, windows)
     save_state(state)

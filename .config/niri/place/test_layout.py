@@ -146,9 +146,13 @@ class LearnExpandedTest(unittest.TestCase):
         self.assertEqual(s["order"], [10, 11, 20, 30, 31])
         self.assertEqual(s["sizes"], [2, 1, 2])
 
-    def test_two_role_setup_pads_sizes(self):
+    def test_two_role_setup_has_no_padding(self):
         s = layout.learn({}, [[10], [20, 21]])
-        self.assertEqual(s["sizes"], [1, 2, 0])
+        self.assertEqual(s["sizes"], [1, 2])
+
+    def test_first_run_collapsed_is_a_single_slot(self):
+        s = layout.learn({}, [[10, 11, 20]])
+        self.assertEqual(s["sizes"], [3])
 
 
 class LearnCollapsedTest(unittest.TestCase):
@@ -255,6 +259,149 @@ class FirstOccupiedTest(unittest.TestCase):
         workspaces = [ws(5, "A", 2), ws(6, "A", 1)]
         windows = [win(1, 5), win(2, 6)]
         self.assertEqual(layout.first_occupied(workspaces, windows, ["A"]), [6])
+
+
+class MigrateTest(unittest.TestCase):
+    """New niri session: workspace ids are dead — the strip resets, sizes
+    survive as the cut seed, splits survive as cut targets."""
+
+    def state(self):
+        return {"order": [10, 11, 20], "sizes": [2, 1],
+                "splits": {"aaaa1111": [2, 1]}, "session": "socket-OLD.sock"}
+
+    def test_new_session_resets_strip_keeps_sizes_and_splits(self):
+        s = layout.migrate(self.state(), "socket-NEW.sock")
+        self.assertEqual(s["order"], [])
+        self.assertEqual(s["sizes"], [2, 1])
+        self.assertEqual(s["splits"], {"aaaa1111": [2, 1]})
+        self.assertEqual(s["session"], "socket-NEW.sock")
+        self.assertTrue(s["fresh"])
+
+    def test_same_session_is_the_same_state(self):
+        s = self.state()
+        self.assertEqual(layout.migrate(s, "socket-OLD.sock"), s)
+
+    def test_first_ever_session_is_not_fresh(self):
+        s = layout.migrate({"session": "socket-OLD.sock"}, "socket-NEW.sock")
+        self.assertIsNone(s["sizes"])
+        self.assertFalse(s.get("fresh"))
+
+
+class TransitionTest(unittest.TestCase):
+    """Cold start: the strip is whatever is open right now. fresh survives
+    collapsed time; the first expanded arrival cuts by the remembered split
+    (arrive/arrived)."""
+
+    def test_fresh_collapsed_adopts_strip_and_marks_cold(self):
+        s = layout.transition({"fresh": True}, [[10, 11, 20]])
+        self.assertEqual(s["order"], [10, 11, 20])
+        self.assertTrue(s["cold"])
+        self.assertTrue(s["fresh"])
+
+    def test_fresh_expanded_adopts_strip_and_clears_cold(self):
+        s = layout.transition({"fresh": True, "cold": True}, [[10, 11], [20]])
+        self.assertEqual(s["order"], [10, 11, 20])
+        self.assertNotIn("cold", s)
+
+    def test_not_fresh_is_untouched(self):
+        s = {"order": [10], "sizes": [1, 2]}
+        self.assertEqual(layout.transition(s, [[10, 20]]), s)
+
+
+class ArriveTest(unittest.TestCase):
+    """Entering a setup: an expanded arrival with a remembered split cuts the
+    strip by it; without any sizes yet, reality becomes the baseline."""
+
+    def test_expanded_restores_the_remembered_split(self):
+        s = layout.arrive({"splits": {"aaaa1111": [2, 1, 2]}}, "aaaa1111",
+                          [[10, 11], [20], [30, 31]])
+        self.assertEqual(s["sizes"], [2, 1, 2])
+        self.assertNotIn("fresh", s)
+
+    def test_collapsed_arrival_does_not_cut(self):
+        s = layout.arrive({"sizes": [2, 1, 2], "splits": {"aaaa1111": [2, 1, 2]}},
+                          "aaaa1111", [[10, 11, 20]])
+        self.assertEqual(s["sizes"], [2, 1, 2])
+        self.assertNotIn("fresh", s)
+        self.assertNotIn("cold", s)
+
+    def test_first_run_collapsed_learns_and_waits_to_expand(self):
+        s = layout.arrive({"splits": {}}, "aaaa1111", [[10, 11, 20]])
+        self.assertEqual(s["order"], [10, 11, 20])
+        self.assertEqual(s["sizes"], [3])
+        self.assertTrue(s["fresh"])
+        self.assertTrue(s["cold"])
+
+    def test_first_run_expanded_learns_the_blocks(self):
+        s = layout.arrive({}, "aaaa1111", [[10, 11], [20]])
+        self.assertEqual(s["order"], [10, 11, 20])
+        self.assertEqual(s["sizes"], [2, 1])
+        self.assertNotIn("fresh", s)
+
+
+class ArrivedTest(unittest.TestCase):
+    """The arrival converged: distribution done — fresh ends and the active
+    cut is remembered for this setup. (place.py gates on ok and expanded;
+    converge sits mid-arrival, so arrive/arrived bracket it.)"""
+
+    def test_remembers_the_cut_and_ends_fresh(self):
+        before = {"fresh": True, "sizes": [2, 1], "splits": {}}
+        s = layout.arrived(before, "aaaa1111")
+        self.assertEqual(s["splits"]["aaaa1111"], [2, 1])
+        self.assertNotIn("fresh", s)
+        self.assertEqual(before, {"fresh": True, "sizes": [2, 1], "splits": {}})  # pure
+
+    def test_without_sizes_nothing_is_remembered(self):
+        s = layout.arrived({"fresh": True, "sizes": None, "splits": {"x": [1]}}, "aaaa1111")
+        self.assertNotIn("fresh", s)
+        self.assertEqual(s["splits"], {"x": [1]})
+
+
+class SettleTest(unittest.TestCase):
+    """Steady state: follow the user's arrangement. While settled and
+    expanded, the setup's split mirrors the active sizes — THE invariant,
+    previously hand-copied in three places."""
+
+    def state(self):
+        return {"order": [10, 11, 20, 30, 31], "sizes": [2, 1, 2],
+                "splits": {"aaaa1111": [3, 1, 1]}, "session": "s"}
+
+    def test_expanded_learns_and_mirrors_the_cut(self):
+        before = self.state()
+        s = layout.settle(before, [[10, 11, 99], [20], [30, 31]], "aaaa1111")
+        self.assertEqual(s["order"], [10, 11, 99, 20, 30, 31])
+        self.assertEqual(s["sizes"], [3, 1, 2])
+        self.assertEqual(s["splits"]["aaaa1111"], [3, 1, 2])
+        self.assertEqual(before["splits"]["aaaa1111"], [3, 1, 1])  # pure
+
+    def test_frozen_while_fresh_keeps_sizes_and_skips_the_mirror(self):
+        s = layout.settle(dict(self.state(), fresh=True),
+                          [[10, 11, 20, 30, 31]], "aaaa1111")
+        self.assertEqual(s["sizes"], [2, 1, 2])
+        self.assertEqual(s["splits"]["aaaa1111"], [3, 1, 1])
+
+    def test_collapsed_preserves_boundaries_and_skips_the_mirror(self):
+        s = layout.settle(self.state(), [[10, 20, 30, 31]], "aaaa1111")
+        self.assertEqual(s["sizes"], [1, 1, 2])
+        self.assertEqual(s["splits"]["aaaa1111"], [3, 1, 1])
+
+
+class RekeyTest(unittest.TestCase):
+    """Desk order redefined: the remembered cut follows the setup's new id."""
+
+    def test_split_moves_to_the_new_id(self):
+        s = layout.rekey({"splits": {"old": [2, 1]}}, "old", "new")
+        self.assertEqual(s["splits"], {"new": [2, 1]})
+
+    def test_existing_split_for_the_new_id_wins(self):
+        s = layout.rekey({"splits": {"old": [9], "new": [1, 1]}}, "old", "new")
+        self.assertEqual(s["splits"], {"new": [1, 1]})
+
+    def test_noop_without_old_or_with_same_id(self):
+        s = {"splits": {"a": [1]}}
+        self.assertEqual(layout.rekey(s, None, "b"), s)
+        self.assertEqual(layout.rekey(s, "a", "a"), s)
+        self.assertEqual(layout.rekey({"splits": {}}, "x", "y"), {"splits": {}})
 
 
 if __name__ == "__main__":

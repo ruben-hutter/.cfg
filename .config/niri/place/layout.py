@@ -4,13 +4,21 @@ Concepts
 --------
 order     canonical ordering of workspace ids, as one long strip:
           role-1's workspaces, then role-2's, then role-3's.
-sizes     [n1, n2, n3] — the ACTIVE cut: how many of the strip belong to
-          role 1, 2, 3. The last role absorbs any tail.
-splits    per-setup remembered cuts: {setup-id: [n1, n2, n3]}. Arriving at
+sizes     the ACTIVE cut: how many of the strip belong to each role, in
+          role order. The last role absorbs any tail. Length follows the
+          setup being cut for; shorter lists tolerate any plan (missing
+          roles count 0).
+splits    per-setup remembered cuts: {setup-id: [n1, n2, ...]}. Arriving at
           an expanded setup with a remembered split makes it the active
           cut, so each setup re-expands the strip the way it was last
           arranged there. Mirrored from the active sizes while a setup is
-          settled, so user rearrangements are kept per setup.
+          settled (settle — the one place that invariant lives), so user
+          rearrangements are kept per setup.
+fresh     a cold-start strip: ids from before the (re)boot are dead, the
+          strip is whatever is open, waiting for its first expanded
+          arrival to cut it by a remembered split
+cold      fresh while collapsed: strip adopted, waiting to expand
+session   niri socket basename; a change means ids died (migrate)
 setup     {"name": str, "id": str, "roles": [monitor-identity, ...]} —
           identity is "make model serial", roles[0] is the primary.
 id        short hash of the position-ordered identities: the monitor set
@@ -19,7 +27,13 @@ id        short hash of the position-ordered identities: the monitor set
 signature identities ordered by physical position (the id's preimage).
 
 state (what the caller persists) =
-    {"order": [...], "sizes": [...], "splits": {...}, "session": token, ...}
+    {"order": [...], "sizes": [...], "splits": {...}, "session": token,
+     "fresh"/"cold": lifecycle flags}
+
+The state machine's verbs (below): migrate (session boundary),
+transition (cold start), arrive/arrived (entering a setup, split around
+the I/O step of converging), settle (steady state), rekey (desk order
+redefined). All pure: dict in, dict out.
 """
 
 import hashlib
@@ -141,6 +155,94 @@ def first_occupied(workspaces, windows, conns):
     return picks
 
 
+# ---------------------------------------------------------------- state
+# The strip-and-cut state machine: {order, sizes, splits, fresh, cold,
+# session}. Every verb is pure — dict in, dict out, no I/O — so place.py
+# keeps only persistence and process. The split/sizes mirroring invariant
+# lives HERE (settle), nowhere else.
+
+def migrate(state, session):
+    """New niri session: workspace ids are dead. The strip resets; sizes
+    survive as the cut seed; splits survive as cut targets; fresh marks a
+    strip waiting to be cut by the next expanded arrival."""
+    if state.get("session") == session:
+        state.setdefault("splits", {})
+        return state
+    sizes = state.get("sizes")
+    state = {"order": [], "sizes": sizes, "splits": state.get("splits", {}),
+             "session": session}
+    if sizes is not None:
+        state["fresh"] = True
+    return state
+
+
+def transition(state, lists):
+    """Cold start (fresh): adopt the open workspaces as the strip. Collapsed
+    time is marked cold; an expanded adoption clears it — the next arrival
+    cuts the strip by the setup's remembered split."""
+    if not state.get("fresh"):
+        return state
+    state = dict(state)
+    state["order"] = [i for l in lists for i in l]
+    if len(lists) > 1:
+        state.pop("cold", None)
+    else:
+        state["cold"] = True
+    return state
+
+
+def arrive(state, sid, lists):
+    """Entering setup sid: an expanded arrival restores its remembered cut
+    (sizes = the split); with no sizes yet, reality becomes the baseline and
+    a collapsed one waits to expand (fresh + cold). Runs BEFORE converge."""
+    state = dict(state)
+    expanded = len(lists) > 1
+    split = state.get("splits", {}).get(sid)
+    if expanded and split:
+        state["sizes"] = list(split)
+    if not state.get("sizes"):
+        state.update(learn(state, lists))
+        if not expanded:
+            state["fresh"] = state["cold"] = True
+    return state
+
+
+def arrived(state, sid):
+    """The arrival converged: distribution done — fresh ends and the active
+    cut is remembered as this setup's split. place.py gates on ok+expanded
+    and calls this AFTER converge."""
+    state = dict(state, splits=dict(state.get("splits", {})))
+    state.pop("fresh", None)
+    if state.get("sizes"):
+        state["splits"][sid] = list(state["sizes"])
+    return state
+
+
+def settle(state, lists, sid):
+    """Steady state on the setup's own monitors: follow the user's
+    arrangement (learn). NEVER call this on a transition tick: reality is
+    mid-switch, and learning from it would corrupt the strip. While settled
+    and expanded, the setup's split mirrors the active sizes — the one place
+    that invariant lives."""
+    state = learn(state, lists, freeze_sizes=bool(state.get("fresh")))
+    if len(lists) > 1 and not state.get("fresh") and state.get("sizes"):
+        state = dict(state, splits=dict(state.get("splits", {})))
+        state["splits"][sid] = list(state["sizes"])
+    return state
+
+
+def rekey(state, old_id, new_id):
+    """Desk order redefined: the remembered cut follows the setup's new id.
+    A split already remembered under the new id wins (the old one is
+    dropped), matching the historical setdefault behavior."""
+    splits = state.get("splits", {})
+    if not old_id or old_id == new_id or old_id not in splits:
+        return state
+    state = dict(state, splits=dict(splits))
+    state["splits"].setdefault(new_id, state["splits"].pop(old_id))
+    return state
+
+
 def learn(state, lists, freeze_sizes=False):
     """Adopt observed reality.
 
@@ -163,9 +265,9 @@ def learn(state, lists, freeze_sizes=False):
 
     if sizes is None:
         if len(lists) == 1:
-            return {"order": list(strip), "sizes": [len(strip), 0, 0]}
+            return {"order": list(strip), "sizes": [len(strip)]}
         return {"order": list(strip),
-                "sizes": [len(l) for l in lists] + [0] * (3 - len(lists))}
+                "sizes": [len(l) for l in lists]}
 
     if len(lists) == 1:
         # collapsed: strip order wins; block sizes preserved
@@ -190,7 +292,7 @@ def learn(state, lists, freeze_sizes=False):
     # expanded
     state["order"] = strip
     if not freeze_sizes:
-        state["sizes"] = [len(l) for l in lists] + [0] * (3 - len(lists))
+        state["sizes"] = [len(l) for l in lists]
     return state
 
 
