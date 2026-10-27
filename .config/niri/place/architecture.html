@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>place — workspace arrangement across monitor setups</title>
+<style>
+  :root{
+    --bg:#f5f7f9; --card:#ffffff; --ink:#1e293b; --muted:#64748b;
+    --teal:#0e7490; --violet:#7c3aed; --indigo:#4f46e5; --slate:#334155;
+    --line:#e2e8f0; --amber:#b45309;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1020px;margin:0 auto;padding:32px 20px 64px}
+  header h1{font-size:30px;margin:0 0 6px;letter-spacing:-.02em}
+  header h1 em{color:var(--teal);font-style:normal}
+  header p{margin:0;color:var(--muted);max-width:46em}
+  h2{font-size:19px;margin:44px 0 12px;letter-spacing:-.01em}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+        padding:20px 22px;box-shadow:0 1px 2px rgba(15,23,42,.05)}
+  .tagline{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .pill{background:#ecfeff;border:1px solid #a5f3fc;color:var(--teal);
+        border-radius:999px;padding:3px 12px;font-size:13px;font-weight:600}
+  .pill.v{background:#f3e8ff;border-color:#ddd6fe;color:var(--violet)}
+  .pill.s{background:#f1f5f9;border-color:var(--line);color:var(--slate)}
+
+  /* diagram */
+  #diagram{width:100%;height:auto;display:block}
+  #diagram [data-node]{transition:opacity .35s}
+  #diagram [data-dim="1"]{opacity:.15}
+  #diagram .lbl{font:12px system-ui;fill:var(--muted)}
+  #diagram .t{font:600 15px system-ui;fill:var(--ink)}
+  #diagram .s{font:12px system-ui;fill:var(--muted)}
+
+  /* scenario tabs + steps */
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 0}
+  .tabs button{cursor:pointer;border:1px solid var(--line);background:#fff;
+    border-radius:999px;padding:7px 16px;font:600 14px system-ui;color:var(--muted)}
+  .tabs button:hover{border-color:var(--teal);color:var(--teal)}
+  .tabs button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+  #steps{list-style:none;margin:18px 0 0;padding:0;counter-reset:st}
+  #steps li{counter-increment:st;display:flex;gap:14px;padding:10px 8px;
+    border-top:1px solid var(--line);cursor:default}
+  #steps li:first-child{border-top:0}
+  #steps li:hover{background:#f8fafc}
+  #steps li::before{content:counter(st);flex:0 0 28px;height:28px;border-radius:50%;
+    background:var(--teal);color:#fff;font:700 14px/28px system-ui;text-align:center}
+  #steps b{display:block}
+  #steps p{margin:2px 0 0;color:var(--muted);font-size:14.5px}
+  .hint{color:var(--muted);font-size:13px;margin-top:10px}
+
+  /* loop pills */
+  .loop{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:6px}
+  .loop .pill{font-size:13.5px;padding:6px 14px}
+  .loop .arr{color:var(--muted);font-weight:700}
+  .loop-note{color:var(--muted);font-size:14px;margin-top:10px}
+
+  /* tables */
+  table{width:100%;border-collapse:collapse;font-size:14.5px}
+  th{text-align:left;color:var(--muted);font-size:13px;text-transform:uppercase;
+     letter-spacing:.04em;padding:8px 10px;border-bottom:2px solid var(--line)}
+  td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+  td code, p code, li code{background:#f1f5f9;border-radius:6px;padding:1px 6px;
+    font:13px ui-monospace,"SF Mono",Consolas,monospace}
+  .own{white-space:nowrap}
+  .own.you{color:var(--amber);font-weight:700}
+  .own.place{color:var(--teal);font-weight:700}
+
+  .gloss{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px}
+  .gloss div{background:#f8fafc;border:1px solid var(--line);border-radius:10px;
+    padding:10px 14px;font-size:14.5px}
+  .gloss b{color:var(--teal)}
+  footer{margin-top:44px;color:var(--muted);font-size:13.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1><em>place</em> — your workspaces follow your monitors</h1>
+  <p>One small daemon watches your niri session. Every physical monitor
+     arrangement you connect is learned once and re-created on every return:
+     all workspaces form one strip, and each setup is just a different cut of it.</p>
+  <div class="tagline">
+    <span class="pill">1 daemon</span><span class="pill v">1 click-overlay</span>
+    <span class="pill s">2 data files</span><span class="pill s">0 config edits needed</span>
+  </div>
+</header>
+
+<h2>Architecture</h2>
+<div class="card">
+<svg id="diagram" viewBox="0 0 960 500" role="img" aria-label="place architecture">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7"
+            markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <!-- user-owned sources (dashed) -->
+  <g data-node="monitors">
+    <rect x="40" y="40" width="150" height="60" rx="10" fill="#fff"
+          stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 4"/>
+    <text class="t" x="115" y="66" text-anchor="middle">your monitors</text>
+    <text class="s" x="115" y="86" text-anchor="middle">dock · hotplug</text>
+  </g>
+  <g data-node="outputkdl">
+    <rect x="40" y="160" width="150" height="60" rx="10" fill="#fff"
+          stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 4"/>
+    <text class="t" x="115" y="186" text-anchor="middle">output.kdl</text>
+    <text class="s" x="115" y="206" text-anchor="middle">your pins (untouched)</text>
+  </g>
+
+  <!-- niri -->
+  <g data-node="niri">
+    <rect x="390" y="40" width="200" height="64" rx="10" fill="#eef2ff"
+          stroke="var(--indigo)" stroke-width="2"/>
+    <text class="t" x="490" y="66" text-anchor="middle">niri</text>
+    <text class="s" x="490" y="86" text-anchor="middle">compositor · IPC server</text>
+  </g>
+
+  <!-- daemon -->
+  <g data-node="daemon">
+    <rect x="390" y="210" width="200" height="86" rx="10" fill="#ecfeff"
+          stroke="var(--teal)" stroke-width="2"/>
+    <text class="t" x="490" y="240" text-anchor="middle">place.py watch</text>
+    <text class="s" x="490" y="261" text-anchor="middle">daemon · polls every 5 s</text>
+    <text class="s" x="490" y="279" text-anchor="middle">identify · learn · converge</text>
+  </g>
+
+  <!-- stores -->
+  <g data-node="placejson">
+    <rect x="110" y="380" width="210" height="64" rx="10" fill="#fff"
+          stroke="var(--slate)" stroke-width="2"/>
+    <text class="t" x="215" y="406" text-anchor="middle">place/place.json</text>
+    <text class="s" x="215" y="426" text-anchor="middle">setups: order · roles · id</text>
+  </g>
+  <g data-node="overlay">
+    <rect x="390" y="380" width="200" height="84" rx="10" fill="#f3e8ff"
+          stroke="var(--violet)" stroke-width="2"/>
+    <text class="t" x="490" y="408" text-anchor="middle">place.py setup</text>
+    <text class="s" x="490" y="428" text-anchor="middle">badge overlay · 2 passes</text>
+    <text class="s" x="490" y="446" text-anchor="middle">(arrange_gtk.py)</text>
+  </g>
+  <g data-node="statejson">
+    <rect x="660" y="380" width="220" height="64" rx="10" fill="#fff"
+          stroke="var(--slate)" stroke-width="2"/>
+    <text class="t" x="770" y="406" text-anchor="middle">state.json</text>
+    <text class="s" x="770" y="426" text-anchor="middle">strip · splits · paused flag</text>
+  </g>
+
+  <!-- edges -->
+  <g stroke="#475569" stroke-width="1.8" fill="none">
+    <line x1="190" y1="70" x2="384" y2="70" marker-end="url(#arr)"/>
+    <line x1="190" y1="180" x2="384" y2="92" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+    <line x1="450" y1="210" x2="450" y2="110" marker-end="url(#arr)"/>
+    <line x1="530" y1="104" x2="530" y2="206" marker-end="url(#arr)"/>
+    <line x1="402" y1="296" x2="268" y2="376" marker-end="url(#arr)"/>
+    <line x1="578" y1="296" x2="712" y2="376" marker-end="url(#arr)"/>
+    <line x1="490" y1="296" x2="490" y2="374" marker-end="url(#arr)"/>
+    <polyline points="575,392 630,392 630,72 596,72" stroke-dasharray="6 4"
+              marker-end="url(#arr)"/>
+  </g>
+  <g class="lbl">
+    <text x="287" y="60" text-anchor="middle">hotplug</text>
+    <text x="252" y="126" text-anchor="middle">pins applied</text>
+    <text x="442" y="164" text-anchor="end">read state</text>
+    <text x="540" y="164" text-anchor="start">actions</text>
+    <text x="300" y="338" text-anchor="middle">setups</text>
+    <text x="668" y="338" text-anchor="middle">strip · splits</text>
+    <text x="500" y="330" text-anchor="start">spawns on new setup</text>
+    <text x="640" y="234" text-anchor="middle" transform="rotate(90 640,234)">click capture (IPC)</text>
+  </g>
+  <text class="lbl" x="40" y="488">solid = automatic data / actions · dashed = your files &amp; clicks</text>
+</svg>
+</div>
+
+<h2>The 5-second loop</h2>
+<div class="card">
+  <div class="loop">
+    <span class="pill s">read niri state</span><span class="arr">→</span>
+    <span class="pill s">identify setup</span><span class="arr">→</span>
+    <span class="pill">new? register + spawn overlay</span>
+    <span class="pill">changed? restore split → converge → refocus</span>
+    <span class="pill">same? learn your rearranging</span>
+  </div>
+  <p class="loop-note">Locked session? Transitions are deferred until unlock.
+     <code>place.py pause</code> silences everything; <code>resume</code> re-applies.</p>
+</div>
+
+<h2>Scenarios — click one, then hover the steps</h2>
+<div class="card">
+  <div class="tabs" id="tabs"></div>
+  <ol id="steps"></ol>
+  <p class="hint">Hovering a step highlights the components involved in the
+     diagram above. Click a scenario tab to see the full picture again.</p>
+</div>
+
+<h2>Data stores &amp; ownership</h2>
+<div class="card">
+  <table>
+    <tr><th>file</th><th>content</th><th>owner</th></tr>
+    <tr><td><code>place/place.json</code></td>
+        <td>every known setup: monitor-set hash, clicked desk order, id,
+            role order, “arranged” flag</td>
+        <td class="own place">place (auto)</td></tr>
+    <tr><td><code>~/.local/state/place/state.json</code></td>
+        <td>live state: workspace strip, block sizes, per-setup splits
+            (survive reboots)</td>
+        <td class="own place">place (auto, disposable)</td></tr>
+    <tr><td><code>niri conf/output.kdl</code></td>
+        <td>physical monitor pins: position, scale, mode</td>
+        <td class="own you">you — place never reads or writes it</td></tr>
+  </table>
+  <p class="hint">place reads geometry from <b>niri’s runtime</b>, i.e. after your
+     config was applied. Your clicked desk order is the authoritative
+     arrangement key — niri’s auto-layout is only a provisional guess.</p>
+</div>
+
+<h2>Glossary</h2>
+<div class="gloss">
+  <div><b>setup</b> — one physical monitor arrangement; id = hash of the clicked left→right order</div>
+  <div><b>desk order</b> — monitors left→right on your desk, defined by clicking (pass 1)</div>
+  <div><b>role / primary</b> — importance order (pass 2); role 0 absorbs new workspaces and keeps focus</div>
+  <div><b>split</b> — per-setup memory of how many workspaces live on each monitor</div>
+  <div><b>strip</b> — all workspaces in one canonical order; every setup is a different cut of it</div>
+  <div><b>converge</b> — send &amp; verify moves until reality matches the plan</div>
+</div>
+
+<footer>
+  place · a personal niri companion · daemon: <code>place.py watch</code> ·
+  overlay: <code>place.py setup</code> · details: <code>ARCHITECTURE.md</code> ·
+  tests: <code>python3 -m unittest test_layout.py</code>
+</footer>
+
+</div>
+
+<script>
+const NODES = document.querySelectorAll("#diagram [data-node]");
+function highlight(ids){
+  NODES.forEach(n => n.setAttribute("data-dim", ids.includes(n.dataset.node) ? "0" : "1"));
+}
+
+const SCENARIOS = {
+  "New setup": {
+    nodes: ["monitors","niri","daemon","placejson","statejson","overlay"],
+    steps: [
+      ["Monitors connected","niri places them — your output.kdl pins if known, otherwise its own guess.",["monitors","niri","outputkdl"]],
+      ["Unknown → registered","The watcher finds no match and creates “auto-XXXX”: provisional desk order (niri’s guess) + centrality roles.",["daemon","placejson"]],
+      ["Provisional apply","The workspace strip is cut by the PREVIOUS setup’s split onto the new screens.",["daemon","niri","statejson"]],
+      ["Overlay launches automatically","place.py setup paints a badge on every screen — no terminal needed.",["daemon","overlay"]],
+      ["Pass 1 · desk order","Click the screens LEFT → RIGHT (rightmost implicit). Your clicks are the authoritative arrangement key — and the screens snap into that order immediately (runtime; add pins to output.kdl for permanence).",["overlay","monitors"]],
+      ["Pass 2 · importance","Click the screens in order of importance (last implicit) — this defines the roles.",["overlay","monitors"]],
+      ["Save + re-apply","place.json updated (order, roles, id), the split migrates, workspaces land on their monitors — and place.py align keeps niri’s layout in sync with your clicked desk order.",["daemon","placejson","statejson","niri"]],
+    ]},
+  "Returning": {
+    nodes: ["monitors","niri","daemon","placejson","statejson"],
+    steps: [
+      ["Monitors connected","A setup you have used before.",["monitors","niri"]],
+      ["Matched by id","The hash of your clicked desk order identifies the setup (fallback: monitor-set hash if niri’s layout drifted).",["daemon","placejson"]],
+      ["Split restored","This setup remembers how many workspaces live on each of its monitors.",["daemon","statejson"]],
+      ["Converge + refocus","Verified moves put the blocks in place; the primary monitor keeps keyboard focus.",["daemon","niri"]],
+    ]},
+  "Settled": {
+    nodes: ["niri","daemon","statejson","monitors"],
+    steps: [
+      ["Same setup as last tick","Nothing to transition — reality is stable.",["daemon","niri"]],
+      ["Learn","Manual workspace drags are adopted into the strip within ~5 s.",["monitors","niri","daemon"]],
+      ["Split mirrors reality","The current setup remembers how you left it — visible on your next return.",["daemon","statejson"]],
+    ]},
+  "Reboot": {
+    nodes: ["niri","daemon","statejson","placejson"],
+    steps: [
+      ["Workspace ids die","A new niri session invalidates every workspace id.",["niri","daemon"]],
+      ["Splits survive","Per-setup splits live in state.json, independent of ids.",["statejson"]],
+      ["Fresh strip","The strip becomes whatever you open on the laptop screen.",["daemon","statejson"]],
+      ["Dock → cut","The next arrival at a multi-monitor setup cuts the fresh strip by its remembered split.",["daemon","niri","statejson"]],
+    ]},
+  "Paused": {
+    nodes: ["daemon"],
+    steps: [
+      ["place.py pause","A flag file silences the watcher: no moves, no learning — perfect for presentations.",["daemon"]],
+      ["place.py resume","Flag removed; the next tick re-applies the current setup.",["daemon","niri"]],
+    ]},
+  "Redefine": {
+    nodes: ["overlay","daemon","placejson","niri","statejson"],
+    steps: [
+      ["place.py locate","Redefine only the desk order (left → right). Roles re-derive from centrality if never explicitly arranged.",["overlay","daemon","placejson"]],
+      ["place.py arrange","Redefine only the importance order (roles).",["overlay","daemon","placejson"]],
+      ["place.py apply","One convergence pass right now — no overlay.",["daemon","niri","statejson"]],
+      ["place.py show","Read-only: current world, remembered splits, setup table.",["daemon","placejson"]],
+    ]},
+};
+
+const tabs = document.getElementById("tabs");
+const stepsEl = document.getElementById("steps");
+Object.keys(SCENARIOS).forEach((name, i) => {
+  const b = document.createElement("button");
+  b.textContent = name;
+  b.onclick = () => show(name);
+  if (i === 0) b.classList.add("on");
+  tabs.appendChild(b);
+});
+
+function show(name){
+  document.querySelectorAll("#tabs button").forEach(b =>
+    b.classList.toggle("on", b.textContent === name));
+  const sc = SCENARIOS[name];
+  stepsEl.innerHTML = "";
+  sc.steps.forEach(([t, d, hl]) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<span><b>${t}</b><p>${d}</p></span>`;
+    li.onmouseenter = () => highlight(hl);
+    li.onmouseleave = () => highlight(sc.nodes);
+    stepsEl.appendChild(li);
+  });
+  highlight(sc.nodes);
+}
+show("New setup");
+</script>
+</body>
+</html>
