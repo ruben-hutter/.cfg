@@ -182,15 +182,16 @@ def current_setup(setups, outputs):
     return setup, how, False
 
 
-def converge(niri, state, conns, deadline=APPLY_TIMEOUT, attempts=2):
+def converge(niri, state, conns, deadline=APPLY_TIMEOUT, attempts=2,
+             now=time.time, sleep=time.sleep):
     """Send moves until reality matches (order, sizes), verifying each step
     (niri can accept-but-drop moves). Retries the whole pass a couple of
-    times before giving up and reporting. Returns (ok, n_pending)."""
+    times before giving up and reporting. Returns (ok, n_pending).
+    now/sleep are seams for tests."""
     for attempt in range(1, attempts + 1):
         tries = {}
-        end = time.time() + deadline
-        ok = False
-        while time.time() < end:
+        end = now() + deadline
+        while now() < end:
             _, workspaces, windows = niri.state()
             moves = layout.plan(state, conns, workspaces, windows)
             if not moves:
@@ -202,15 +203,13 @@ def converge(niri, state, conns, deadline=APPLY_TIMEOUT, attempts=2):
                 break
             wid, conn, idx = pending[0]
             log(f"move ws {wid} -> {conn}#{idx} (try {tries.get(wid, 0) + 1})")
-            r1 = niri.raw({"MoveWorkspaceToMonitor": {"output": conn, "reference": {"Id": wid}}})
-            r2 = niri.raw({"MoveWorkspaceToIndex": {"index": idx, "reference": {"Id": wid}}})
-            if (r1, r2) != ("\"Handled\"", "\"Handled\""):
-                log(f"WARNING unexpected responses: {r1!r} {r2!r}")
+            if not niri.move(wid, conn, idx):
+                log(f"WARNING move ws {wid} not handled by niri")
             tries[wid] = tries.get(wid, 0) + 1
-            time.sleep(RETRY_PAUSE)
-        if not ok and attempt < attempts:
+            sleep(RETRY_PAUSE)
+        if attempt < attempts:
             log(f"apply attempt {attempt} incomplete - retrying after pause")
-            time.sleep(1.5)
+            sleep(1.5)
     _, workspaces, windows = niri.state()
     leftover = layout.plan(state, conns, workspaces, windows)
     return (not leftover), len(leftover)
@@ -229,7 +228,7 @@ def restore_focus(niri, conns, converged):
     picks = layout.first_occupied(workspaces, windows, conns)
     for r in list(range(1, len(conns))) + [0]:  # primary last
         if picks[r] is not None:
-            niri.raw({"FocusWorkspace": {"reference": {"Id": picks[r]}}})
+            niri.focus(picks[r])
     log(f"restored focus to first used workspace per monitor: {picks}")
 
 
@@ -431,7 +430,7 @@ def spawn_badges(niri, specs):
     # keyboard focus ends up doesn't matter).
     for w in wins:
         if w.get("app_id") == BADGE_APP_ID:
-            niri.raw({"FocusWorkspace": {"reference": {"Id": w["workspace_id"]}}})
+            niri.focus(w["workspace_id"])
     return badge, err
 
 

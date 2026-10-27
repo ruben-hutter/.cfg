@@ -31,3 +31,18 @@ class Niri:
         if r.returncode != 0:
             return None
         return (r.stdout or "").strip()
+
+    def move(self, wid, conn, idx):
+        """Move workspace wid onto conn at position idx. Returns whether niri
+        handled BOTH actions — it can answer "Handled" while silently doing
+        nothing (e.g. while the session is locked); callers verify effects
+        by polling."""
+        r1 = self.raw({"MoveWorkspaceToMonitor":
+                       {"output": conn, "reference": {"Id": wid}}})
+        r2 = self.raw({"MoveWorkspaceToIndex":
+                       {"index": idx, "reference": {"Id": wid}}})
+        return (r1, r2) == ('"Handled"', '"Handled"')
+
+    def focus(self, wid):
+        """Focus the workspace with the given id."""
+        self.raw({"FocusWorkspace": {"reference": {"Id": wid}}})
