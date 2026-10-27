@@ -15,9 +15,12 @@ relays each click — the window title encodes the connector as "PLACE:<conn>",
 and the app id is "place.arrange" so other windows can be ignored.
 """
 
+from __future__ import annotations
+
 import json
 import sys
 import threading
+from typing import Any
 
 import gi
 gi.require_version("Gtk", "4.0")
@@ -42,21 +45,21 @@ HINTS = {
 QUESTION = '<span size="286720" weight="bold">?</span>'
 
 
-def num_markup(idx):
+def num_markup(idx: int | str) -> str:
     return f'<span size="286720" weight="bold">{idx}</span>'
 
 
 class Badges(Gtk.Application):
-    def __init__(self, specs):
+    def __init__(self, specs: list[dict[str, Any]]) -> None:
         super().__init__(application_id=APP_ID)
-        self.specs = specs
-        self.wins = []
-        self.nums = {}    # conn -> number label
-        self.status = {}  # conn -> progress label
-        self.hints = {}   # conn -> hint label
+        self.specs: list[dict[str, Any]] = specs
+        self.wins: list[Gtk.Window] = []
+        self.nums: dict[str, Gtk.Label] = {}    # conn -> number label
+        self.status: dict[str, Gtk.Label] = {}  # conn -> progress label
+        self.hints: dict[str, Gtk.Label] = {}   # conn -> hint label
         threading.Thread(target=self.read_updates, daemon=True).start()
 
-    def read_updates(self):
+    def read_updates(self) -> bool:
         """Parent feeds commands on stdin as the user clicks / phases change."""
         for line in sys.stdin:
             parts = line.split()
@@ -68,18 +71,18 @@ class Badges(Gtk.Application):
                 GLib.idle_add(self.set_phase, parts[1])
         return False
 
-    def set_number(self, conn, idx):
+    def set_number(self, conn: str, idx: str) -> bool:
         label = self.nums.get(conn)
         if label:
             label.set_markup(num_markup(idx))
         return False
 
-    def set_status(self, picked, total):
+    def set_status(self, picked: str, total: str) -> bool:
         for label in self.status.values():
             label.set_markup(f'<span size="20480" weight="bold">{picked}/{total} picked</span>')
         return False
 
-    def set_phase(self, phase):
+    def set_phase(self, phase: str) -> bool:
         hint = HINTS.get(f"{phase}")
         for label in self.hints.values():
             if hint:
@@ -90,7 +93,7 @@ class Badges(Gtk.Application):
                 label.set_markup(QUESTION)
         return False
 
-    def do_activate(self):
+    def do_activate(self) -> None:
         disp = Gdk.Display.get_default()
         provider = Gtk.CssProvider()
         css = "\n".join(
@@ -115,7 +118,8 @@ class Badges(Gtk.Application):
         for win in self.wins:
             win.present()
 
-    def make_badge(self, mon, color_idx, spec):
+    def make_badge(self, mon: Gdk.Monitor, color_idx: int,
+                   spec: dict[str, Any]) -> Gtk.Window:
         win = Gtk.Window(application=self)
         win.set_title(TITLE_PREFIX + spec["conn"])
         win.add_css_class(f"badge{color_idx}")
@@ -152,7 +156,7 @@ class Badges(Gtk.Application):
         return win
 
 
-def mon_conn(mon):
+def mon_conn(mon: Gdk.Monitor) -> str:
     try:
         return mon.get_connector()
     except AttributeError:
