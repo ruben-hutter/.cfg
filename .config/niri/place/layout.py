@@ -166,8 +166,7 @@ def migrate(state, session):
     survive as the cut seed; splits survive as cut targets; fresh marks a
     strip waiting to be cut by the next expanded arrival."""
     if state.get("session") == session:
-        state.setdefault("splits", {})
-        return state
+        return dict(state, splits=state.get("splits", {}))
     sizes = state.get("sizes")
     state = {"order": [], "sizes": sizes, "splits": state.get("splits", {}),
              "session": session}
@@ -207,14 +206,22 @@ def arrive(state, sid, lists):
     return state
 
 
+def _mirror(state, sid):
+    """Copy-on-write: remember this setup's cut — the active sizes become its
+    split. THE place the split/sizes mirroring happens."""
+    state = dict(state, splits=dict(state.get("splits", {})))
+    state["splits"][sid] = list(state["sizes"])
+    return state
+
+
 def arrived(state, sid):
     """The arrival converged: distribution done — fresh ends and the active
     cut is remembered as this setup's split. place.py gates on ok+expanded
     and calls this AFTER converge."""
-    state = dict(state, splits=dict(state.get("splits", {})))
+    state = dict(state)
     state.pop("fresh", None)
     if state.get("sizes"):
-        state["splits"][sid] = list(state["sizes"])
+        state = _mirror(state, sid)
     return state
 
 
@@ -226,8 +233,7 @@ def settle(state, lists, sid):
     that invariant lives."""
     state = learn(state, lists, freeze_sizes=bool(state.get("fresh")))
     if len(lists) > 1 and not state.get("fresh") and state.get("sizes"):
-        state = dict(state, splits=dict(state.get("splits", {})))
-        state["splits"][sid] = list(state["sizes"])
+        state = _mirror(state, sid)
     return state
 
 

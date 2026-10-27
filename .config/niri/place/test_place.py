@@ -24,7 +24,8 @@ class FakeNiri:
     """In-memory world {ws_id: (conn, idx)}; state() reports it like niri.
     move() applies instantly and reports Handled."""
 
-    def __init__(self, world):
+    def __init__(self, world, outs=None):
+        self.outs = outs or {}
         self.world = dict(world)
         self.moves = []
 
@@ -34,7 +35,7 @@ class FakeNiri:
                       for wid, (conn, idx) in ordered]
         windows = [{"id": 900 + w["id"], "workspace_id": w["id"]}
                    for w in workspaces]  # every workspace occupied
-        return ({}, workspaces, windows)
+        return (self.outs, workspaces, windows)
 
     def move(self, wid, conn, idx):
         self.moves.append((wid, conn, idx))
@@ -102,6 +103,34 @@ class ConvergeTest(unittest.TestCase):
                                      deadline=8, attempts=1, now=now, sleep=sleep)
         self.assertEqual((ok, pending), (False, 2))
         self.assertLessEqual(len(niri.moves), 3)  # a few tries, not forever
+
+
+class TickTest(unittest.TestCase):
+    """tick must RETURN the updated state so callers persist what it learned
+    — the regression the pure-verb refactor nearly shipped: callers saved
+    their own stale dict while settle/arrive results were dropped."""
+
+    def setup_world(self):
+        outs = {"A": {"make": "M", "model": "X", "serial": "1",
+                      "logical": {"x": 0, "y": 0, "width": 100,
+                                  "height": 9, "scale": 1.0}}}
+        ident = layout.identity(outs["A"])
+        sid = layout.setup_id(outs)
+        setups = [{"name": "t", "id": sid, "set": layout.set_id([ident]),
+                   "roles": [ident], "arranged": True}]
+        return outs, setups, sid
+
+    def test_settled_tick_returns_the_learned_state(self):
+        outs, setups, sid = self.setup_world()
+        niri = FakeNiri({10: ("A", 1), 20: ("A", 2)}, outs)
+        state = {"order": [10, 20, 30], "sizes": [1, 1, 1],
+                 "splits": {}, "session": "s"}
+        last, new_state = place.tick(niri, setups, state, ("t", sid),
+                                     {"locked": False})
+        self.assertEqual(last, ("t", sid))
+        self.assertEqual(new_state["order"], [10, 20])   # ws 30 closed
+        self.assertEqual(new_state["sizes"], [1, 1, 0])
+        self.assertIsNot(new_state, state)  # callers MUST save the returned dict
 
 
 if __name__ == "__main__":
