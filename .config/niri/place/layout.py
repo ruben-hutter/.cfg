@@ -2,15 +2,27 @@
 
 Concepts
 --------
-order   canonical ordering of workspace ids, as one long strip:
-        role-1's workspaces, then role-2's, then role-3's.
-sizes   [n1, n2, n3] — how many of the strip belong to role 1, 2, 3.
-        The last role absorbs any tail (e.g. a 2-monitor setup's laptop).
-setup   {"name": str, "roles": [monitor-identity, ...]} — identity is
-        "make model serial", whitespace-normalized.
+order     canonical ordering of workspace ids, as one long strip:
+          role-1's workspaces, then role-2's, then role-3's.
+sizes     [n1, n2, n3] — the ACTIVE cut: how many of the strip belong to
+          role 1, 2, 3. The last role absorbs any tail.
+splits    per-setup remembered cuts: {setup-id: [n1, n2, n3]}. Arriving at
+          an expanded setup with a remembered split makes it the active
+          cut, so each setup re-expands the strip the way it was last
+          arranged there. Mirrored from the active sizes while a setup is
+          settled, so user rearrangements are kept per setup.
+setup     {"name": str, "id": str, "roles": [monitor-identity, ...]} —
+          identity is "make model serial", roles[0] is the primary.
+id        short hash of the position-ordered identities: the monitor set
+          AND their left-to-right arrangement. A TV left of the laptop is
+          a different setup from the same TV right of it.
+signature identities ordered by physical position (the id's preimage).
 
-state (what the caller persists) = {"order": [...], "sizes": [...], "session": token}
+state (what the caller persists) =
+    {"order": [...], "sizes": [...], "splits": {...}, "session": token, ...}
 """
+
+import hashlib
 
 
 def identity(out):
@@ -18,13 +30,87 @@ def identity(out):
     return " ".join(parts.split())
 
 
-def detect_setup(setups, identities):
-    """The setup whose role identities exactly match the connected monitors."""
+def signature(outputs):
+    """Identities ordered by physical position (x, then y, then connector):
+    the setup's arrangement key."""
+    def key(item):
+        conn, out = item
+        log = out.get("logical") or {}
+        return (log.get("x", 0), log.get("y", 0), conn)
+    return [identity(out) for _, out in sorted(outputs.items(), key=key)]
+
+
+def setup_id(outputs):
+    """Provisional identifier for the connected arrangement: short hash of
+    the position-ordered identities (niri's view of the desk)."""
+    return _hash(signature(outputs))
+
+
+def order_id(order):
+    """Identifier for a HUMAN-DECLARED desk order (from 'place setup'/'locate').
+    This is the authoritative arrangement key: niri's auto-layout can differ
+    from the physical desk, the user's clicks cannot."""
+    return _hash(order)
+
+
+def set_id(identities):
+    """Identifier for the monitor SET, independent of arrangement - the
+    fallback match when the arrangement key differs on a revisit."""
+    return _hash(sorted(identities))
+
+
+def _hash(lines):
+    return hashlib.sha256("\n".join(lines).encode()).hexdigest()[:8]
+
+
+def default_roles(outputs):
+    """Centrality order: centermost monitor first (it becomes the primary),
+    ties -> internal panel last, then left first. This reproduces every
+    setup in place.json that was ordered by hand (middle monitor = role 0)."""
+    bounds = []
+    for out in outputs.values():
+        log = out.get("logical") or {}
+        x, w = log.get("x", 0), log.get("width", 0)
+        bounds.append((x, x + w))
+    mid = (min(a for a, _ in bounds) + max(b for _, b in bounds)) / 2
+
+    def key(item):
+        conn, out = item
+        log = out.get("logical") or {}
+        x, w = log.get("x", 0), log.get("width", 0)
+        return (abs(x + w / 2 - mid), conn.startswith("eDP"), x, conn)
+    return [identity(out) for _, out in sorted(outputs.items(), key=key)]
+
+
+def default_roles_from_order(order, internal=()):
+    """Centrality order from a human-declared left-to-right sequence
+    (no geometry needed): position distance from the middle of the
+    sequence, ties -> internal panel last, then left first. Reproduces the
+    hand-written setups when fed their true desk orders."""
+    n = len(order)
+    mid = (n - 1) / 2
+
+    def key(i):
+        return (abs(i - mid), order[i] in internal, i)
+    return [order[i] for i in sorted(range(n), key=key)]
+
+
+def detect_setup(setups, sid, setid, identities):
+    """Match precedence: exact arrangement id > hand-written legacy entry
+    (role-set match, until linked) > monitor set (niri's layout differs
+    from the declared desk order). Returns (setup, how) with how in
+    {"id", "legacy", "set", None}."""
+    for s in setups:
+        if s.get("id") == sid:
+            return s, "id"
     ids = set(identities)
     for s in setups:
-        if set(s["roles"]) == ids:
-            return s
-    return None
+        if not s.get("id") and set(s["roles"]) == ids:
+            return s, "legacy"
+    for s in setups:
+        if s.get("set") == setid:
+            return s, "set"
+    return None, None
 
 
 def role_conns(setup, outputs):
@@ -118,7 +204,6 @@ def plan(state, conns, workspaces, windows):
     order = state["order"]
     sizes = state["sizes"]
     occ = {w["workspace_id"] for w in windows}
-
     # the state's segments per role, existing ids only (unknowns park where
     # they are, per learn)
     acc = 0
@@ -130,13 +215,17 @@ def plan(state, conns, workspaces, windows):
             n = max(0, sizes[r]) if r < len(sizes) else 0
             segs.append(order[acc:acc + n])
             acc += n
+    homed = {i for seg in segs for i in seg if i in occ}
 
     moves = []
     for r, conn in enumerate(conns):
         full = [w["id"] for w in sorted(workspaces, key=lambda w: (w["output"], w["idx"]))
                 if w["output"] == conn]
         desired = [i for i in segs[r] if i in occ]
-        desired += [i for i in occupied_full(full, occ) if i not in desired]
+        # park only occupied workspaces with no home in any segment; managed
+        # ones sitting on the wrong monitor get their own segment's slot
+        desired += [i for i in occupied_full(full, occ)
+                    if i not in desired and i not in homed]
 
         # simulate: walk the strip, fill occupied slots in desired order,
         # empty workspaces keep their slots

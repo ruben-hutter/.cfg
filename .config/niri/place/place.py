@@ -1,22 +1,44 @@
 #!/usr/bin/env python3
 """place — keep niri workspaces arranged by monitor role across setup changes.
 
-Model (see layout.py): workspaces form one canonical strip, cut into blocks
-by role (block 0 = primary monitor's workspaces, block 1 = secondary,
-block 2 = laptop screen). When the connected monitor set changes to a known
-setup, the strip is cut and each block is placed on its role's monitor.
+Model (see layout.py): workspaces form one canonical strip (order), cut into
+blocks by role. Every monitor set ever connected is registered automatically
+in place.json. A setup is identified by the HUMAN-DECLARED desk order (the
+monitors' left-to-right sequence, defined by clicking the on-screen badges) —
+niri's auto-layout is only a provisional guess until then. Arriving at a
+setup restores its remembered split (block sizes), so returning somewhere
+re-creates its arrangement.
+
+`place.py setup` runs whenever a new setup is connected (auto-launched by
+the watcher): pass 1 — click the screens LEFT to RIGHT (desk order); pass 2
+— click them in order of importance (role order). Roles default to the
+centrality rule (centermost = primary) if you skip pass 2. `locate` and
+`arrange` redefine desk order / importance separately.
+
+Cold start (new niri session): the strip is whatever is open; the first
+arrival at an expanded setup cuts it by that setup's remembered split.
 
 Run:
     place.py watch    poll; converge on setup changes (while unlocked)
-    place.py apply    one convergence pass now
+    place.py apply    one convergence pass now (registers unknown setups)
+    place.py setup    define desk order (L->R) + importance on the badges
+    place.py locate   redefine only the desk order (left to right)
+    place.py arrange  redefine only the importance order
+    place.py align    snap the screens into the declared desk order (runtime)
     place.py show     current world + remembered state
+    place.py pause    hands-off: no moves, no learning, until resume
+    place.py resume   resume managing; the next poll re-applies
 
-Config: ~/.config/niri/place.json   (setup table: role -> monitor identity)
-State:  ~/.local/state/place/state.json
+Config: ~/.config/niri/place/place.json — auto-maintained setup table:
+    {"name", "id" (hash of desk order), "set" (hash of monitor set),
+     "order" (desk order), "roles" (importance, roles[0] = primary),
+     "arranged" (roles were explicitly chosen)}
+State:  ~/.local/state/place/state.json  (+ paused flag, place.log)
 """
 
 import json
 import os
+import re
 import subprocess
 import sys
 import threading
@@ -27,12 +49,18 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import layout
 from niri import Niri
 
-CONF = Path.home() / ".config/niri/place.json"
+CONF = Path.home() / ".config/niri/place/place.json"
 STATE = Path.home() / ".local/state/place/state.json"
+PAUSED = STATE.parent / "paused"
+BADGE = Path(__file__).resolve().parent / "arrange_gtk.py"
+BADGE_APP_ID = "place.arrange"
 POLL = 5.0
 APPLY_TIMEOUT = 8.0
 MAX_TRIES = 4
 RETRY_PAUSE = 0.3
+ARRANGE_TIMEOUT = 120.0
+
+_SET_WARNED = set()  # setup ids whose set-fallback mismatch we already announced
 
 
 def log(msg):
@@ -56,18 +84,29 @@ def session_token():
     return os.path.basename(os.environ.get("NIRI_SOCKET", "unknown"))
 
 
+def load_setups():
+    return json.loads(CONF.read_text())["setups"]
+
+
+def save_setups(setups):
+    tmp = CONF.with_name(".place.json.tmp")
+    tmp.write_text(json.dumps({"setups": setups}, indent=2) + "\n")
+    tmp.replace(CONF)
+
+
 def load_state():
     if STATE.exists():
         d = json.loads(STATE.read_text())
     else:
         d = {}
     if d.get("session") != session_token():
-        # new niri session: workspace ids are dead; block sizes survive and
-        # become the distribution target while the user re-opens work
+        # new niri session: workspace ids are dead; splits (and sizes, as a
+        # seed) survive and become the cut targets while the user re-opens
         sizes = d.get("sizes")
-        d = {"order": [], "sizes": sizes, "session": session_token(),
-             "fresh": sizes is not None}
+        d = {"order": [], "sizes": sizes, "splits": d.get("splits", {}),
+             "session": session_token(), "fresh": sizes is not None}
         log(f"new session detected, sizes {sizes}")
+    d.setdefault("splits", {})
     return d
 
 
@@ -104,6 +143,51 @@ def start_lock_watch():
     return flag
 
 
+def register_setup(setups, outputs):
+    """Add the connected monitor set to place.json. The desk order starts as
+    niri's layout guess and becomes authoritative once the user clicks it
+    (place setup/locate). Returns the new entry."""
+    identities = [layout.identity(o) for o in outputs.values()]
+    sid = layout.setup_id(outputs)
+    entry = {"name": f"auto-{sid[:4]}",
+             "id": sid,
+             "set": layout.set_id(identities),
+             "order": layout.signature(outputs),
+             "roles": layout.default_roles(outputs)}
+    setups.append(entry)
+    save_setups(setups)
+    log(f"registered setup {entry['name']} ({sid}): roles {entry['roles']}")
+    notify(f"place: new setup {entry['name']}",
+           "click the screens on your monitor: left to right, then by importance")
+    return entry
+
+
+def current_setup(setups, outputs):
+    """Detect the connected monitor set. Returns (setup, how, created) with
+    how in {"id", "legacy", "set", "new"}."""
+    sid = layout.setup_id(outputs)
+    identities = [layout.identity(o) for o in outputs.values()]
+    setid = layout.set_id(identities)
+    setup, how = layout.detect_setup(setups, sid, setid, identities)
+    if setup is None:
+        return register_setup(setups, outputs), "new", True
+    if not setup.get("set"):
+        # entries linked before the set-fallback existed: backfill
+        setup["set"] = setid
+        setup.setdefault("order", layout.signature(outputs))
+        save_setups(setups)
+    if how == "legacy":
+        # hand-written entry seen connected for the first time: link it
+        setup["id"] = sid
+        setup["set"] = setid
+        setup["order"] = layout.signature(outputs)
+        setup["arranged"] = True  # hand-tuned roles: don't clobber them later
+        save_setups(setups)
+        log(f"linked setup {setup.get('name')} to id {sid}")
+        return setup, "legacy", False
+    return setup, how, False
+
+
 def converge(niri, state, conns, deadline=APPLY_TIMEOUT, attempts=2):
     """Send moves until reality matches (order, sizes), verifying each step
     (niri can accept-but-drop moves). Retries the whole pass a couple of
@@ -138,62 +222,6 @@ def converge(niri, state, conns, deadline=APPLY_TIMEOUT, attempts=2):
     return (not leftover), len(leftover)
 
 
-def tick(niri, setups, state, last_setup, locked):
-    """One poll. Returns the setup name, or None if unknown / deferred."""
-    outputs, workspaces, windows = niri.state()
-    identities = [layout.identity(o) for o in outputs.values()]
-    setup = layout.detect_setup(setups, identities)
-    if not setup:
-        return None
-
-    name = setup.get("name") or "?"
-    conns = layout.role_conns(setup, outputs)
-    lists = layout.observed_lists(workspaces, windows, conns)
-    changed = name != last_setup
-
-    if changed:
-        # transition: place the blocks per current state
-        if locked:
-            log(f"setup {name} detected but session is locked - deferring")
-            return None  # not marking it done: retried on a later poll
-        if state.get("fresh") and not state.get("order"):
-            state["order"] = [i for l in lists for i in l]
-            log(f"fresh session at {name}: adopting strip for distribution")
-        if not state.get("sizes"):
-            # first run ever: adopt the current arrangement as the layout
-            state.update(layout.learn(state, lists))
-            log(f"learned initial layout at {name}: sizes {state['sizes']}")
-        ok, pending = converge(niri, state, conns)
-        restore_focus(niri, conns, ok)
-        if ok:
-            state.pop("fresh", None)  # distribution phase done
-        log(f"applied {name}: {'ok' if ok else f'INCOMPLETE ({pending} pending)'}")
-        if not ok:
-            notify(f"place: {name} (incomplete)",
-                   "some workspaces refused to move - see place.log")
-        return name
-    # settled: follow the user's arrangement (also runs while locked -
-    # keybinds work there). NEVER on a transition tick: reality is
-    # mid-switch, and learning from it would corrupt the strip.
-    state.update(layout.learn(state, lists, freeze_sizes=state.get("fresh", False)))
-    return name
-
-
-def cmd_watch(niri, setups, state):
-    log(f"watcher started (pid {os.getpid()})")
-    locked = start_lock_watch()
-    last_setup = None
-    while True:
-        time.sleep(POLL)
-        try:
-            name = tick(niri, setups, state, last_setup, locked["locked"])
-            last_setup = name  # None (unknown/deferred) -> retried next poll
-            if name is not None:
-                save_state(state)
-        except Exception as e:
-            log(f"ERROR tick: {e}")
-
-
 def restore_focus(niri, conns, converged):
     """After a transition, show each monitor's first occupied workspace (its
     frontmost used one, skipping the leading buffer empty). The primary is
@@ -211,43 +239,485 @@ def restore_focus(niri, conns, converged):
     log(f"restored focus to first used workspace per monitor: {picks}")
 
 
-def cmd_apply(niri, setups, state):
+def apply_setup(niri, state, setup, outputs, workspaces, windows):
+    """Arrive at `setup`: restore its remembered split, converge, learn the
+    result into its split. Returns (ok, n_pending)."""
+    conns = layout.role_conns(setup, outputs)
+    expanded = len(conns) > 1
+    split = state["splits"].get(setup["id"])
+    if expanded and split:
+        log(f"restoring split {split} for {setup.get('name')}")
+        state["sizes"] = list(split)
+    lists = layout.observed_lists(workspaces, windows, conns)
+    if not state.get("sizes"):
+        # first run ever: adopt the current arrangement as the baseline
+        state.update(layout.learn(state, lists))
+        log(f"learned initial layout at {setup.get('name')}: sizes {state['sizes']}")
+        if not expanded:
+            state["fresh"] = state["cold"] = True
+    ok, pending = converge(niri, state, conns)
+    restore_focus(niri, conns, ok)
+    if ok and expanded:
+        state.pop("fresh", None)  # distribution phase done
+        if state.get("sizes"):
+            state["splits"][setup["id"]] = list(state["sizes"])
+    return ok, pending
+
+
+def tick(niri, setups, state, last, locked):
+    """One poll. Returns (name, id), or None if deferred (locked)."""
     outputs, workspaces, windows = niri.state()
-    setup = layout.detect_setup(setups, [layout.identity(o) for o in outputs.values()])
-    if not setup:
-        sys.exit("no known setup for the connected monitors")
+    setup, how, created = current_setup(setups, outputs)
+    name = setup.get("name") or "?"
+    sid = setup["id"]
+    if how == "set" and sid not in _SET_WARNED:
+        _SET_WARNED.add(sid)
+        log(f"setup {name}: monitor set matches but niri's layout differs "
+            f"from the declared desk order - use 'place setup' to redefine")
+        notify(f"place: {name} looks rearranged",
+               "if the monitors moved on your desk: run 'place setup'")
     conns = layout.role_conns(setup, outputs)
     lists = layout.observed_lists(workspaces, windows, conns)
+    changed = (name, sid) != last
+
+    if changed:
+        # transition: place the blocks per current state
+        if locked:
+            log(f"setup {name} detected but session is locked - deferring")
+            return None  # not marking it done: retried on a later poll
+        if how == "set":
+            # known monitor set, drifted layout: snap the screens back to the
+            # declared desk order before applying (runtime-only)
+            align_to_desk(niri, setups, outputs, setup)
+        expanded = len(conns) > 1
+        if state.get("fresh"):
+            # cold start: pre-reboot ids are dead, the strip is whatever is
+            # open right now. fresh stays alive through collapsed time; the
+            # first expanded arrival cuts the strip by that setup's
+            # remembered split (see apply_setup).
+            state["order"] = [i for l in lists for i in l]
+            if expanded:
+                state.pop("cold", None)
+            else:
+                state["cold"] = True
+                log(f"fresh session at {name}: strip adopted, waiting to expand")
+        ok, pending = apply_setup(niri, state, setup, outputs, workspaces, windows)
+        log(f"applied {name}: {'ok' if ok else f'INCOMPLETE ({pending} pending)'}")
+        if not ok:
+            notify(f"place: {name} (incomplete)",
+                   "some workspaces refused to move - see place.log")
+        if created:
+            launch_setup_tool()  # freshly registered: define it right away
+        return (name, sid)
+    # settled: follow the user's arrangement (also runs while locked -
+    # keybinds work there). NEVER on a transition tick: reality is
+    # mid-switch, and learning from it would corrupt the strip.
     state.update(layout.learn(state, lists, freeze_sizes=state.get("fresh", False)))
-    ok, failed = converge(niri, state, conns)
+    expanded = len(conns) > 1
+    if expanded and not state.get("fresh") and state.get("sizes"):
+        state["splits"][sid] = list(state["sizes"])
+    return (name, sid)
+
+
+def launch_setup_tool():
+    """Freshly registered setup: pop the badge overlay to define desk order
+    and roles right away (detached; times out on its own if ignored)."""
+    STATE.parent.mkdir(parents=True, exist_ok=True)
+    err = open(STATE.parent / "setup.err", "ab")
+    subprocess.Popen([sys.executable, str(Path(__file__).resolve()), "setup"],
+                     stdout=subprocess.DEVNULL, stderr=err,
+                     start_new_session=True)
+    err.close()
+    log("launched 'place setup' for the new setup")
+
+
+def cmd_watch(niri, state):
+    log(f"watcher started (pid {os.getpid()})")
+    locked = start_lock_watch()
+    conf_mtime = CONF.stat().st_mtime
+    setups = load_setups()
+    last = None
+    while True:
+        time.sleep(POLL)
+        try:
+            try:
+                mtime = CONF.stat().st_mtime
+                if mtime != conf_mtime:
+                    setups = load_setups()
+                    conf_mtime = mtime
+                    log("config changed on disk - reloaded")
+            except OSError:
+                pass
+            if PAUSED.exists():
+                last = None  # resume re-applies, even without a setup change
+                continue
+            last = tick(niri, setups, state, last, locked["locked"])
+            if last is not None:
+                save_state(state)
+        except Exception as e:
+            log(f"ERROR tick: {e}")
+
+
+def parse_pick(text):
+    """pick-window replies as JSON (with -j) or as a human-readable block:
+    'Window ID 33: (focused)\\n  Title: \"PLACE:DP-4\"\\n  App ID: ...'"""
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        title = re.search(r'^\s*Title:\s*"(.*)"', text, re.M)
+        app = re.search(r'^\s*App ID:\s*"(.*)"', text, re.M)
+        if title:
+            return {"title": title.group(1), "app_id": app.group(1) if app else ""}
+        return None
+
+
+def pick_window(timeout):
+    """Run niri's interactive window picker; returns the picked window's
+    info dict, or None on failure/cancel/timeout."""
+    try:
+        r = subprocess.run(["niri", "msg", "pick-window"],
+                           capture_output=True, text=True, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        return None
+    if r.returncode != 0:
+        log(f"pick-window failed: {(r.stderr or '').strip()}")
+        return None
+    info = parse_pick(r.stdout)
+    if info is None:
+        log(f"pick-window: unexpected output: {r.stdout.strip()!r}")
+    return info
+
+
+class Abort(Exception):
+    pass
+
+
+def conn_specs(outputs, conns, with_index):
+    """Badge specs: one per monitor; index = its position in the CURRENT
+    role order (None = unknown until clicked, used for the desk phase)."""
+    specs = []
+    for i, conn in enumerate(conns):
+        out = outputs[conn]
+        spec = {"conn": conn,
+                "desc": f'{out.get("make", "")} {out.get("model", "")}'.strip()}
+        if with_index:
+            spec["index"] = i + 1
+        specs.append(spec)
+    return specs
+
+
+def badge_send(badge, *lines):
+    try:
+        for line in lines:
+            badge.stdin.write((line + "\n").encode())
+        badge.stdin.flush()
+    except (BrokenPipeError, AttributeError, OSError):
+        pass
+
+
+def spawn_badges(niri, specs):
+    """Start the badge overlay; wait until every window is actually mapped
+    and bring each one's workspace to the front of its monitor. Returns
+    (badge, err-file); exits the process on failure."""
+    err_path = STATE.parent / "badge.err"
+    err_path.parent.mkdir(parents=True, exist_ok=True)
+    err = open(err_path, "wb")
+    badge = subprocess.Popen([sys.executable, str(BADGE), json.dumps(specs)],
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.DEVNULL, stderr=err)
+    wins, all_mapped = [], False
+    map_deadline = time.time() + 10
+    while time.time() < map_deadline:
+        if badge.poll() is not None:
+            break
+        wins = niri.query_json("-j", "windows")
+        if sum(1 for w in wins if w.get("app_id") == BADGE_APP_ID) >= len(specs):
+            all_mapped = True
+            break
+        time.sleep(0.1)
+    if badge.poll() is not None:
+        err.close()
+        log(f"badge process died - see {err_path}")
+        sys.exit(f"aborted: badge windows failed to open - see {err_path}")
+    if not all_mapped:
+        badge.kill()
+        err.close()
+        log("not all badge windows mapped")
+        sys.exit("aborted: not all badges appeared - see place.log")
+    # badges map onto each monitor's *active* workspace - a monitor whose
+    # front workspace is a different one would hide its badge. Bring every
+    # badge's workspace to the front (the picker is pointer-driven, so where
+    # keyboard focus ends up doesn't matter).
+    for w in wins:
+        if w.get("app_id") == BADGE_APP_ID:
+            niri.raw({"FocusWorkspace": {"reference": {"Id": w["workspace_id"]}}})
+    return badge, err
+
+
+def kill_badge(badge, err):
+    badge.kill()
+    try:
+        if badge.stdin:
+            badge.stdin.close()
+    except (BrokenPipeError, OSError, AttributeError):
+        pass
+    err.close()
+
+
+def run_picks(niri, badge, order_conns, deadline, bad_click_hint):
+    """Collect clicks until all but one monitor are picked (the remaining
+    one is implicitly last). Raises Abort on timeout/cancel."""
+    picked = []
+    total = len(order_conns)
+    while len(picked) < total - 1:
+        remaining = deadline - time.time()
+        if remaining <= 0:
+            raise Abort(f"timed out after {ARRANGE_TIMEOUT:.0f}s")
+        info = pick_window(remaining)
+        if info is None:
+            raise Abort("picker cancelled or failed")
+        title = info.get("title") or ""
+        if info.get("app_id") != BADGE_APP_ID or not title.startswith("PLACE:"):
+            notify("place", bad_click_hint)
+            continue
+        conn = title.split("PLACE:", 1)[1].strip()
+        if conn in picked:
+            notify("place", f"{conn} already picked - keep clicking")
+            continue
+        picked.append(conn)
+        badge_send(badge, f"SET {conn} {len(picked)}",
+                   f"STATUS {len(picked)} {total}")
+    return picked
+
+
+def implicit_conn(order_conns, picked):
+    return next(c for c in order_conns if c not in picked)
+
+
+def commit_desk_order(setups, state, setup, outputs, picked):
+    """Store a human-declared left-to-right desk order: the entry's order,
+    id, and (unless roles were explicitly arranged) centrality roles derived
+    from it. Migrates the remembered split to the new id."""
+    old_id = setup.get("id")
+    desk = [layout.identity(outputs[c]) for c in picked]
+    setup["order"] = desk
+    setup["id"] = layout.order_id(desk)
+    if not setup.get("arranged"):
+        internal = {layout.identity(o) for c, o in outputs.items()
+                    if c.startswith("eDP")}
+        setup["roles"] = layout.default_roles_from_order(desk, internal)
+    if old_id and old_id != setup["id"] and old_id in state["splits"]:
+        state["splits"].setdefault(setup["id"], state["splits"].pop(old_id))
+    save_setups(setups)
+    log(f"desk order for {setup.get('name')}: {' -> '.join(picked)} "
+        f"(id {setup['id']}, roles {setup['roles']})")
+
+
+def cmd_setup(niri, setups, state):
+    """Two-pass definition of the current setup: click the screens left to
+    right (desk order), then in order of importance (roles)."""
+    outputs, workspaces, windows = niri.state()
+    setup, _how, _created = current_setup(setups, outputs)
+    order_conns = layout.role_conns(setup, outputs)
+    total = len(order_conns)
+    badge, err = spawn_badges(niri, conn_specs(outputs, order_conns, with_index=False))
+    try:
+        badge_send(badge, "PHASE locate", f"STATUS 0 {total}")
+        picked = run_picks(niri, badge, order_conns,
+                           time.time() + ARRANGE_TIMEOUT,
+                           "please click a screen (left to right)")
+        picked.append(implicit_conn(order_conns, picked))
+        badge_send(badge, f"SET {picked[-1]} {len(picked)}",
+                   f"STATUS {len(picked)} {total}")
+        time.sleep(0.8)
+        commit_desk_order(setups, state, setup, outputs, picked)
+        align_to_desk(niri, setups, outputs, setup)  # screens snap into place
+        order_conns = layout.role_conns(setup, outputs)  # roles may have moved
+
+        badge_send(badge, "PHASE arrange",
+                   *[f"SET {c} {i + 1}" for i, c in enumerate(order_conns)],
+                   f"STATUS 0 {total}")
+        picked = run_picks(niri, badge, order_conns,
+                           time.time() + ARRANGE_TIMEOUT,
+                           "please click a screen (order of importance)")
+        picked.append(implicit_conn(order_conns, picked))
+        badge_send(badge, f"SET {picked[-1]} {len(picked)}",
+                   f"STATUS {len(picked)} {total}")
+        time.sleep(0.8)
+        setup["roles"] = [layout.identity(outputs[c]) for c in picked]
+        setup["arranged"] = True
+        save_setups(setups)
+        log(f"role order for {setup.get('name')}: {' -> '.join(picked)}")
+    except Abort as e:
+        kill_badge(badge, err)
+        notify("place setup: aborted", str(e))
+        sys.exit(f"setup aborted: {e}")
+    kill_badge(badge, err)
+    ok, pending = apply_setup(niri, state, setup, outputs, workspaces, windows)
     save_state(state)
-    print(f"{setup.get('name')}: {'ok' if ok else f'INCOMPLETE ({failed} pending)'}")
+    notify(f"place setup: {setup.get('name')} defined",
+           f"primary: {picked[0]}")
+    print(f"{setup.get('name')}: {'ok' if ok else f'INCOMPLETE ({pending} pending)'}"
+          f"  primary: {picked[0]}")
+
+
+def cmd_locate(niri, setups, state):
+    """Redefine only the desk order (left to right)."""
+    outputs, workspaces, windows = niri.state()
+    setup, _how, _created = current_setup(setups, outputs)
+    order_conns = layout.role_conns(setup, outputs)
+    badge, err = spawn_badges(niri, conn_specs(outputs, order_conns, with_index=False))
+    try:
+        badge_send(badge, "PHASE locate", f"STATUS 0 {len(order_conns)}")
+        picked = run_picks(niri, badge, order_conns,
+                           time.time() + ARRANGE_TIMEOUT,
+                           "please click a screen (left to right)")
+        picked.append(implicit_conn(order_conns, picked))
+        badge_send(badge, f"SET {picked[-1]} {len(picked)}",
+                   f"STATUS {len(picked)} {len(order_conns)}")
+        time.sleep(0.8)
+    except Abort as e:
+        kill_badge(badge, err)
+        notify("place locate: aborted", str(e))
+        sys.exit(f"locate aborted: {e}")
+    kill_badge(badge, err)
+    commit_desk_order(setups, state, setup, outputs, picked)
+    align_to_desk(niri, setups, outputs, setup)
+    ok, pending = apply_setup(niri, state, setup, outputs, workspaces, windows)
+    save_state(state)
+    notify(f"place locate: {setup.get('name')} desk order set",
+           " -> ".join(picked))
+    print(f"{setup.get('name')}: {'ok' if ok else f'INCOMPLETE ({pending} pending)'}"
+          f"  desk: {' -> '.join(picked)}")
+
+
+def cmd_arrange(niri, setups, state):
+    """Redefine only the importance order (roles)."""
+    outputs, workspaces, windows = niri.state()
+    setup, _how, _created = current_setup(setups, outputs)
+    order_conns = layout.role_conns(setup, outputs)
+    badge, err = spawn_badges(niri, conn_specs(outputs, order_conns, with_index=True))
+    try:
+        badge_send(badge, "PHASE arrange", f"STATUS 0 {len(order_conns)}")
+        picked = run_picks(niri, badge, order_conns,
+                           time.time() + ARRANGE_TIMEOUT,
+                           "please click a numbered screen")
+        picked.append(implicit_conn(order_conns, picked))
+        badge_send(badge, f"SET {picked[-1]} {len(picked)}",
+                   f"STATUS {len(picked)} {len(order_conns)}")
+        time.sleep(0.8)
+    except Abort as e:
+        kill_badge(badge, err)
+        notify("place arrange: aborted", str(e))
+        sys.exit(f"arrange aborted: {e}")
+    kill_badge(badge, err)
+    setup["roles"] = [layout.identity(outputs[c]) for c in picked]
+    setup["arranged"] = True
+    save_setups(setups)
+    log(f"role order for {setup.get('name')}: {' -> '.join(picked)}")
+    ok, pending = apply_setup(niri, state, setup, outputs, workspaces, windows)
+    save_state(state)
+    notify(f"place arrange: order saved ({setup.get('name')})",
+           " -> ".join(picked))
+    print(f"{setup.get('name')}: {'ok' if ok else f'INCOMPLETE ({pending} pending)'}"
+          f"  order: {' -> '.join(picked)}")
+
+
+def align_to_desk(niri, setups, outputs, setup):
+    """Push the declared desk order into niri's RUNTIME layout: monitors
+    left→right at y=0, using their current logical widths. This aligns the
+    physical screen arrangement with what was clicked in pass 1 — it does
+    not write any config file (persistent pins stay in output.kdl)."""
+    desk = setup.get("order") or []
+    if not desk:
+        log("align: no declared desk order for this setup")
+        return
+    conn_by_ident = {layout.identity(o): c for c, o in outputs.items()}
+    x = 0
+    for ident in desk:
+        conn = conn_by_ident.get(ident)
+        if conn:
+            try:
+                niri.query("output", conn, "position", "set", str(x), "0")
+                log(f"align: {conn} -> x={x}")
+            except RuntimeError as e:
+                log(f"WARNING align {conn}: {e}")
+        x += outputs[conn]["logical"]["width"] if conn else 0
+
+
+def cmd_align(niri, setups, state):
+    outputs, _workspaces, _windows = niri.state()
+    setup, _how, _created = current_setup(setups, outputs)
+    align_to_desk(niri, setups, outputs, setup)
+    print("aligned to desk order:", " -> ".join(setup.get("order", [])))
+
+
+def cmd_apply(niri, setups, state):
+    outputs, workspaces, windows = niri.state()
+    setup, _how, _created = current_setup(setups, outputs)
+    ok, pending = apply_setup(niri, state, setup, outputs, workspaces, windows)
+    save_state(state)
+    print(f"{setup.get('name')}: {'ok' if ok else f'INCOMPLETE ({pending} pending)'}")
 
 
 def cmd_show(niri, setups, state):
     outputs, workspaces, windows = niri.state()
-    setup = layout.detect_setup(setups, [layout.identity(o) for o in outputs.values()])
-    print(f"setup: {setup.get('name') if setup else 'UNKNOWN'}")
+    sid = layout.setup_id(outputs)
+    identities = [layout.identity(o) for o in outputs.values()]
+    setup, how = layout.detect_setup(setups, sid, layout.set_id(identities), identities)
+    print(f"setup: {setup.get('name') if setup else 'UNKNOWN'} ({sid}, match: {how})")
     for conn in sorted(outputs):
         for w in sorted(workspaces, key=lambda w: (w["output"], w["idx"])):
             if w["output"] == conn:
                 n = sum(1 for x in windows if x["workspace_id"] == w["id"])
                 print(f"  {conn:6s} #{w['idx']:2d} id={w['id']:4d} {n} win")
-    print(f"sizes: {state.get('sizes')}")
     print(f"order: {state.get('order')}")
+    print(f"sizes: {state.get('sizes')}")
+    splits = state.get("splits", {})
+    if splits:
+        name_by_id = {s.get("id"): s.get("name") for s in setups}
+        print("remembered splits:")
+        for k in sorted(splits):
+            print(f"  {k} {name_by_id.get(k, '?'):10s} {splits[k]}")
+
+
+def cmd_pause():
+    STATE.parent.mkdir(parents=True, exist_ok=True)
+    PAUSED.touch()
+    notify("place: paused", "hands-off until 'place.py resume'")
+    print("paused - the watcher will not move or learn anything")
+
+
+def cmd_resume():
+    PAUSED.unlink(missing_ok=True)
+    notify("place: resumed", "next poll re-applies the current setup")
+    print("resumed")
 
 
 def main():
-    niri = Niri()
-    setups = json.loads(CONF.read_text())["setups"]
-    state = load_state()
     cmd = sys.argv[1] if len(sys.argv) > 1 else "watch"
+    if cmd == "pause":
+        cmd_pause()
+        return
+    if cmd == "resume":
+        cmd_resume()
+        return
+    niri = Niri()
+    state = load_state()
     if cmd == "watch":
-        cmd_watch(niri, setups, state)
+        cmd_watch(niri, state)
     elif cmd == "apply":
-        cmd_apply(niri, setups, state)
+        cmd_apply(niri, load_setups(), state)
+    elif cmd == "setup":
+        cmd_setup(niri, load_setups(), state)
+    elif cmd == "locate":
+        cmd_locate(niri, load_setups(), state)
+    elif cmd == "arrange":
+        cmd_arrange(niri, load_setups(), state)
+    elif cmd == "align":
+        cmd_align(niri, load_setups(), state)
     elif cmd == "show":
-        cmd_show(niri, setups, state)
+        cmd_show(niri, load_setups(), state)
     else:
         sys.exit(f"unknown command {cmd!r}")
 
