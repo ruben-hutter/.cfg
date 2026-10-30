@@ -33,6 +33,36 @@
         "BOE 0x0CE0 None"
       ],
       "arranged": true
+    },
+    {
+      "name": "auto-8008",
+      "id": "8008b3ce",
+      "set": "26994026",
+      "order": [
+        "BOE 0x0CE0 None",
+        "HP Inc. HP 24fh 3CM0330VYC",
+        "HP Inc. HP 24fh 3CM033045N"
+      ],
+      "roles": [
+        "HP Inc. HP 24fh 3CM0330VYC",
+        "HP Inc. HP 24fh 3CM033045N",
+        "BOE 0x0CE0 None"
+      ]
+    },
+    {
+      "name": "auto-7030",
+      "id": "7030bb96",
+      "set": "fb49ec95",
+      "order": [
+        "HP Inc. HP 527pq CNK6090BWD",
+        "HP Inc. HP 527pm 1H36020GBC",
+        "BOE 0x0CE0 None"
+      ],
+      "roles": [
+        "HP Inc. HP 527pm 1H36020GBC",
+        "HP Inc. HP 527pq CNK6090BWD",
+        "BOE 0x0CE0 None"
+      ]
     }
   ]
 }

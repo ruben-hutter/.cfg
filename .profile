@@ -29,6 +29,12 @@ esac
 # cargo/rustup
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
+# API keys (secrets kept in pass)
+if _key="$(pass show openrouter/api-key 2>/dev/null)"; then
+    export OPENROUTER_API_KEY="$_key"
+fi
+unset _key
+
 # ghcup
 [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
 

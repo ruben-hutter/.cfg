@@ -6,12 +6,12 @@
 // Remember to uncomment the node by removing "/-"!
 
 // Work monitors Basel
-output "HP Inc. HP 527pq CNK6090BL4" {
+output "HP Inc. HP 527pq CNK6090BWD" {
     scale 1.0
     position x=0 y=0
 }
 
-output "HP Inc. HP 527pm 1H36020DJ7" {
+output "HP Inc. HP 527pm 1H36020GBC" {
     focus-at-startup
     scale 1.0
     position x=2560 y=0

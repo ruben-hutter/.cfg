@@ -1,5 +1,8 @@
 environment {
     XDG_CURRENT_DESKTOP "niri"
+    // Java/Swing apps (Ghidra, ZAP, ...) render blank windows on frameless WMs without this.
+    // https://github.com/NationalSecurityAgency/ghidra/issues/8744
+    _JAVA_AWT_WM_NONREPARENTING "1"
     //QT_QPA_PLATFORM "wayland"
     QT_QPA_PLATFORMTHEME "qt6ct"
     QT_QPA_PLATFORMTHEME_QT6 "qt6ct"
