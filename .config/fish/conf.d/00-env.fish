@@ -18,6 +18,11 @@ fish_add_path $HOME/.ghcup/bin
 fish_add_path $HOME/.cabal/bin
 fish_add_path $HOME/.juliaup/bin
 
+# API keys (secrets kept in pass)
+if set -l key (pass show openrouter/api-key 2>/dev/null)
+    set -gx OPENROUTER_API_KEY "$key"
+end
+
 # Tools
 fish_add_path $PNPM_HOME
 fish_add_path $HOME/.opencode/bin

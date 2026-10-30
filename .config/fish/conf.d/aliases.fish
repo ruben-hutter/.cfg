@@ -35,8 +35,10 @@ alias nv="nvim"
 # open vscode with ozone
 #alias code="env ELECTRON_OZONE_PLATFORM_HINT=auto code"
 
-# tmux session manager
-alias tm="~/scripts/tmux_session_manager.sh"
+# tmux session manager — only from plain terminals, no-op inside tmux
+function tm
+    set -q TMUX; or ~/scripts/tmux_session_manager.sh
+end
 
 # open a new note in nvim
 alias nn="~/scripts/new_note.sh"

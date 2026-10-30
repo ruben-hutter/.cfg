@@ -30,4 +30,8 @@ if status is-interactive
     if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
         source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
     end
+
+    # Drop new plain terminals straight into the tmux session picker
+    # (inside tmux `tm` is a no-op, so new tmux windows are unaffected)
+    tm
 end

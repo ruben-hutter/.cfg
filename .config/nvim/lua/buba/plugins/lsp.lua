@@ -15,6 +15,7 @@ return {
 			'html',          -- html
 			'cssls',         -- css
 			'tinymist',      -- typst (was configured before)
+			'nil_ls',        -- nix
 		},
 	}},
 
@@ -32,6 +33,11 @@ return {
 			-- mason's incompatible one shadows ghcup's inside nvim.
 			vim.lsp.config('hls', {
 				cmd = { vim.fn.expand('~/.ghcup/bin/haskell-language-server-9.10.3'), '--lsp' },
+				-- formattingProvider needs the formatter binary on PATH
+				-- (~/.local/bin/fourmolu). Project-level fourmolu.yaml overrides style.
+				settings = {
+					haskell = { formattingProvider = 'fourmolu' },
+				},
 			})
 
 			-- make lua_ls aware of the `vim` global
@@ -41,12 +47,15 @@ return {
 				},
 			})
 
+			-- dartls: dart comes from the nix flake on PATH inside LiveTogether
+			-- (direnv `use flake`), NOT from mason — mason's dart packaging is
+			-- unreliable. lspconfig's dartls resolves `dart` from PATH.
 			-- jdtls is configured by nvim-java; enabled here
 			-- (keymaps live in after/plugin/lsp.lua)
 			vim.lsp.enable({
 				'hls', 'jdtls', 'bashls', 'pyright', 'rust_analyzer',
 				'clangd', 'gopls', 'lua_ls', 'ts_ls', 'html', 'cssls',
-				'tinymist', 'fish_lsp',
+				'tinymist', 'fish_lsp', 'nil_ls', 'dartls',
 			})
 		end,
 	},
