@@ -40,15 +40,21 @@ function tm
     set -q TMUX; or ~/scripts/tmux_session_manager.sh
 end
 
-# open a new note in nvim
-alias nn="~/scripts/new_note.sh"
-
 # lauch lazygit
 alias lg="lazygit"
 
 # lazygit for dotfiles config repo
 alias conflg='lazygit --git-dir $HOME/.cfg --work-tree $HOME'
 
+# quick connect to proxcode — remote bashrc drops into the tm picker
+alias pxc="ssh proxcode"
+
 # zoxide
 alias z="zoxide"
+
+# code-remote — provision/connect to remote dev VMs (~/repos/code-remote)
+# `code-remote <host>` connects, `<host> bootstrap|sync|connect [ssh-args]` does the rest
+function code-remote
+    ~/repos/code-remote/bin/code-remote $argv
+end
 
