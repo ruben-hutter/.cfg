@@ -1,0 +1,29 @@
+#compdef walker
+
+_walker() {
+  _arguments -s \
+    '(-v --version)'{-v,--version}'[show version]' \
+    '(-n --nosearch)'{-n,--nosearch}'[hide search input]' \
+    '(-N --nohints)'{-N,--nohints}'[hide keybind hints]' \
+    '(-I --inputonly)'{-I,--inputonly}'[only show input (dmenu)]' \
+    '(-i --index)'{-i,--index}'[print selected index instead of value (dmenu)]' \
+    '(-m --provider)'{-m,--provider=}'[exclusive provider to query]:provider:' \
+    '(-s --set)'{-s,--set=}'[provider set to use]:set:' \
+    '(-p --placeholder)'{-p,--placeholder=}'[input placeholder]:placeholder:' \
+    '(-h --height)'{-h,--height=}'[forced height]:height:' \
+    '--minheight[min height]:height:' \
+    '--maxheight[max height]:height:' \
+    '(-c --current)'{-c,--current}'[mark current value (dmenu)]' \
+    '(-w --width)'{-w,--width=}'[forced width]:width:' \
+    '--minwidth[min width]:width:' \
+    '--maxwidth[max width]:width:' \
+    '(-t --theme)'{-t,--theme=}'[theme to use]:theme:' \
+    '(-d --dmenu)'{-d,--dmenu}'[dmenu mode]' \
+    '(-q --close)'{-q,--close}'[close walker when open]' \
+    '(-H --hideqa)'{-H,--hideqa}'[hide quick activation buttons]' \
+    '(-k --keepopen)'{-k,--keepopen}'[keep open after selection (dmenu)]' \
+    '(-e --exit)'{-e,--exit}'[exit after this dmenu call]' \
+    '*: :_files'
+}
+
+_walker "$@"

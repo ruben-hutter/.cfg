@@ -41,6 +41,8 @@ zle -N zle-keymap-select
 zle -N zle-line-init
 
 # --- Completion system (native menu: `cd ..` + Tab -> `cd ../`, etc.) ---
+# ~/.zfunc holds generated tool completions (_cargo, _rustup); must precede compinit
+fpath=("$HOME/.zfunc" $fpath)
 autoload -Uz compinit
 compinit -d $HOME/.cache/zsh/zcompdump
 zstyle ':completion:*' menu select                          # arrow-key menu

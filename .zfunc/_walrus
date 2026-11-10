@@ -1,0 +1,57 @@
+#compdef walrus
+
+_walrus_topics() {
+  # first column of `walrus topics` table, skipping header/separator lines
+  local -a topics
+  topics=(${(f)"$(command walrus topics 2>/dev/null)"})
+  topics=(${(Q)${topics[$[1+2],-1]//(#m)[[:space:]]*/}})
+  _describe -t topics 'topic' topics
+}
+
+_walrus() {
+  local curcontext=$curcontext state line
+  typeset -A opt_args
+
+  _arguments -C \
+    '(-h --help)'{-h,--help}'[show help]' \
+    '1:cmd:->cmds' \
+    '*::arg:->args'
+
+  case $state in
+    cmds)
+      local -a cmds
+      cmds=(
+        'start:start tracking'
+        'stop:stop tracking'
+        'show:show entries'
+        'list:list recent entries'
+        'topics:list topics'
+        'add:add an entry'
+        'edit:edit an entry'
+        'drop:drop an entry'
+        'drop-topic:drop a topic'
+        'export:export entries'
+        'reset:reset data'
+        'help:show help'
+      )
+      _describe -t walrus-cmds 'walrus command' cmds
+      ;;
+    args)
+      case $line[1] in
+        show)
+          _arguments \
+            '(-n --count)'{-n,--count=}'[number of entries]:count:' \
+            '(-p --period)'{-p,--period=}'[period]:period:(day week month year)' \
+            '(-t --topic)'{-t,--topic=}'[topic]: : _walrus_topics'
+          ;;
+        list)
+          _arguments \
+            '(-n --count)'{-n,--count=}'[number of entries]:count:' \
+            '(-t --topic)'{-t,--topic=}'[topic]: : _walrus_topics'
+          ;;
+      esac
+      ;;
+  esac
+}
+
+_walrus "$@"
