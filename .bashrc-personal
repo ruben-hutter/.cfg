@@ -23,7 +23,6 @@ alias df='df -h'
 alias free="free -mt"
 
 # Aliases for software managment
-alias update="sudo dnf upgrade"
 alias upal="sudo dnf upgrade"
 
 # alias to use aliases also with sudo
@@ -50,3 +49,37 @@ alias code="env ELECTRON_OZONE_PLATFORM_HINT=auto code"
 
 # .gitignore file creator
 function gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@ ;}
+
+# NOTE: `tm` (tmux session picker) is NOT aliased here — on remotes the HM
+# bashrc defines a guarded tm() FUNCTION (no-op inside tmux). An alias would
+# be expanded while parsing that definition line and break it.
+
+# =============================== #
+# Ported from fish config (nixos-config home/programs/fish.nix)
+# =============================== #
+
+# zed's binary is called zeditor in nixpkgs
+alias zed="zeditor"
+
+# Lazygit
+alias lg="lazygit"
+
+# NixOS system management (only usable on NixOS hosts; harmless elsewhere)
+alias rebuild="sudo nixos-rebuild switch --flake ~/nixos-config#nixos"
+# NOTE: fish's `update` (nix flake update + rebuild) is intentionally NOT
+# ported — bash keeps `update` = dnf upgrade for the Fedora laptop.
+
+# Activate Python virtualenv (bash port of the fish function)
+function venv() {
+    if [ -f .venv/bin/activate ]; then
+        source .venv/bin/activate
+    elif [ -f "$HOME/.venv/bin/activate" ]; then
+        source "$HOME/.venv/bin/activate"
+    else
+        echo "No virtualenv found"
+    fi
+}
+
+# NOT ported (fish-only interactive machinery):
+#   fish_user_key_bindings / _q_smart_enter — vi-mode bindings + cursor shapes
+#   are fish-specific; bash vi-mode would be a behavior change, not a port.
