@@ -63,6 +63,33 @@
         "HP Inc. HP 527pq CNK6090BWD",
         "BOE 0x0CE0 None"
       ]
+    },
+    {
+      "name": "auto-9f23",
+      "id": "d424f8d8",
+      "set": "d424f8d8",
+      "order": [
+        "BOE 0x0CE0 None",
+        "LG Electronics LG TV 0x01010101"
+      ],
+      "roles": [
+        "LG Electronics LG TV 0x01010101",
+        "BOE 0x0CE0 None"
+      ],
+      "arranged": true
+    },
+    {
+      "name": "auto-4357",
+      "id": "435701f0",
+      "set": "435701f0",
+      "order": [
+        "BOE 0x0CE0 None",
+        "HP Inc. HP 527pq CNK6090BWD"
+      ],
+      "roles": [
+        "HP Inc. HP 527pq CNK6090BWD",
+        "BOE 0x0CE0 None"
+      ]
     }
   ]
 }

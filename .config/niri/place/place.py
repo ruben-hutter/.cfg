@@ -248,10 +248,16 @@ def apply_setup(niri: Niri, state: layout.State, setup: layout.Setup,
     conns = layout.role_conns(setup, outputs)
     expanded = len(conns) > 1
     sid = setup["id"]
-    if expanded and state["splits"].get(sid):
-        log(f"restoring split {state['splits'][sid]} for {setup.get('name')}")
+    lists = layout.observed_lists(workspaces, windows, conns)
+    split = state["splits"].get(sid)
+    if expanded and split:
+        if sum(split) > sum(map(len, lists)):
+            log(f"split {split} for {setup.get('name')} exceeds the open "
+                f"workspaces (dead slots) - keeping the active cut")
+        else:
+            log(f"restoring split {split} for {setup.get('name')}")
     had_sizes = bool(state.get("sizes"))
-    state = layout.arrive(state, sid, layout.observed_lists(workspaces, windows, conns))
+    state = layout.arrive(state, sid, lists)
     if not had_sizes and state.get("sizes"):
         # first run ever: adopt the current arrangement as the baseline
         log(f"learned initial layout at {setup.get('name')}: sizes {state['sizes']}")

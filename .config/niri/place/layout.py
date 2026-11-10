@@ -211,11 +211,13 @@ def transition(state: State, lists: list[list[int]]) -> State:
 def arrive(state: State, sid: str, lists: list[list[int]]) -> State:
     """Entering setup sid: an expanded arrival restores its remembered cut
     (sizes = the split); with no sizes yet, reality becomes the baseline and
-    a collapsed one waits to expand (fresh + cold). Runs BEFORE converge."""
+    a collapsed one waits to expand (fresh + cold). A split summing past the
+    open workspaces has dead slots (learned elsewhere, never shrunk) and is
+    distrusted - the active cut stays in charge. Runs BEFORE converge."""
     state = dict(state)
     expanded = len(lists) > 1
     split = state.get("splits", {}).get(sid)
-    if expanded and split:
+    if expanded and split and sum(split) <= sum(map(len, lists)):
         state["sizes"] = list(split)
     if not state.get("sizes"):
         state.update(learn(state, lists))

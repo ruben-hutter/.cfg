@@ -338,6 +338,27 @@ class ArriveTest(unittest.TestCase):
         self.assertEqual(s["sizes"], [2, 1])
         self.assertNotIn("fresh", s)
 
+    def test_phantom_split_is_distrusted_active_cut_is_kept(self):
+        # field incident 2026-11-03: a stale split summing past the open
+        # workspaces (its tail slots died at another setup) must not hijack
+        # the arrival - the active cut (carried through collapsed time)
+        # stays in charge.
+        s = layout.arrive({"order": [3, 2, 8], "sizes": [1, 2, 0],
+                           "splits": {"aaaa1111": [2, 2, 0]}},
+                          "aaaa1111", [[], [], [3, 2, 8]])
+        self.assertEqual(s["sizes"], [1, 2, 0])
+
+    def test_split_summing_to_the_open_workspaces_is_restored(self):
+        s = layout.arrive({"sizes": [1, 2, 0], "splits": {"aaaa1111": [2, 1, 0]}},
+                          "aaaa1111", [[], [20], [30, 31]])
+        self.assertEqual(s["sizes"], [2, 1, 0])
+
+    def test_first_run_with_phantom_split_learns_from_reality(self):
+        s = layout.arrive({"splits": {"aaaa1111": [2, 2, 0]}}, "aaaa1111",
+                          [[], [], [30, 31]])
+        self.assertEqual(s["sizes"], [0, 0, 2])
+        self.assertEqual(s["order"], [30, 31])
+
 
 class ArrivedTest(unittest.TestCase):
     """The arrival converged: distribution done — fresh ends and the active
