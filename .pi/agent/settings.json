@@ -1,0 +1,16 @@
+{
+  "lastChangelogVersion": "1.5.2",
+  "theme": "catppuccin-mocha",
+  "packages": [
+    "npm:catppuccin-pi-theme",
+    "npm:pi-excalidraw"
+  ],
+  "hideThinkingBlock": true,
+  "defaultProvider": "zai",
+  "defaultModel": "auto",
+  "enabledModels": [
+    "zai/auto",
+    "zai/glm-5.3-flash",
+    "zai/glm-5.3"
+  ]
+}

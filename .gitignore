@@ -30,3 +30,14 @@
 
 # plugin managers manage their own clones
 .config/tmux/plugins/
+
+# pi agent: secrets, private logs, and machine-regenerated state (.cfg syncs config only)
+.pi/agent/auth.json
+.pi/agent/sessions/
+.pi/agent/install/
+.pi/agent/npm/
+.pi/agent/models-store.json
+.pi/agent/trust.json
+.pi/agent/extensions/gondolin/node_modules/
+.pi/agent/extensions/herdr-agent-state.ts
+.pi/TASK.md

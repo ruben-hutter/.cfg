@@ -1,0 +1,10 @@
+{
+  "app.session.resume": "ctrl+r",
+  "tui.input.newLine": ["shift+enter", "ctrl+q"],
+  "app.model.select": "alt+m",
+  "tui.altScreen.bottom": ["ctrl+end", "alt+e"],
+  "tui.altScreen.halfPageUp": "alt+u",
+  "tui.altScreen.halfPageDown": "alt+d",
+  "tui.altScreen.lineUp": "alt+k",
+  "tui.altScreen.lineDown": "alt+j"
+}
