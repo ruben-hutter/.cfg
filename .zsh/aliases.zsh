@@ -24,11 +24,8 @@ alias upal='sudo dnf upgrade --refresh'
 # use aliases under sudo too (trailing space expands the next word — zsh honors it)
 alias sudo='sudo '
 
-# open vscode with ozone hint 'auto' (overrides the session-wide 'wayland')
 alias code='env ELECTRON_OZONE_PLATFORM_HINT=auto code'
 
-# other-host muscle memory (not installed here; harmless if typed by reflex)
-alias zed='zeditor'                                    # nixpkgs name for Zed
 alias rebuild='sudo nixos-rebuild switch --flake ~/nixos-config#nixos'  # NixOS hosts
 
 # yubikey oath codes

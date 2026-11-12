@@ -28,7 +28,6 @@ setopt auto_cd                # type a directory name to cd into it
 setopt interactive_comments   # `# ...` works on the command line
 setopt no_beep
 setopt extended_glob          # ^pat, *(.), etc.
-setopt no_list_ambiguous      # list candidates on FIRST Tab
 
 # --- Vi mode + cursor shapes (block=normal, bar=insert) ---
 bindkey -v
@@ -40,18 +39,28 @@ zle-line-init() { printf '\e[6 q' }   # every prompt starts in insert mode
 zle -N zle-keymap-select
 zle -N zle-line-init
 
-# --- Completion system (native menu: `cd ..` + Tab -> `cd ../`, etc.) ---
+# --- Completion system (generates candidates; fzf-tab renders them below) ---
 # ~/.zfunc holds generated tool completions (_cargo, _rustup); must precede compinit
 fpath=("$HOME/.zfunc" $fpath)
 autoload -Uz compinit
 compinit -d $HOME/.cache/zsh/zcompdump
-zstyle ':completion:*' menu select                          # arrow-key menu
+zstyle ':completion:*' menu no                             # no native menu: lets fzf-tab capture the unambiguous prefix
 zstyle ':completion:*' special-dirs true                    # 'cd ..' + Tab -> 'cd ../'
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'   # case-insensitive
+# candidate generation: exact/case-insensitive prefix, substring, subsequence.
+# NOT replaced by fzf-tab: it fuzzy-filters what compsys offers, so without the
+# loose matchers `cd media<Tab>` in lxc/ would find zero candidates and just beep.
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|?=**' 'l:|=* r:|?=**'
 [[ -n $LS_COLORS ]] && zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# label each menu section ("-- directory --" etc.) instead of a flat wall of names
-zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+# group headers, shown by fzf-tab inside the fzf list (escape sequences like
+# %F{..} are ignored by fzf-tab, so keep this plain to enable grouping)
+zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*' group-name ''
+
+# --- fzf-tab: fish-style fzf completion menu ---
+# must load after compinit and before widget-wrapping plugins (autosuggestions,
+# syntax-highlighting) — installed: ~/.zsh/plugins/fzf-tab (git clone)
+[[ -f $HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh ]] \
+    && source $HOME/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
 
 # v in normal mode: edit the current line in $EDITOR (like fish's edit_command_buffer)
 autoload -Uz edit-command-line
